@@ -1,36 +1,19 @@
-\documentclass[11pt, dvipdfmx]{article}
+\documentclass[uplatex, dvipdfmx, book, 11pt]{jsbook}
 
-\usepackage[utf8]{inputenc}
-\usepackage[margin=35truemm]{geometry} % 余白を35mmに設定
-\usepackage{tikz-feynhand}
 % --- 数学関連のパッケージ ---
-\usepackage{amsmath}      % 様々な数式環境
-\usepackage{amsthm}       % 定理環境
-\usepackage{amsfonts}     % 数学用フォント
-\usepackage{physics}      % 物理学の数式用マクロ (bra, ket, dvなど)
-\usepackage{bm}           % 太字の数式 \bm{}
-\usepackage{showkeys}
-% --- 図や色、レイアウト関連のパッケージ ---
-\usepackage{graphicx, color} % 図の挿入や色の利用
-\usepackage{tikz}         % 図形描画
-\usetikzlibrary{intersections,calc,arrows.meta}
-\usepackage{float}        % 図表の位置を調整 [H]など
-\usepackage{siunitx}      % 単位をきれいに表示 \SI{100}{\kilo\gram}など
-\usepackage{ascmac}       % itemboxなどの囲み枠
-\usepackage{amsmath}
-\usepackage{amssymb}      % 数学記号 (\becauseなど)
+\usepackage{amsmath, amssymb, amsthm, bm}
+\usepackage{mathrsfs}     % \mathscr
 \numberwithin{equation}{section}
-% --- その他 ---
-\parindent = 0pt % 全体の段落開始時のインデントをなくす
-\newcommand{\intinf}{\int_{-\infty}^\infty}
-\newcommand{\pathint}{\int \mathcal{D}\varphi}
-\newenvironment{note}{
-    \vspace{1ex} % 上部の余白（お好みで調整）
-    \par\footnotesize\noindent\textbf{【注】}
-}{
-    \par\vspace{1ex} % 下部の余白
-}
-% --- ハイパーリンク関連 (できるだけ最後に読み込む) ---
+
+% --- 図や色、レイアウト関連のパッケージ ---
+\usepackage{graphicx, color}
+\usepackage{tikz}
+\usetikzlibrary{intersections, calc, arrows.meta, decorations.pathmorphing, patterns}
+\usepackage{tikz-cd}      % 可換図式
+\usepackage{float}
+\usepackage{ascmac}
+
+% --- ハイパーリンク関連 ---
 \usepackage[
     dvipdfmx,
     bookmarks=true,
@@ -41,74 +24,201 @@
     citecolor=blue,
     urlcolor=blue
 ]{hyperref}
-\usepackage{pxjahyper} % hyperrefの日本語文字化け対策
-\usepackage{amsmath, amssymb}
-\usepackage[many]{tcolorbox} % manyオプションでskinsやtheoremsなどを一括読み込み
+\usepackage{pxjahyper}
 
-% tcolorboxを用いた新しい定理環境の定義
+% --- 定理系ボックス ---
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems, skins, breakable}
 \tcbset{
     myboxstyle/.style={
         enhanced,
-        colback=white,           % メインボックスの背景色（白）
-        boxrule=0.8pt,           % 枠線の太さ
-        arc=1.5mm,               % 角の丸み
-        coltitle=white,          % タイトル文字の色（白）
-        attach boxed title to top left={xshift=5mm, yshift=-\tcboxedtitleheight/2},
+        breakable,
+        colback=white,
+        coltitle=white,
+        fonttitle=\bfseries,
+        boxrule=0.8pt,
+        arc=1.5mm,
+        attach boxed title to top left={xshift=3mm, yshift=-2mm},
+        top=3mm,
+        before skip=3mm, after skip=3mm,
         description font=\normalfont,
-        separator sign={:}       % 番号の後のコロン
+        separator sign={:}
     }
 }
 
-% ==========================================
-% 2. 各環境の定義（色のみ個別設定）
-% ==========================================
-
-% --- 定理 (Theorem) : グレー系 ---
-\newtcbtheorem[number within=section]{mythm}{Theorem}{
+% --- 定理 (Theorem) : 赤系 ---
+\newtcbtheorem[number within=section]{mythm}{定理}{
     myboxstyle,
-    colframe=red!75!black,           % 枠線の色（赤系に合わせて変更）
-    boxed title style={
-        colback=red!50,              % タイトル背景色をグレーから赤に変更
-        colframe=red!75!black,       % タイトル枠線の色（赤系に合わせて変更）
-        boxrule=0.8pt,
-        arc=1.5mm
-    }
+    colframe=red!75!black,
+    boxed title style={colback=red!50, colframe=red!75!black, boxrule=0.8pt, arc=1.5mm}
 }{thm}
 
-% --- 定義 (Definition) : ブルー系 ---
-\newtcbtheorem[number within=section]{mydef}{Definition}{
+% --- 定義 (Definition) : 青系 ---
+\newtcbtheorem[use counter from=mythm]{mydef}{定義}{
     myboxstyle,
-    colframe=blue!70!black,      % 枠線の色（青70% + 黒30%）
-    boxed title style={
-        colback=blue!60!gray!80, % タイトル背景色（少しグレーを混ぜた落ち着いた青）
-        colframe=blue!70!black,
-        boxrule=0.8pt,
-        arc=1.5mm
-    }
+    colframe=blue!70!black,
+    boxed title style={colback=blue!60!gray!80, colframe=blue!70!black, boxrule=0.8pt, arc=1.5mm}
 }{def}
 
-% --- 補題 (Lemma) : グリーン系 ---
-\newtcbtheorem[number within=section]{mylem}{Lemma}{
+% --- 補題 (Lemma) : 緑系 ---
+\newtcbtheorem[use counter from=mythm]{mylem}{補題}{
     myboxstyle,
-    colframe=green!50!black,     % 枠線の色（緑50% + 黒50%）
-    boxed title style={
-        colback=green!50!gray,   % タイトル背景色（渋めの緑）
-        colframe=green!50!black,
-        boxrule=0.8pt,
-        arc=1.5mm
-    }
+    colframe=green!50!black,
+    boxed title style={colback=green!50!gray, colframe=green!50!black, boxrule=0.8pt, arc=1.5mm}
 }{lem}
 
-\begin{document}
+% --- 命題 (Proposition) : オレンジ系 ---
+\newtcbtheorem[use counter from=mythm]{myprop}{命題}{
+    myboxstyle,
+    colframe=orange!80!black,
+    boxed title style={colback=orange!80!black, colframe=orange!80!black, boxrule=0.8pt, arc=1.5mm}
+}{prop}
 
-\title{テスト文書}
+% --- 系 (Corollary) : 紫系 ---
+\newtcbtheorem[use counter from=mythm]{mycor}{系}{
+    myboxstyle,
+    colframe=violet!70!black,
+    boxed title style={colback=violet!60!gray, colframe=violet!70!black, boxrule=0.8pt, arc=1.5mm}
+}{cor}
+
+% --- 例 (Example) : グレー系 ---
+\newtcbtheorem[use counter from=mythm]{myex}{例}{
+    myboxstyle,
+    colframe=gray!70!black,
+    boxed title style={colback=gray!70!black, colframe=gray!70!black, boxrule=0.8pt, arc=1.5mm}
+}{ex}
+
+% --- 物理との関係 (Physics remark) : 水色系 ---
+\newtcolorbox{physbox}[1][]{
+    enhanced, breakable,
+    colback=cyan!4, colframe=cyan!50!black,
+    boxrule=0.6pt, arc=1.5mm,
+    fonttitle=\bfseries, title={物理との関係\ifx\relax#1\relax\else：#1\fi}
+}
+
+% --- 章の導入文 ---
+\newtcolorbox{chapterlead}{
+    enhanced, colback=gray!6, colframe=gray!6, boxrule=0pt, arc=0mm,
+    left=4mm, right=4mm, top=2mm, bottom=2mm,
+    borderline west={2pt}{0pt}{gray!60!black}
+}
+
+% 計算過程などを書く注釈環境
+\newenvironment{note}{\vspace{1ex}\par\footnotesize\noindent\textbf{【注】}}{\par\vspace{1ex}}
+
+% 練習問題
+\newcounter{exprob}[section]
+\renewcommand{\theexprob}{\thesection.\arabic{exprob}}
+\newcommand{\exprob}[1]{\par\medskip\noindent\refstepcounter{exprob}\label{#1}\textbf{問\,\theexprob}\quad}
+\newcommand{\exsol}[1]{\par\medskip\noindent\textbf{問\,\ref{#1} の解答}\quad}
+
+\renewcommand{\proofname}{証明}
+
+% --- 代数幾何用のマクロ ---
+\newcommand{\A}{\mathbb{A}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\m}{\mathfrak{m}}
+\newcommand{\p}{\mathfrak{p}}
+\newcommand{\q}{\mathfrak{q}}
+\newcommand{\af}{\mathfrak{a}}
+\newcommand{\bfr}{\mathfrak{b}}
+\newcommand{\sheaf}[1]{\mathscr{#1}}
+\newcommand{\OO}{\mathscr{O}}
+\newcommand{\Zero}{\mathbf{V}}             % 零点集合 V(S)
+\newcommand{\Ideal}{\mathbf{I}}            % 消滅イデアル I(X)
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\Proj}{Proj}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\Ker}{Ker}
+\DeclareMathOperator{\Img}{Im}
+\DeclareMathOperator{\Coker}{Coker}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\Frac}{Frac}
+\DeclareMathOperator{\Sing}{Sing}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\Pic}{Pic}
+\DeclareMathOperator{\Div}{Div}
+\DeclareMathOperator{\trdeg}{trdeg}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\PGL}{PGL}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Res}{Res}
+\newcommand{\rad}{\sqrt}
+
+\title{講義ノート：物理のための代数幾何学}
 \author{小武}
 \date{\today}
+
+\begin{document}
+\frontmatter
 \maketitle
-\section{はじめに}
+\tableofcontents
 
+\mainmatter
+
+% ==========================================================
+\part[代数幾何学の基礎]{代数幾何学の基礎\\[2em]
+  \normalsize\normalfont 代数と幾何の対応を理解し、代数幾何学の基本言語を構築する。}
+\input{chapters/ch01}
+\input{chapters/ch02}
+\input{chapters/ch03}
+\input{chapters/ch04}
+
+% ==========================================================
+\part[アフィン代数幾何]{アフィン代数幾何\\[2em]
+  \normalsize\normalfont 代数的集合を環として記述し、幾何学的対象の局所構造を代数的に調べる。}
+\input{chapters/ch05}
+\input{chapters/ch06}
+\input{chapters/ch07}
+
+% ==========================================================
+\part[射影代数幾何]{射影代数幾何\\[2em]
+  \normalsize\normalfont アフィン空間を拡張し、射影空間・コンパクトな幾何学的対象・交差を理解する。}
+\input{chapters/ch08}
+\input{chapters/ch09}
+
+% ==========================================================
+\part[大域的構造と現代代数幾何への導入]{大域的構造と現代代数幾何への導入\\[2em]
+  \normalsize\normalfont 局所的な代数構造を大域的な幾何学へ拡張し、スキームと層の思想を理解する。}
+\input{chapters/ch10}
+\input{chapters/ch11}
+\input{chapters/ch12}
+
+% ==========================================================
+\part[複素幾何と物理への応用]{複素幾何と物理への応用\\[2em]
+  \normalsize\normalfont 代数幾何を複素幾何・ゲージ理論・弦理論へ接続する。}
+\input{chapters/ch13}
+\input{chapters/ch14}
+\input{chapters/ch15}
+\input{chapters/ch16}
+\input{chapters/ch17}
+
+% ==========================================================
+\appendix
+\part[付録]{付録\\[2em]
+  \normalsize\normalfont 本編を読むための数学的準備、および計算・証明で用いる道具をまとめる。}
+\input{chapters/appA}
+\input{chapters/appB}
+\input{chapters/appC}
+\input{chapters/appD}
+\input{chapters/appE}
+\input{chapters/appF}
+\input{chapters/appG}
+\input{chapters/appH}
+\input{chapters/appI}
+\input{chapters/appJ}
+
+\backmatter
 \bibliographystyle{unsrturl}
-
-% Zoteroから出力した .bib ファイルの名前（拡張子 .bib は不要）
+\nocite{bouchardlecturescomplexgeometry2007, greenestringtheorycalabiyau1997}
 \bibliography{マイライブラリ}
 \end{document}

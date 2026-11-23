@@ -1,0 +1,335 @@
+% ==========================================================
+\chapter{群・環・体の基礎}\label{app:B}
+% ==========================================================
+
+この付録では群・環・体の基本事項をまとめる．
+環とイデアルの理論は第2章で改めて詳しく扱うので，ここでは
+本編を読むうえで前提となる定義と，群論・体論の基本事項を中心に述べる．
+特に体の拡大と超越次数は第7章（次元）・第10章（関数体）で，
+群作用と商は第8章（射影空間）・第14章（ゲージ群）・第16章（モジュライ）で用いる．
+
+% ----------------------------------------------------------
+\section{群}
+% ----------------------------------------------------------
+
+\begin{mydef}{群}{appB-group}
+集合 $G$ と演算 $G\times G\to G$，$(g,h)\mapsto gh$ が次を満たすとき $G$ を\textbf{群}という．
+\begin{enumerate}
+\item（結合律）$(gh)k=g(hk)$．
+\item（単位元）$eg=ge=g$（すべての $g$）を満たす $e\in G$ が存在する．
+\item（逆元）各 $g\in G$ に対し $gg^{-1}=g^{-1}g=e$ を満たす $g^{-1}\in G$ が存在する．
+\end{enumerate}
+さらに $gh=hg$ が常に成り立つとき\textbf{可換群}（Abel群）という．
+可換群の演算はしばしば $+$ で書き，単位元を $0$，逆元を $-g$ と書く．
+\end{mydef}
+
+単位元と逆元は一意的である（$e=ee'=e'$ など）．
+
+\begin{myex}{群の例}{appB-groupex}
+\begin{enumerate}
+\item $(\Z,+)$，$(\Q,+)$，$(\R,+)$，$(\C,+)$ は可換群．$\Z/n\Z$ も加法で可換群．
+\item 体 $k$ の乗法群 $k^\times=k\setminus\{0\}$．特に $\C^\times$ や $U(1)=\{z\in\C\mid |z|=1\}$．
+\item 一般線形群 $\GL_n(k)=\{A\in M_n(k)\mid\det A\ne0\}$，特殊線形群 $\SL_n(k)=\{\det A=1\}$，
+ユニタリ群 $U(n)=\{A\in\GL_n(\C)\mid A^\dagger A=1\}$，$SU(n)=U(n)\cap\SL_n(\C)$．
+\item 射影線形群 $\PGL_{n+1}(k)=\GL_{n+1}(k)/k^\times$．これは $\PP^n$ の自己同型群である（第8章，第10章）．
+\item 集合 $X$ の全単射全体 $\mathrm{Sym}(X)$．$X=\{1,\dots,n\}$ のとき対称群 $S_n$．
+\end{enumerate}
+\end{myex}
+
+\begin{mydef}{群準同型}{appB-hom}
+群の間の写像 $\varphi\colon G\to H$ が $\varphi(gh)=\varphi(g)\varphi(h)$ を満たすとき\textbf{準同型}という．
+このとき $\varphi(e)=e$，$\varphi(g^{-1})=\varphi(g)^{-1}$ が従う．
+$\Ker\varphi=\varphi^{-1}(e)$ を\textbf{核}，$\Img\varphi=\varphi(G)$ を\textbf{像}という．
+全単射な準同型を\textbf{同型}という．
+\end{mydef}
+
+$\varphi$ が単射であることと $\Ker\varphi=\{e\}$ は同値である
+（$\varphi(g)=\varphi(h)\iff gh^{-1}\in\Ker\varphi$ による）．
+
+\begin{mydef}{群作用}{appB-action}
+群 $G$ の集合 $X$ への（左）\textbf{作用}とは，写像 $G\times X\to X$，$(g,x)\mapsto g\cdot x$ で
+$e\cdot x=x$，$g\cdot(h\cdot x)=(gh)\cdot x$ を満たすものをいう．
+$G\cdot x=\{g\cdot x\mid g\in G\}$ を $x$ の\textbf{軌道}，$G_x=\{g\mid g\cdot x=x\}$ を\textbf{固定部分群}（安定化群）という．
+軌道の全体を $X/G$ と書き，\textbf{軌道空間}という．
+\end{mydef}
+
+軌道は付録Aの意味の同値類であり，$X/G$ は商集合である．
+軌道と固定部分群の間には全単射 $G/G_x\to G\cdot x$，$gG_x\mapsto g\cdot x$ がある（次節の剰余類を参照）．
+
+\begin{myex}{射影空間とゲージ変換}{appB-actionex}
+\begin{enumerate}
+\item $k^\times$ は $k^{n+1}\setminus\{0\}$ に $\lambda\cdot x=\lambda x$ で作用し，軌道空間は $\PP^n$ である．
+\item $\C^\times$ が $\C^2$ に $\lambda\cdot(x,y)=(\lambda x,\lambda^{-1}y)$ で作用するとき，
+不変式 $u=xy$ を用いると「良い商」は $\A^1=\Spec\C[xy]$ となる．しかし素朴な軌道空間では
+$\{x=0,y\ne0\}$，$\{y=0,x\ne0\}$，原点の3つの軌道が $u=0$ に潰れ，非Hausdorffになる．
+商の取り方の微妙さはモジュライ空間（第16章）の主要なテーマである．
+\item ゲージ理論では，ゲージ変換群がゲージ場の空間に作用し，物理的配位は軌道空間である（第14章）．
+\end{enumerate}
+\end{myex}
+
+% ----------------------------------------------------------
+\section{部分群}
+% ----------------------------------------------------------
+
+\begin{mydef}{部分群}{appB-subgroup}
+群 $G$ の部分集合 $H$ が $G$ の演算で群になるとき\textbf{部分群}という．
+これは「$H\ne\emptyset$ かつ $g,h\in H\Rightarrow gh^{-1}\in H$」と同値である．
+\end{mydef}
+
+準同型 $\varphi\colon G\to H$ の核と像はそれぞれ $G$，$H$ の部分群である．
+部分群の任意個の共通部分は部分群である．したがって部分集合 $S\subset G$ を含む最小の部分群
+（$S$ で\textbf{生成される部分群} $\langle S\rangle$）が存在する．
+
+\begin{mydef}{剰余類}{appB-coset}
+$H$ を $G$ の部分群とする．$g\in G$ に対し $gH=\{gh\mid h\in H\}$ を\textbf{左剰余類}という．
+$g\sim g'\iff g^{-1}g'\in H$ は同値関係で，その同値類が左剰余類である．
+左剰余類全体を $G/H$ と書く．
+\end{mydef}
+
+\begin{mythm}{Lagrange の定理}{appB-lagrange}
+$G$ が有限群で $H$ が部分群ならば $|G|=|G/H|\cdot|H|$．特に $|H|$ は $|G|$ を割り切る．
+\end{mythm}
+\begin{proof}
+各剰余類 $gH$ は $h\mapsto gh$ により $H$ と全単射であり，$G$ は剰余類の互いに素な和である（付録A）．
+\end{proof}
+
+\begin{myex}{}{appB-subgroupex}
+$\SL_n(k)\subset\GL_n(k)$，$SU(n)\subset U(n)$，
+$1$ の $n$ 乗根の群 $\mu_n=\{\zeta\in\C\mid\zeta^n=1\}\cong\Z/n\Z\subset\C^\times$．
+$\mu_n$ は $\C^m$ に作用して商特異点 $\C^m/\mu_n$ を作り，Calabi–Yau の特異点の局所モデルとして現れる（第15章）．
+\end{myex}
+
+% ----------------------------------------------------------
+\section{正規部分群}
+% ----------------------------------------------------------
+
+\begin{mydef}{正規部分群}{appB-normal}
+部分群 $N\subset G$ が，すべての $g\in G$ について $gNg^{-1}=N$ を満たすとき\textbf{正規部分群}といい，
+$N\triangleleft G$ と書く．
+\end{mydef}
+
+可換群の部分群はすべて正規である．準同型の核は常に正規部分群である：
+$\varphi(gng^{-1})=\varphi(g)e\varphi(g)^{-1}=e$．
+
+\begin{myex}{}{appB-normalex}
+\begin{enumerate}
+\item $\SL_n(k)=\Ker(\det\colon\GL_n(k)\to k^\times)$ は正規部分群．
+\item スカラー行列の群 $k^\times\cdot1\subset\GL_n(k)$ は中心に含まれるので正規部分群．
+\item $SU(n)$ の中心は $\mu_n\cdot 1$ であり，$SU(n)/\mu_n$ は随伴表現が忠実になる群（随伴群）である．
+\end{enumerate}
+\end{myex}
+
+% ----------------------------------------------------------
+\section{商群}
+% ----------------------------------------------------------
+
+\begin{mythm}{商群}{appB-quotgroup}
+$N\triangleleft G$ のとき，剰余類の集合 $G/N$ は演算 $(gN)(hN)=ghN$ によって群になる．
+標準射影 $\pi\colon G\to G/N$ は核が $N$ の全射準同型である．
+\end{mythm}
+\begin{proof}
+well-definedness のみ確認する．$gN=g'N$，$hN=h'N$ とし $g'=gn$，$h'=hm$（$n,m\in N$）と書くと
+$g'h'=gnhm=gh(h^{-1}nh)m$ であり，正規性より $h^{-1}nh\in N$．よって $g'h'N=ghN$．
+群の公理は $G$ から遺伝する．
+\end{proof}
+
+\begin{mythm}{準同型定理}{appB-isom}
+群準同型 $\varphi\colon G\to H$ に対し，$\bar\varphi\colon G/\Ker\varphi\to\Img\varphi$，$g\Ker\varphi\mapsto\varphi(g)$ は
+well-defined な同型である．
+より一般に，$N\triangleleft G$ が $N\subset\Ker\varphi$ を満たせば，$\varphi=\bar\varphi\circ\pi$ となる準同型
+$\bar\varphi\colon G/N\to H$ が一意に存在する（商群の普遍性）．
+\end{mythm}
+\begin{proof}
+付録Aの商集合の普遍性により写像 $\bar\varphi$ が一意に存在し，準同型であることは $\varphi$ が準同型であることから従う．
+$\bar\varphi(gN)=e\iff g\in\Ker\varphi$ なので，$N=\Ker\varphi$ のとき $\bar\varphi$ は単射．
+\end{proof}
+
+\begin{myex}{}{appB-quotex}
+\begin{enumerate}
+\item $\Z/n\Z$ は $\Z$ の部分群 $n\Z$ による商群．
+\item $\det$ により $\GL_n(k)/\SL_n(k)\cong k^\times$．
+\item $\exp(2\pi i\,\cdot)\colon\R\to U(1)$ の核は $\Z$ なので $\R/\Z\cong U(1)$．
+\item 格子 $\Lambda=\Z+\tau\Z\subset\C$ に対し $\C/\Lambda$ は可換群であり，同時に Riemann 面（楕円曲線）である．
+楕円曲線上の点の加法はこの群構造である（第13章，第17章）．
+\item 因子類群 $\mathrm{Cl}(X)=\Div(X)/(\text{主因子})$ も可換群の商である．滑らかな多様体では直線束の同型類の群 $\Pic(X)$ と一致する（第11章・第14章の直線束の議論の背景）．
+\end{enumerate}
+\end{myex}
+
+% ----------------------------------------------------------
+\section{環}
+% ----------------------------------------------------------
+
+\begin{mydef}{環}{appB-ring}
+集合 $R$ に加法 $+$ と乗法 $\cdot$ が与えられ，
+\begin{enumerate}
+\item $(R,+)$ は可換群である（単位元を $0$ と書く）．
+\item 乗法は結合的で，単位元 $1$ を持つ．
+\item 分配律 $a(b+c)=ab+ac$，$(a+b)c=ac+bc$ が成り立つ．
+\end{enumerate}
+を満たすとき $R$ を（単位元を持つ）\textbf{環}という．$ab=ba$ が常に成り立つとき\textbf{可換環}という．
+\end{mydef}
+
+本ノートでは特に断らない限り，環は単位元を持つ可換環とし，環準同型は $1$ を $1$ に移すものとする．
+$1=0$ となる環は零環 $\{0\}$ に限る．
+
+\begin{myex}{環の例}{appB-ringex}
+\begin{enumerate}
+\item $\Z$，$\Q$，$\R$，$\C$，$\Z/n\Z$．
+\item 多項式環 $k[x_1,\dots,x_n]$（第1章，第2章）．
+\item 位相空間 $X$ 上の連続関数環 $C(X)$，多様体上の $C^\infty$ 関数環 $C^\infty(M)$．
+\item 非可換環の例：行列環 $M_n(k)$．量子力学の演算子代数は典型的な非可換環である．
+\item 外積代数 $\Lambda^\bullet V$（付録C）は次数付き可換（$\omega\wedge\eta=(-1)^{pq}\eta\wedge\omega$）であって可換ではない．
+\end{enumerate}
+\end{myex}
+
+\begin{mydef}{イデアルと剰余環}{appB-ideal}
+可換環 $R$ の加法部分群 $I$ が $RI\subset I$ を満たすとき\textbf{イデアル}という．
+このとき加法群の商 $R/I$ は $(a+I)(b+I)=ab+I$ で環になる（\textbf{剰余環}）．
+\end{mydef}
+
+環準同型の核はイデアルであり，群の場合と同様に準同型定理 $R/\Ker\varphi\cong\Img\varphi$ が成り立つ．
+素イデアル・極大イデアル・Noether 性などの詳細は第2章を参照のこと．
+
+\begin{mydef}{単元}{appB-unit}
+$ab=1$ となる $b$ が存在する $a\in R$ を\textbf{単元}（可逆元）といい，単元全体のなす乗法群を $R^\times$ と書く．
+\end{mydef}
+
+例えば $\Z^\times=\{\pm1\}$，$k[x]^\times=k^\times$．
+
+% ----------------------------------------------------------
+\section{整域}
+% ----------------------------------------------------------
+
+\begin{mydef}{零因子・整域}{appB-domain}
+$a\ne0$ で，ある $b\ne0$ に対し $ab=0$ となるとき $a$ を\textbf{零因子}という．
+零環でなく零因子を持たない可換環を\textbf{整域}という．
+ある $n\geq1$ で $a^n=0$ となる元を\textbf{冪零元}という．
+\end{mydef}
+
+\begin{myex}{}{appB-domainex}
+\begin{enumerate}
+\item $\Z$，体，$k[x_1,\dots,x_n]$ は整域．
+\item $\Z/6\Z$ では $2\cdot3=0$ なので整域でない．$\Z/p\Z$（$p$ 素数）は整域（実は体）．
+\item $k[x,y]/(xy)$ は整域でない．零点集合 $\Zero(xy)$ は2本の座標軸の和で\emph{可約}である．
+既約性と整域性の対応は第3章・第5章の主題である．
+\item $k[x]/(x^2)$ では $x$ は冪零元である．これは「原点に無限小の広がりを持つ点」を表し，
+古典的な点集合では見えない情報としてスキーム論（第12章）で重要になる．
+\end{enumerate}
+\end{myex}
+
+\begin{myprop}{多項式環は整域}{appB-polydomain}
+$R$ が整域ならば $R[x]$ も整域であり，$\deg(fg)=\deg f+\deg g$．
+帰納的に $k[x_1,\dots,x_n]$ は整域である．
+\end{myprop}
+\begin{proof}
+$f,g\ne0$ の最高次係数を $a,b$ とすると $fg$ の最高次係数は $ab\ne0$．
+\end{proof}
+
+\begin{mydef}{商体}{appB-frac}
+整域 $R$ に対し，$R\times(R\setminus\{0\})$ 上の同値関係 $(a,s)\sim(b,t)\iff at=bs$ による商集合を $\Frac R$ と書き，
+$(a,s)$ の類を $a/s$ と書く．通常の分数の演算で $\Frac R$ は体となり，$R$ の\textbf{商体}という．
+\end{mydef}
+
+$\Frac\Z=\Q$，$\Frac k[x_1,\dots,x_n]=k(x_1,\dots,x_n)$（有理関数体）．
+既約多様体 $X$ の関数体 $k(X)=\Frac k[X]$（第10章）はこの構成であり，
+局所化（第6章）はこの構成の一般化である．
+
+% ----------------------------------------------------------
+\section{体}
+% ----------------------------------------------------------
+
+\begin{mydef}{体}{appB-field}
+零環でない可換環 $k$ で，$0$ 以外のすべての元が単元であるものを\textbf{体}という．
+\end{mydef}
+
+体は整域である．$\Q,\R,\C$，有限体 $\F_p=\Z/p\Z$（$p$ 素数），有理関数体 $k(x)$ などが例である．
+可換環 $R$ が体であることと，$R$ のイデアルが $0$ と $R$ のみであることは同値である．
+したがって $R/\m$ が体 $\iff$ $\m$ は極大イデアル（第2章）．
+
+\begin{mydef}{標数}{appB-char}
+環準同型 $\Z\to k$ の核は $n\Z$（$n\geq0$）の形であり，$k$ が整域なので $n=0$ または素数である．
+この $n$ を $k$ の\textbf{標数}といい $\operatorname{char}k$ と書く．
+\end{mydef}
+
+$\operatorname{char}\Q=\operatorname{char}\C=0$，$\operatorname{char}\F_p=p$．
+本ノートの物理への応用では主に標数 $0$（特に $\C$）を考える．
+
+\begin{mydef}{代数閉体}{appB-algclosed}
+定数でない任意の $f\in k[x]$ が $k$ に根を持つとき，$k$ を\textbf{代数閉体}という．
+このとき $f$ は1次式の積に分解する．
+\end{mydef}
+
+\begin{mythm}{代数学の基本定理}{appB-fta}
+$\C$ は代数閉体である．
+\end{mythm}
+
+証明は複素解析（付録D，Liouville の定理）を用いるのが簡明である．
+$\R$ は $x^2+1$ が根を持たないので代数閉でない．
+Hilbert の零点定理（第4章）は $k$ が代数閉体であることを本質的に用いる．
+本編で多くの場合 $k=\C$ あるいは一般の代数閉体を仮定するのはこのためである．
+
+% ----------------------------------------------------------
+\section{体の拡大}
+% ----------------------------------------------------------
+
+\begin{mydef}{体の拡大}{appB-ext}
+体 $K$ が部分体 $k$ を含むとき，$K/k$ を\textbf{体の拡大}という．
+$K$ は $k$ 上のベクトル空間であり，その次元 $[K:k]=\dim_kK$ を\textbf{拡大次数}という．
+$[K:k]<\infty$ のとき\textbf{有限拡大}という．
+\end{mydef}
+
+\begin{myprop}{次数の乗法性}{appB-tower}
+$k\subset L\subset K$ ならば $[K:k]=[K:L][L:k]$．
+\end{myprop}
+\begin{proof}
+$\{e_i\}$ を $L/k$ の基底，$\{f_j\}$ を $K/L$ の基底とすると $\{e_if_j\}$ が $K/k$ の基底になる．
+\end{proof}
+
+\begin{mydef}{代数的・超越的}{appB-algebraic}
+$K/k$ を拡大とし $\alpha\in K$ とする．
+$\alpha$ を根に持つ $0$ でない $f\in k[x]$ が存在するとき $\alpha$ は $k$ 上\textbf{代数的}，
+そうでないとき\textbf{超越的}という．
+$\alpha$ が代数的なとき，$\alpha$ を根に持つ最小次数のモニック多項式を\textbf{最小多項式}という．
+すべての元が代数的な拡大を\textbf{代数拡大}という．
+\end{mydef}
+
+\begin{myprop}{単純拡大}{appB-simple}
+$\alpha$ が $k$ 上代数的で最小多項式を $f$ とすると，$f$ は既約で
+$k[x]/(f)\cong k(\alpha)$，$[k(\alpha):k]=\deg f$．
+$\alpha$ が超越的なら $k[\alpha]\cong k[x]$，$k(\alpha)\cong k(x)$．
+\end{myprop}
+\begin{proof}
+評価写像 $k[x]\to K$，$x\mapsto\alpha$ の核は $k[x]$ の主イデアル $(f)$（$f=0$ も含む）であり，
+像は整域なので核は素イデアル．$f\ne0$ なら $(f)$ は極大となり（$k[x]$ は単項イデアル整域），
+$k[x]/(f)$ は体で $k(\alpha)$ と一致する．基底は $1,\alpha,\dots,\alpha^{\deg f-1}$．
+\end{proof}
+
+例えば $\R[x]/(x^2+1)\cong\C$，$[\C:\R]=2$．
+
+\begin{mydef}{超越次数}{appB-trdeg}
+拡大 $K/k$ の元 $\alpha_1,\dots,\alpha_r$ が\textbf{代数的に独立}であるとは，
+$0$ でない $F\in k[x_1,\dots,x_r]$ で $F(\alpha_1,\dots,\alpha_r)=0$ となるものが存在しないことをいう．
+代数的に独立で，$K$ が $k(\alpha_1,\dots,\alpha_r)$ 上代数的となるような組を\textbf{超越基底}という．
+超越基底の元の個数は取り方によらず，これを\textbf{超越次数} $\mathop{\mathrm{tr.deg}}\nolimits_kK$ という．
+\end{mydef}
+
+\begin{myex}{関数体の超越次数}{appB-trdegex}
+\begin{enumerate}
+\item $\mathop{\mathrm{tr.deg}}\nolimits_k k(x_1,\dots,x_n)=n$．
+\item $X=\Zero(y^2-x^3-ax-b)\subset\A^2$（楕円曲線のアフィン部分）の関数体
+$k(X)=\Frac\bigl(k[x,y]/(y^2-x^3-ax-b)\bigr)$ では，$x$ は超越的で，
+$y$ は $k(x)$ 上2次の代数的元である．よって $\mathop{\mathrm{tr.deg}}\nolimits_kk(X)=1$，$[k(X):k(x)]=2$．
+\end{enumerate}
+\end{myex}
+
+既約多様体 $X$ の次元は $\dim X=\mathop{\mathrm{tr.deg}}\nolimits_kk(X)$ に等しい（第7章，第10章）．
+「次元 $=$ 独立に動かせる関数の数」という直観は，物理の「自由度の数」と同じ発想である．
+
+\begin{physbox}[対称性と群]
+物理の対称性は群とその作用として記述される．
+ゲージ群（$U(1)$，$SU(2)$，$SU(3)$ など）は時空の各点で独立に作用し，
+その数学的定式化が主束である（第14章）．
+F理論では，楕円ファイバーの特異点の型からゲージ群が読み取られる（第17章）．
+また超越次数が測る「独立なパラメータの数」は，モジュライ空間の次元（＝質量ゼロのスカラー場の数）
+を数える際の基本的な考え方である（第16章）．
+\end{physbox}

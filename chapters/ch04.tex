@@ -1,0 +1,988 @@
+\chapter{Hilbertの零点定理と代数・幾何の対応}
+\label{ch:ch04}
+
+\begin{chapterlead}
+第3章では多項式の集合（イデアル）から図形（代数的集合）を作る操作 $\Zero$ を調べた．
+本章ではその逆向きの操作，すなわち図形からその上で消える多項式全体を取り出す操作 $\Ideal$ を導入し，二つの操作がどの程度互いに逆になっているかを調べる．
+答えを与えるのが \textbf{Hilbert の零点定理} (Nullstellensatz) である：代数閉体上では，代数的集合と\textbf{根基イデアル}が一対一に対応し，
+点は極大イデアルに，既約集合は素イデアルに対応する．
+この「代数と幾何の辞書」こそが代数幾何学の出発点であり，以後の全ての章はこの辞書の上に築かれる．
+\end{chapterlead}
+
+本章では $k$ は代数閉体とし，$R=k[x_1,\dots,x_n]$ と書く．
+代数閉性を外すと何が起こるかは\ref{subsec:ch04-nonclosed}小節で論じる．
+
+%======================================================================
+\section{消滅イデアル}
+%======================================================================
+
+\subsection{集合に対する消滅イデアル}
+
+第3章では，多項式の集合 $S$ に対しその共通零点 $\Zero(S)\subset\A^n$ を考えた．
+これを逆に辿ると，$\A^n$ の部分集合 $X$ が与えられたとき，「$X$ 上で恒等的に $0$ になる多項式」を全て集めることが考えられる．
+たとえば $X$ が放物線 $y=x^2$ なら，$y-x^2$ はもちろん $X$ 上で消えるが，$x(y-x^2)$ や $(y-x^2)^2$，$(y+1)(y-x^2)$ なども消える．
+こうした多項式全体は，$y-x^2$ の倍数全体 $(y-x^2)$ になることが後でわかる．
+
+これは物理における「拘束条件」の考え方に近い．相空間の部分多様体 $X$ を拘束面として与えたとき，$X$ 上で消える関数全体を考え，それを「拘束条件のなす集合」と見ることができる（Dirac の拘束系の理論）．
+$X$ 上で消える関数の和や，任意の関数との積はやはり $X$ 上で消えるので，これらはイデアルをなす．
+
+\subsection{消滅イデアルの定義}
+
+\begin{mydef}{消滅イデアル}{ch04-vanishing-ideal}
+部分集合 $X\subset\A^n$ に対し，
+\[
+  \Ideal(X):=\{f\in R\mid \text{全ての } P\in X \text{ に対し } f(P)=0\}
+\]
+を $X$ の \textbf{消滅イデアル} (vanishing ideal, ideal of $X$) という．
+\end{mydef}
+
+$\Ideal(X)$ がイデアルであることは直ちに確かめられる：$f,g\in\Ideal(X)$，$h\in R$ なら $(f+g)(P)=0$，$(hf)(P)=h(P)f(P)=0$．
+第3章（既約性と整域の小節）でもこの定義を先取りして用いた．
+
+\begin{myex}{基本的な消滅イデアル}{ch04-basic}
+\begin{enumerate}
+  \item $\Ideal(\emptyset)=R$（空集合上では全ての多項式が「消える」）．
+  \item $\Ideal(\A^n)=0$（第3章，多項式と多項式関数の命題；$k$ が無限体であることを用いる）．
+  \item 点 $P=(a_1,\dots,a_n)$ について $\Ideal(\{P\})=(x_1-a_1,\dots,x_n-a_n)=:\m_P$．
+  \item $\Ideal(\Zero(y-x^2))=(y-x^2)$．
+\end{enumerate}
+\end{myex}
+
+\begin{proof}[(3) と (4) の証明]
+(3) $\m_P\subset\Ideal(\{P\})$ は明らか．逆に $f(P)=0$ とする．$x_i=(x_i-a_i)+a_i$ と書いて $f$ を $x_i-a_i$ の多項式として展開すると
+$f=f(P)+\sum_i(x_i-a_i)g_i=\sum_i(x_i-a_i)g_i\in\m_P$．
+また $R/\m_P\cong k$（$f\mapsto f(P)$ による）なので $\m_P$ は極大イデアルである．
+
+(4) $(y-x^2)\subset\Ideal(X)$ は明らか．$f\in\Ideal(X)$ とし，$y$ を $x^2+(y-x^2)$ と書き換えて展開すると $f=(y-x^2)g+h(x)$（$h$ は $x$ のみの多項式）．
+$X$ の点 $(t,t^2)$ を代入すると $0=h(t)$ が全ての $t\in k$ で成り立つので $h=0$．よって $f\in(y-x^2)$．
+\end{proof}
+
+\subsection{消滅イデアルの性質}
+
+\begin{myprop}{消滅イデアルの性質}{ch04-I-props}
+$X,Y\subset\A^n$ を部分集合とする．
+\begin{enumerate}
+  \item（反変性）$X\subset Y$ ならば $\Ideal(Y)\subset\Ideal(X)$．
+  \item $\Ideal(X\cup Y)=\Ideal(X)\cap\Ideal(Y)$．
+  \item $\Ideal(X)$ は根基イデアルである：$f^m\in\Ideal(X)$（$m\ge1$）ならば $f\in\Ideal(X)$．
+\end{enumerate}
+\end{myprop}
+
+\begin{proof}
+(1) $Y$ 上で消えれば $X$ 上で消える．(2) $X\cup Y$ 上で消えることは，$X$ 上でも $Y$ 上でも消えることと同値．
+(3) 各 $P\in X$ で $f(P)^m=0$ なら，$k$ は体なので $f(P)=0$．
+\end{proof}
+
+(3) の性質は非常に重要である．$\Ideal(X)$ は「$f^2$ は入っているが $f$ は入っていない」ということが決してない．
+これは\ref{sec:ch04-radical}節の根基イデアルの概念につながる．
+一方，共通部分については $\Ideal(X\cap Y)\supset\Ideal(X)+\Ideal(Y)$ であるが，一般に等号は成り立たない．
+
+\begin{myex}{$\Ideal(X\cap Y)\ne\Ideal(X)+\Ideal(Y)$ の例}{ch04-intersection}
+放物線 $X=\Zero(y-x^2)$ と直線 $Y=\Zero(y)$ の交わりは原点のみで $\Ideal(X\cap Y)=(x,y)$．
+一方 $\Ideal(X)+\Ideal(Y)=(y-x^2,\ y)=(x^2,y)$ であり，$x\notin(x^2,y)$．
+両者の差は第3章で見た「交点の重複度」に相当する．
+\end{myex}
+
+\subsection{零点集合と消滅イデアル}
+
+$\Zero$ と $\Ideal$ を合成するとどうなるか．まず次の簡単な事実がある．
+
+\begin{myprop}{閉包の記述}{ch04-VI-closure}
+任意の部分集合 $X\subset\A^n$ に対し，$\Zero(\Ideal(X))=\overline X$（Zariski 閉包）．
+特に $X$ が代数的集合ならば $\Zero(\Ideal(X))=X$．
+\end{myprop}
+
+\begin{proof}
+$X$ の各点で $\Ideal(X)$ の元は消えるので $X\subset\Zero(\Ideal(X))$．右辺は閉集合なので $\overline X\subset\Zero(\Ideal(X))$．
+逆に，$X$ を含む任意の閉集合 $Z=\Zero(S)$ を取ると，$S$ の元は $X$ 上で消えるので $S\subset\Ideal(X)$，よって $\Zero(\Ideal(X))\subset\Zero(S)=Z$．
+$Z$ は任意だったから $\Zero(\Ideal(X))\subset\overline X$．
+\end{proof}
+
+すなわち「図形 $\to$ イデアル $\to$ 図形」と戻ると，元の図形の Zariski 閉包が得られる．
+図形側の情報はほとんど失われない．それに対し，「イデアル $\to$ 図形 $\to$ イデアル」と戻ったとき何が得られるかは非自明であり，これが零点定理の主題である．
+たとえば $\Ideal(\Zero(x^2))=\Ideal(\{0\})=(x)\ne(x^2)$ である．
+
+\exprob{prob:ch04-1} $X=\{(0,0),(1,1)\}\subset\A^2$ の消滅イデアルの生成元を求めよ．
+
+\exprob{prob:ch04-2} $k=\C$ とし，$X=\{(x,y)\in\A^2_\C\mid x,y\in\Z\}$ とする．$\Ideal(X)$ と $X$ の Zariski 閉包を求めよ．
+
+%======================================================================
+\section{イデアルと代数的集合の対応}
+%======================================================================
+
+\subsection{イデアルから代数的集合への対応}
+
+第3章で見たように，各イデアル $I\subset R$ に対し代数的集合 $\Zero(I)\subset\A^n$ が定まり，任意の代数的集合はこの形をしている．
+したがって写像
+\[
+  \Zero\colon\{R\text{ のイデアル}\}\longrightarrow\{\A^n\text{ の代数的集合}\},\qquad I\mapsto\Zero(I)
+\]
+は全射である．しかし単射ではない：$\Zero(x)=\Zero(x^2)$．
+
+\subsection{代数的集合からイデアルへの対応}
+
+逆向きに，
+\[
+  \Ideal\colon\{\A^n\text{ の代数的集合}\}\longrightarrow\{R\text{ のイデアル}\},\qquad X\mapsto\Ideal(X)
+\]
+が定まる．命題\ref{prop:ch04-VI-closure}より $\Zero\circ\Ideal=\mathrm{id}$（代数的集合上）なので，$\Ideal$ は \emph{単射} であり，$\Zero$ の右逆写像である．
+すなわち，異なる代数的集合は異なる消滅イデアルを持ち，代数的集合はその消滅イデアルで完全に決まる．
+問題は $\Ideal$ の像がどのようなイデアルからなるかである．命題\ref{prop:ch04-I-props}(3) によりそれは根基イデアルに含まれる．
+零点定理は，像が \emph{ちょうど} 根基イデアル全体であることを主張する（定理\ref{thm:ch04-correspondence}）．
+
+\subsection{対応の反変性}
+
+$\Zero$ と $\Ideal$ はどちらも包含関係を逆転させる（\textbf{反変}である）：
+\[
+  I\subset J\ \Rightarrow\ \Zero(J)\subset\Zero(I),\qquad X\subset Y\ \Rightarrow\ \Ideal(Y)\subset\Ideal(X).
+\]
+方程式を増やすと図形は小さくなり，図形を大きくするとその上で消える関数は少なくなる．
+このような二つの反変写像の組は数学の多くの場面に現れ，\textbf{Galois 対応}（Galois 接続）とよばれる．
+
+\begin{myprop}{Galois 対応}{ch04-galois}
+$S\subset R$ を部分集合，$X\subset\A^n$ を部分集合とする．
+\begin{enumerate}
+  \item $S\subset\Ideal(X)\iff X\subset\Zero(S)$．
+  \item $S\subset\Ideal(\Zero(S))$，$X\subset\Zero(\Ideal(X))$．
+  \item $\Zero(\Ideal(\Zero(S)))=\Zero(S)$，$\Ideal(\Zero(\Ideal(X)))=\Ideal(X)$．
+\end{enumerate}
+\end{myprop}
+
+\begin{proof}
+(1) どちらも「全ての $f\in S$ と全ての $P\in X$ について $f(P)=0$」と同値．
+(2) (1) で $X=\Zero(S)$，あるいは $S=\Ideal(X)$ と置けばよい．
+(3) (2) の前半を $S$ に適用し $\Zero$ の反変性を使うと $\Zero(\Ideal(\Zero(S)))\subset\Zero(S)$．
+(2) の後半を $X=\Zero(S)$ に適用すると逆の包含．第二式も同様．
+\end{proof}
+
+(3) から，$\Zero$ の像（代数的集合）と $\Ideal$ の像（ある種のイデアル）の間では $\Zero$ と $\Ideal$ が互いに逆写像になる．
+これは Galois 対応の一般論であり，体論の Galois 理論における「中間体 $\leftrightarrow$ 部分群」の対応と全く同じ形式をしている．
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  \draw[thick,rounded corners] (-4.6,-1.6) rectangle (-1.0,1.6);
+  \node at (-2.8,1.95) {$R$ のイデアル全体};
+  \draw[thick,blue,rounded corners,fill=blue!8] (-4.0,-1.2) rectangle (-1.6,0.6);
+  \node[blue] at (-2.8,0.25) {根基イデアル};
+  \draw[thick,rounded corners] (1.0,-1.6) rectangle (4.6,1.6);
+  \node at (2.8,1.95) {$\A^n$ の部分集合全体};
+  \draw[thick,red,rounded corners,fill=red!8] (1.6,-1.2) rectangle (4.0,0.6);
+  \node[red] at (2.8,0.25) {代数的集合};
+  \draw[->,thick] (-1.7,-0.3) to[bend left=20] node[above]{$\Zero$} (1.7,-0.3);
+  \draw[<-,thick] (-1.7,-0.75) to[bend right=20] node[below]{$\Ideal$} (1.7,-0.75);
+  \node at (0,-2.2) {零点定理：$k$ 代数閉なら色つきの部分どうしが一対一に対応する};
+\end{tikzpicture}
+\caption{$\Zero$ と $\Ideal$ の Galois 対応．}
+\label{fig:ch04-galois}
+\end{figure}
+
+\subsection{包含関係の反転}
+
+代数的集合とその消滅イデアルの間では，包含関係が \emph{正確に} 逆転する．
+
+\begin{myprop}{包含の反転}{ch04-inclusion}
+代数的集合 $X,Y\subset\A^n$ について
+\[
+  X\subset Y\iff\Ideal(Y)\subset\Ideal(X),\qquad X=Y\iff\Ideal(X)=\Ideal(Y).
+\]
+\end{myprop}
+
+\begin{proof}
+$\Rightarrow$ は反変性．$\Ideal(Y)\subset\Ideal(X)$ ならば $\Zero$ を取って $X=\Zero(\Ideal(X))\subset\Zero(\Ideal(Y))=Y$．
+\end{proof}
+
+この結果，「小さい図形」$\leftrightarrow$「大きいイデアル」という対応になる．
+最も小さい空でない代数的集合である一点は，（真のイデアルの中で）最も大きいイデアル，すなわち極大イデアルに対応すると期待される．
+これを保証するのが弱零点定理（定理\ref{thm:ch04-weak-null}）であり，その帰結は\ref{sec:ch04-duality}節でまとめる．
+
+\begin{myex}{包含の鎖}{ch04-chain}
+$\A^3$ において
+\[
+  \{0\}\subset\Zero(x,y)\ (z\text{軸})\subset\Zero(x)\ (yz\text{平面})\subset\A^3
+\]
+に対応して
+\[
+  (x,y,z)\supset(x,y)\supset(x)\supset 0
+\]
+となる．図形の次元が1つずつ上がるごとに，素イデアルの鎖が1段ずつ下がる．この観察が Krull 次元（第7章）の定義の動機となる．
+\end{myex}
+
+\exprob{prob:ch04-3} 任意の族 $\{X_\lambda\}$ について $\Ideal\bigl(\bigcup_\lambda X_\lambda\bigr)=\bigcap_\lambda\Ideal(X_\lambda)$ を示せ．
+また，任意の族 $\{S_\lambda\}\subset R$ について $\Zero\bigl(\bigcup_\lambda S_\lambda\bigr)=\bigcap_\lambda\Zero(S_\lambda)$ を示し，両者が Galois 対応の一般論から従うことを説明せよ．
+
+%======================================================================
+\section{根基イデアル}
+\label{sec:ch04-radical}
+%======================================================================
+
+\subsection{根基イデアルの定義}
+
+\begin{mydef}{根基}{ch04-radical}
+可換環 $A$ のイデアル $I$ に対し，
+\[
+  \sqrt{I}:=\{f\in A\mid \text{ある } m\ge1 \text{ について } f^m\in I\}
+\]
+を $I$ の \textbf{根基} (radical) という．$\sqrt I=I$ となるイデアルを \textbf{根基イデアル} (radical ideal) という．
+特に $\sqrt{0}$ は $A$ の冪零元全体であり，$A$ の \textbf{冪零根基} (nilradical) とよばれる．
+$\sqrt0=0$ のとき $A$ は \textbf{被約} (reduced) であるという．
+\end{mydef}
+
+\begin{mylem}{根基はイデアル}{ch04-radical-ideal}
+$\sqrt I$ は $I$ を含むイデアルである．
+\end{mylem}
+
+\begin{proof}
+$I\subset\sqrt I$ は $m=1$ とすればよい．$f\in\sqrt I$，$h\in A$ なら $(hf)^m=h^mf^m\in I$．
+$f^m\in I$，$g^l\in I$ のとき，二項定理により
+\[
+  (f+g)^{m+l-1}=\sum_{i+j=m+l-1}\binom{m+l-1}{i}f^ig^j
+\]
+の各項は $i\ge m$ または $j\ge l$ を満たす（さもなくば $i+j\le m+l-2$）ので $I$ に属する．よって $f+g\in\sqrt I$．
+\end{proof}
+
+\subsection{根基イデアルの性質}
+
+\begin{myprop}{根基の性質}{ch04-radical-props}
+$A$ を可換環，$I,J$ をイデアルとする．
+\begin{enumerate}
+  \item $\sqrt{\sqrt I}=\sqrt I$．特に $\sqrt I$ は根基イデアル．
+  \item 素イデアルは根基イデアルである．
+  \item $\sqrt{IJ}=\sqrt{I\cap J}=\sqrt I\cap\sqrt J$．
+  \item $\sqrt I=A\iff I=A$．
+  \item $I$ が根基イデアル $\iff$ $A/I$ が被約．
+  \item $\sqrt I$ は $I$ を含む全ての素イデアルの共通部分に等しい．
+\end{enumerate}
+\end{myprop}
+
+\begin{proof}
+(1) $f^m\in\sqrt I$ なら $(f^m)^l\in I$ なので $f\in\sqrt I$．
+(2) $\p$ 素，$f^m\in\p$ なら，素イデアルの定義を繰り返し用いて $f\in\p$．
+(3) $IJ\subset I\cap J\subset I,J$ から $\sqrt{IJ}\subset\sqrt{I\cap J}\subset\sqrt I\cap\sqrt J$．$f\in\sqrt I\cap\sqrt J$，$f^m\in I$，$f^l\in J$ なら $f^{m+l}\in IJ$．
+(4) $1\in\sqrt I\iff 1\in I$．
+(5) $A/I$ の元 $\bar f$ が冪零 $\iff f^m\in I$．
+(6) $\subset$ は (2) と $\sqrt{}$ の単調性から．逆に $f\notin\sqrt I$ とすると，積閉集合 $\{1,f,f^2,\dots\}$ は $I$ と交わらない．
+$I$ を含み $\{f^m\}$ と交わらないイデアルの族に Zorn の補題を適用して極大元 $\p$ を取ると，$\p$ は素イデアルであることが示せる
+（$a,b\notin\p$ なら $\p+(a)$，$\p+(b)$ は $f$ の冪 $f^i,f^j$ を含み，$f^{i+j}\in\p+(ab)$ となるので $ab\notin\p$）．$f\notin\p$ なので $f$ は右辺に属さない．
+\end{proof}
+
+\subsection{根基と零点集合}
+
+零点集合は根基の違いを見分けられない．
+
+\begin{myprop}{$\Zero(I)=\Zero(\sqrt I)$}{ch04-V-radical}
+任意のイデアル $I\subset R$ に対し $\Zero(I)=\Zero(\sqrt I)$．さらに $\sqrt I\subset\Ideal(\Zero(I))$．
+\end{myprop}
+
+\begin{proof}
+$I\subset\sqrt I$ より $\Zero(\sqrt I)\subset\Zero(I)$．$P\in\Zero(I)$，$f\in\sqrt I$，$f^m\in I$ なら $f(P)^m=0$ より $f(P)=0$．
+後半は，命題\ref{prop:ch04-I-props}(3) により $\Ideal(\Zero(I))$ が $I$ を含む根基イデアルであることから従う．
+\end{proof}
+
+したがって $\Ideal(\Zero(I))$ は少なくとも $\sqrt I$ を含む．
+強零点定理は，代数閉体上では $\Ideal(\Zero(I))=\sqrt I$ と等号が成り立つことを主張する．
+つまり「$I$ の零点集合上で消える多項式」はちょうど「冪が $I$ に入る多項式」であり，零点集合を通すことで失われる情報は「冪」の情報だけである．
+
+\subsection{根基イデアルの例}
+
+\begin{myex}{根基の計算}{ch04-radical-ex}
+\begin{enumerate}
+  \item $A=\Z$：$\sqrt{(12)}=(6)$．一般に $n=p_1^{e_1}\cdots p_r^{e_r}$ なら $\sqrt{(n)}=(p_1\cdots p_r)$．
+  \item $A=k[x]$：$f=c\prod_i(x-a_i)^{e_i}$（$a_i$ 相異なる）なら $\sqrt{(f)}=\bigl(\prod_i(x-a_i)\bigr)$．根の重複度を全て $1$ にする操作である．
+  \item 一般に $R$ において，$f=c\,f_1^{e_1}\cdots f_r^{e_r}$ を既約分解すると $\sqrt{(f)}=(f_1\cdots f_r)$．$f_1\cdots f_r$ を $f$ の \textbf{被約部分} (square-free part) という．
+  \item $\sqrt{(x^2,y)}=(x,y)$．実際 $x^2\in(x^2,y)$ より $x\in\sqrt{(x^2,y)}$，また $(x,y)$ は極大イデアルなので素であり根基．
+  \item $\sqrt{(x^2,xy)}=(x)$．$x^2\in I$ より $(x)\subset\sqrt I$．一方 $I\subset(x)$ で $(x)$ は素なので $\sqrt I\subset(x)$．
+        なお $\Zero(x^2,xy)=\Zero(x)$ は $y$ 軸である．$(x^2,xy)=(x)\cap(x^2,y)$ と分解でき，原点に「埋没した」余分な構造を持っている（第12章）．
+\end{enumerate}
+\end{myex}
+
+(3) の証明：$g=f_1\cdots f_r$ とすると $g^{\max e_i}\in(f)$ なので $g\in\sqrt{(f)}$．
+逆に $h^m\in(f)$ なら各 $f_i$ は $h^m$ を割るので，$f_i$ が素元であることから $f_i\mid h$．$f_i$ は互いに素なので $g\mid h$．
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.9]
+  \begin{scope}
+    \draw[->,gray] (-1.8,0)--(1.8,0) node[right]{$x$};
+    \draw[very thick,blue] (0,-1.5)--(0,1.5);
+    \node at (0,-2.1) {$(x)$：$y$ 軸};
+  \end{scope}
+  \begin{scope}[xshift=5cm]
+    \draw[->,gray] (-1.8,0)--(1.8,0) node[right]{$x$};
+    \draw[very thick,blue] (-0.06,-1.5)--(-0.06,1.5);
+    \draw[very thick,blue] (0.06,-1.5)--(0.06,1.5);
+    \node at (0,-2.1) {$(x^2)$：二重の $y$ 軸};
+  \end{scope}
+  \begin{scope}[xshift=10cm]
+    \draw[->,gray] (-1.8,0)--(1.8,0) node[right]{$x$};
+    \draw[very thick,blue] (0,-1.5)--(0,1.5);
+    \draw[red,thick] (-0.25,0)--(0.25,0);
+    \fill[red] (0,0) circle (2.2pt);
+    \node at (0,-2.1) {$(x^2,xy)$：埋没点つき};
+  \end{scope}
+\end{tikzpicture}
+\caption{零点集合はどれも $y$ 軸であるが，イデアルとしては異なる．根基を取るとすべて $(x)$ になる．}
+\label{fig:ch04-radical}
+\end{figure}
+
+\exprob{prob:ch04-4} $k[x,y]$ において $\sqrt{(x^3-y^2,\ y^3)}$ を求めよ．
+
+\exprob{prob:ch04-5} 可換環 $A$ のイデアル $I$ について，$I$ が根基イデアルであることと $A/I$ が冪零元を $0$ 以外に持たないことの同値性を用いて，$k[x,y]/(y^2-x^3)$ が被約であることを示せ．
+
+%======================================================================
+\section{Hilbertの零点定理}
+%======================================================================
+
+\subsection{Nullstellensatzの準備}
+
+零点定理には弱形と強形の二つがある．
+\begin{itemize}
+  \item \textbf{弱零点定理}：$I\subsetneq R$ ならば $\Zero(I)\ne\emptyset$．すなわち「矛盾しない方程式系は必ず解を持つ」．
+  \item \textbf{強零点定理}：$\Ideal(\Zero(I))=\sqrt I$．
+\end{itemize}
+弱形は，一変数の場合には代数学の基本定理そのものである：$I=(f)\subsetneq k[x]$ なら $f$ は定数でなく，$k$ が代数閉なので根を持つ．
+多変数の場合の困難は，一つの方程式ではなく連立方程式であること，そして変数が多いことである．
+
+証明の鍵は次の環論的な補題である．以下，$k$ 上の \textbf{有限生成代数}（$k$-代数）とは，ある $a_1,\dots,a_m$ によって $k[a_1,\dots,a_m]$ と書ける環，すなわち多項式環の剰余環のことである．
+
+\begin{mydef}{整拡大}{ch04-integral}
+環の拡大 $A\subset B$ について，$b\in B$ が $A$ 上 \textbf{整} (integral) であるとは，$A$ 係数のモニック多項式の根になること，すなわち
+\[
+  b^d+c_{d-1}b^{d-1}+\cdots+c_0=0\qquad(c_i\in A)
+\]
+を満たすことをいう．$B$ の全ての元が $A$ 上整であるとき，$B$ は $A$ 上 \textbf{整} であるという．
+$B=A[b_1,\dots,b_m]$ で各 $b_i$ が整ならば，$B$ は有限生成 $A$-加群であり $A$ 上整である（標準的な事実で，証明は省略する）．
+\end{mydef}
+
+\begin{mylem}{整拡大と体}{ch04-integral-field}
+$A\subset B$ を整域の整拡大とする．$B$ が体ならば $A$ も体である．
+\end{mylem}
+
+\begin{proof}
+$0\ne a\in A$ を取る．$B$ は体なので $a^{-1}\in B$ が存在し，$A$ 上整：
+$a^{-d}+c_{d-1}a^{-(d-1)}+\cdots+c_0=0$．両辺に $a^{d-1}$ を掛けると
+\[
+  a^{-1}=-(c_{d-1}+c_{d-2}a+\cdots+c_0a^{d-1})\in A.
+\]
+よって $A$ は体である．
+\end{proof}
+
+\begin{mythm}{Noether の正規化定理}{ch04-noether-normalization}
+$k$ を無限体，$B=k[a_1,\dots,a_m]$ を有限生成 $k$-代数とする．このとき $k$ 上代数的に独立な元 $y_1,\dots,y_d\in B$ が存在して，$B$ は多項式環 $k[y_1,\dots,y_d]$ 上整になる．
+\end{mythm}
+
+\begin{proof}[証明の概略]
+$m$ に関する帰納法．$a_1,\dots,a_m$ が代数的に独立なら $d=m$，$y_i=a_i$ とすればよい．
+そうでなければ零でない多項式 $F$ で $F(a_1,\dots,a_m)=0$ となるものがある．$F$ の最高次斉次部分を $F_D$ とする．
+$\lambda_1,\dots,\lambda_{m-1}\in k$ を選び $a_i'=a_i-\lambda_ia_m$（$i<m$）と置くと，
+\[
+  \begin{aligned}
+  0&=F(a_1'+\lambda_1a_m,\dots,a_{m-1}'+\lambda_{m-1}a_m,\ a_m)\\
+   &=F_D(\lambda_1,\dots,\lambda_{m-1},1)\,a_m^D+(a_m\text{ について }D\text{ 次未満の項})
+  \end{aligned}
+\]
+となる．$F_D(\lambda_1,\dots,\lambda_{m-1},1)$ は $\lambda$ の零でない多項式なので（$F_D(x_1,\dots,x_{m-1},1)\ne0$ に注意），$k$ が無限体であることから値が $0$ でない $\lambda$ を選べる．
+すると $a_m$ は $B'=k[a_1',\dots,a_{m-1}']$ 上整であり，$B=B'[a_m]$ は $B'$ 上整．
+帰納法の仮定から $B'$ は代数的に独立な $y_1,\dots,y_d$ について $k[y_1,\dots,y_d]$ 上整であり，整性の推移性により $B$ も $k[y_1,\dots,y_d]$ 上整である．
+\end{proof}
+
+幾何学的には，Noether 正規化は「代数的集合 $X$ を適当な線形射影 $X\to\A^d$ で見ると，各ファイバーが有限個の点からなる全射になる」ことを意味する．$d$ は $X$ の次元である（第7章）．
+
+\begin{mylem}{Zariski の補題}{ch04-zariski-lemma}
+$k$ を体，$K$ を有限生成 $k$-代数とする．$K$ が体ならば，$K$ は $k$ の有限次代数拡大である．
+特に $k$ が代数閉体ならば $K=k$．
+\end{mylem}
+
+\begin{proof}
+$k$ が無限体の場合に示す（本書で必要なのは代数閉体の場合で，代数閉体は無限体である）．
+Noether 正規化により，代数的に独立な $y_1,\dots,y_d$ があって $K$ は $A=k[y_1,\dots,y_d]$ 上整．
+補題\ref{lem:ch04-integral-field}により $A$ は体である．しかし $d\ge1$ なら多項式環 $A$ において $y_1$ は可逆でないので $d=0$，$A=k$．
+よって $K$ は $k$ 上整，すなわち代数的であり，有限個の代数的元で生成されるので有限次拡大である．
+$k$ が代数閉なら $k$ の代数拡大は $k$ 自身のみである．
+\end{proof}
+
+\begin{note}
+$k=\C$ の場合は次のような別証明がある．$K$ が体で $\C$ を真に含むとし，$t\in K\setminus\C$ を取る．
+$\C$ は代数閉なので $t$ は $\C$ 上超越的であり，$\{1/(t-c)\}_{c\in\C}$ は $\C$ 上一次独立（部分分数分解の一意性）．よって $\dim_\C K$ は非可算．
+一方 $K$ は有限生成 $\C$-代数なので単項式で張られ，$\dim_\C K$ は高々可算．矛盾．
+\end{note}
+
+\subsection{弱Hilbertの零点定理}
+
+\begin{mythm}{弱零点定理}{ch04-weak-null}
+$k$ を代数閉体とする．
+\begin{enumerate}
+  \item $R=k[x_1,\dots,x_n]$ の極大イデアルは，ある点 $P=(a_1,\dots,a_n)\in\A^n$ を用いて $\m_P=(x_1-a_1,\dots,x_n-a_n)$ と書ける．
+  \item $I\subsetneq R$ を真のイデアルとすると $\Zero(I)\ne\emptyset$．
+\end{enumerate}
+\end{mythm}
+
+\begin{proof}
+(1) $\m$ を極大イデアルとすると $K=R/\m$ は体であり，$\bar x_1,\dots,\bar x_n$ で生成される有限生成 $k$-代数である．
+Zariski の補題により，自然な写像 $k\to K$ は同型である．よって各 $\bar x_i$ に対し $a_i\in k$ があって $\bar x_i=a_i$，すなわち $x_i-a_i\in\m$．
+したがって $\m_P\subset\m$ であり，$\m_P$ は極大（例\ref{ex:ch04-basic}）なので $\m=\m_P$．
+
+(2) $I$ は真のイデアルなので，ある極大イデアル $\m$ に含まれる（Zorn の補題，または $R$ が Noether 環であることによる）．
+(1) より $\m=\m_P$ と書け，$I\subset\m_P$．$\Zero$ の反変性から $\{P\}=\Zero(\m_P)\subset\Zero(I)$．
+\end{proof}
+
+弱零点定理は，連立方程式 $f_1=\cdots=f_r=0$ が \emph{解を持たない} ならば，その理由は代数的な「矛盾の証明書」として現れることを主張している：
+\[
+  \Zero(f_1,\dots,f_r)=\emptyset\iff 1\in(f_1,\dots,f_r)\iff\text{ある } g_i \text{ があって } g_1f_1+\cdots+g_rf_r=1.
+\]
+後者は，与えられた方程式の多項式結合で $1=0$ が導けることを意味する．
+
+\begin{myex}{矛盾の証明書}{ch04-certificate}
+$f_1=xy-1$，$f_2=x$ は共通解を持たない（$x=0$ なら $xy=0\ne1$）．実際
+\[
+  (-1)\cdot(xy-1)+y\cdot x=1
+\]
+である．
+\end{myex}
+
+\subsection{強Hilbertの零点定理}
+
+\begin{mythm}{強零点定理（Hilbert の Nullstellensatz）}{ch04-strong-null}
+$k$ を代数閉体とする．任意のイデアル $I\subset R$ に対し
+\[
+  \Ideal(\Zero(I))=\sqrt I.
+\]
+言い換えると，$f$ が $\Zero(I)$ の全ての点で消えるならば，ある $m\ge1$ について $f^m\in I$ である．
+\end{mythm}
+
+\subsection{定理の証明}
+
+強零点定理は，弱零点定理から \textbf{Rabinowitsch のトリック}とよばれる巧妙な議論で導かれる．
+
+\begin{proof}[強零点定理の証明]
+$\sqrt I\subset\Ideal(\Zero(I))$ は命題\ref{prop:ch04-V-radical}で示した．逆を示す．
+$I=(f_1,\dots,f_r)$（Hilbert の基底定理）とし，$f\in\Ideal(\Zero(I))$，$f\ne0$ とする．
+新しい変数 $t$ を加えた多項式環 $R[t]=k[x_1,\dots,x_n,t]$ において，イデアル
+\[
+  J=(f_1,\dots,f_r,\ 1-tf)\subset k[x_1,\dots,x_n,t]
+\]
+を考える．$\Zero(J)\subset\A^{n+1}$ の点 $(P,c)$ があったとすると，$f_i(P)=0$ より $P\in\Zero(I)$ なので $f(P)=0$，すると $1-cf(P)=1\ne0$ となり矛盾．
+よって $\Zero(J)=\emptyset$ であり，弱零点定理により $J=R[t]$，すなわち $1\in J$：
+\[
+  1=\sum_{i=1}^r g_i(x,t)\,f_i(x)+h(x,t)\,(1-tf(x)).
+\]
+これは多項式の恒等式なので，$t$ に $1/f$ を代入した有理関数体 $k(x_1,\dots,x_n)$ での等式
+\[
+  1=\sum_{i=1}^r g_i(x,1/f)\,f_i(x)
+\]
+が得られる．$g_i$ の $t$ に関する次数の最大値を $m$ とし，両辺に $f^m$ を掛けると，$f^mg_i(x,1/f)$ は多項式になり
+\[
+  f^m=\sum_{i=1}^r\bigl(f^mg_i(x,1/f)\bigr)f_i\in I.
+\]
+よって $f\in\sqrt I$．
+\end{proof}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.95]
+  \draw[->,gray] (-0.3,0)--(4.5,0) node[right]{$x$（$\A^n$ 方向）};
+  \draw[->,gray] (0,-0.3)--(0,3.2) node[above]{$t$};
+  \draw[very thick,blue,domain=0.35:4.2,samples=60] plot (\x,{1/\x});
+  \node[blue] at (3.6,0.65) {$tf(x)=1$};
+  \draw[very thick,red] (0,-0.25)--(0,3.0);
+  \node[red,left] at (0,2.4) {$\Zero(I)\times\A^1$};
+  \node[align=left] at (6.7,1.6) {$\Zero(I)$ 上では $f=0$ なので，\\ 曲面 $tf=1$ と $\Zero(I)\times\A^1$ は\\ 交わらない（$\Zero(J)=\emptyset$）．};
+\end{tikzpicture}
+\caption{Rabinowitsch のトリックの幾何学的意味（$\Zero(I)$ を1点で表した模式図）．}
+\label{fig:ch04-rabinowitsch}
+\end{figure}
+
+Rabinowitsch のトリックの幾何学的意味は次の通りである．$\Zero(1-tf)\subset\A^{n+1}$ は $D(f)\subset\A^n$ と同一視できる（$t=1/f$）．
+すなわち変数を一つ増やすことで「$f\ne0$」という開条件を「$tf=1$」という閉条件に書き換えたのである．
+この手法は第6章の局所化 $R_f=R[t]/(1-tf)$ そのものである．
+
+\subsection{幾何学的解釈}
+
+強零点定理から，代数的集合と根基イデアルの完全な対応が得られる．
+
+\begin{mythm}{代数的集合と根基イデアルの対応}{ch04-correspondence}
+$k$ を代数閉体とする．写像
+\[
+  \{\A^n\text{ の代数的集合}\}\ \underset{\Zero}{\overset{\Ideal}{\rightleftarrows}}\ \{R\text{ の根基イデアル}\}
+\]
+は互いに逆な，包含関係を逆転する全単射である．
+\end{mythm}
+
+\begin{proof}
+$X$ が代数的集合なら $\Ideal(X)$ は根基イデアルで $\Zero(\Ideal(X))=X$（命題\ref{prop:ch04-I-props}(3)，命題\ref{prop:ch04-VI-closure}）．
+$I$ が根基イデアルなら強零点定理より $\Ideal(\Zero(I))=\sqrt I=I$．
+\end{proof}
+
+幾何学的に言い直すと，次のようになる：
+\begin{itemize}
+  \item 「$f$ が $\Zero(f_1,\dots,f_r)$ 上で消える」という幾何学的な条件は，「$f$ のある冪が $f_1,\dots,f_r$ の多項式結合で書ける」という代数的な条件と同値である．
+        前者は無限個の点での確認を要するが，後者は有限的な計算（Gröbner 基底など）で判定できる．
+  \item 代数的集合を記述するには，その消滅イデアル，すなわち根基イデアルを指定すれば十分であり，それで過不足がない．
+  \item 根基でないイデアル（例えば $(x^2)$）は，零点集合の上に「重複度」や「無限小の厚み」という付加情報を載せたものとみなせる．古典的な代数幾何ではこれを捨てるが，スキーム論（第12章）ではこれも幾何学的対象として扱う．
+\end{itemize}
+
+\begin{physbox}[拘束条件と第一類・第二類]
+古典力学の拘束系において，拘束条件 $\phi_a(q,p)=0$ が多項式で与えられているとする．
+「拘束面上で弱くゼロ ($\approx0$)」な関数 $F$ とは，拘束面 $\Zero(\phi_a)$ 上で $F=0$ となる関数のことであり，これは消滅イデアル $\Ideal(\Zero(\phi_a))$ の元にほかならない．
+Dirac の理論では通常「$F\approx 0\iff F=\sum_a c_a\phi_a$」と仮定するが，これは $(\phi_a)$ が根基イデアル（かつ正則性条件を満たす）ことを要求している．
+例えば拘束を $\phi=q^2$ と書いてしまうと，$q\approx0$ であるにもかかわらず $q$ は $\phi$ の倍数ではない．零点定理は，この「拘束条件の選び方の不備」を正確に $\sqrt{(\phi_a)}$ と $(\phi_a)$ の差として捉える．
+\end{physbox}
+
+\exprob{prob:ch04-6} $f_1=x^2+y^2-1$，$f_2=x-1$，$f_3=y-1$ とする．$\Zero(f_1,f_2,f_3)=\emptyset$ を確かめ，$g_1f_1+g_2f_2+g_3f_3=1$ となる多項式 $g_i$ を具体的に求めよ．
+
+\exprob{prob:ch04-7} 強零点定理を用いて，$\Ideal(\Zero(x^2-y^3,\ y^2-x^3))$ を求めよ（$k=\C$）．
+
+%======================================================================
+\section{座標環}
+%======================================================================
+
+\subsection{代数的集合に対応する環}
+
+$\A^n$ 上の関数の環は多項式環 $R$ であった．代数的集合 $X\subset\A^n$ 上の「関数」としては，多項式 $f\in R$ を $X$ に制限したもの $f|_X\colon X\to k$ を考えるのが自然である．
+二つの多項式 $f,g$ が $X$ 上で同じ関数を定めるのは，$f-g$ が $X$ 上で消えるとき，すなわち $f-g\in\Ideal(X)$ のときである．
+したがって $X$ 上の多項式関数全体は，$R$ を $\Ideal(X)$ で割った環と同一視される．
+
+\subsection{座標環の定義}
+
+\begin{mydef}{座標環}{ch04-coordinate-ring}
+代数的集合 $X\subset\A^n$ に対し，
+\[
+  k[X]:=k[x_1,\dots,x_n]/\Ideal(X)
+\]
+を $X$ の \textbf{座標環} (coordinate ring) という．$k[X]$ の元を $X$ 上の \textbf{多項式関数}という（第5章で見るように，$X$ が既約なら $X$ 全体で正則な関数とも一致する）．
+\end{mydef}
+
+上の議論から，制限写像 $R\to\{X\text{ 上の関数}\}$，$f\mapsto f|_X$ の核は $\Ideal(X)$ であり，準同型定理により $k[X]$ は $X$ 上の関数の環に単射で埋め込まれる．
+$k[X]$ は $k$ 上 $\bar x_1,\dots,\bar x_n$（座標関数の制限）で生成される有限生成 $k$-代数であり，$\Ideal(X)$ が根基イデアルなので被約である（命題\ref{prop:ch04-radical-props}(5)）．
+さらに第3章で見たように，$X$ が既約であることと $k[X]$ が整域であることは同値である．
+
+\subsection{座標環の具体例}
+
+\begin{myex}{座標環の例}{ch04-coord-examples}
+\begin{enumerate}
+  \item $k[\A^n]=k[x_1,\dots,x_n]$，$k[\text{一点}]=R/\m_P\cong k$．
+  \item 放物線 $X=\Zero(y-x^2)$：$k[X]=k[x,y]/(y-x^2)\cong k[x]$（$y\mapsto x^2$）．放物線上の関数は $x$ だけの多項式で書け，放物線は代数的に $\A^1$ と「同じ」である．
+  \item 双曲線 $X=\Zero(xy-1)$：$k[X]=k[x,y]/(xy-1)\cong k[x,x^{-1}]$（Laurent 多項式環）．$\A^1$ の座標環 $k[x]$ とは同型でない（$k[x,x^{-1}]$ には定数以外の可逆元 $x$ があるが $k[x]$ にはない）ので，双曲線は $\A^1$ と同型でない．
+  \item 二直線 $X=\Zero(xy)$：$k[X]=k[x,y]/(xy)$．$\bar x\bar y=0$ だが $\bar x,\bar y\ne0$ なので零因子を持ち，整域でない．$X$ が可約であることに対応する．
+  \item 尖点曲線 $X=\Zero(y^2-x^3)$：$k[X]\cong k[t^2,t^3]\subset k[t]$（$x\mapsto t^2$，$y\mapsto t^3$）．$k[t]$ とは同型でない（$t\notin k[t^2,t^3]$）．
+  \item 二点 $X=\{0,1\}\subset\A^1$：$k[X]=k[x]/(x(x-1))\cong k\times k$（中国剰余定理）．各点での値の組 $(f(0),f(1))$ がちょうど関数の情報である．
+\end{enumerate}
+\end{myex}
+
+\begin{proof}[(5) の確認]
+準同型 $\varphi\colon k[x,y]\to k[t]$，$x\mapsto t^2$，$y\mapsto t^3$ の像は $k[t^2,t^3]$（$1$ 次の項を持たない多項式全体）である．
+核が $(y^2-x^3)$ であることを示す．$f\in\Ker\varphi$ を $y^2-x^3$ で（$y$ についてのモニック多項式として）割ると $f=(y^2-x^3)q+a(x)+b(x)y$．
+$\varphi(f)=a(t^2)+b(t^2)t^3=0$ であり，$a(t^2)$ は偶数次の項のみ，$b(t^2)t^3$ は奇数次の項のみからなるので $a=b=0$．
+よって $k[x,y]/(y^2-x^3)\cong k[t^2,t^3]$ は整域 $k[t]$ の部分環なので整域，すなわち $(y^2-x^3)$ は素イデアル（第3章で見た $y^2-x^3$ の既約性からも分かる）であり，特に根基である．零点定理から $\Ideal(X)=\sqrt{(y^2-x^3)}=(y^2-x^3)$．
+\end{proof}
+
+\subsection{座標環と多様体の関係}
+
+座標環は代数的集合の幾何学的な情報を全て含んでいる．例えば：
+\begin{itemize}
+  \item \textbf{点}：$X$ の点 $P$ は評価準同型 $\mathrm{ev}_P\colon k[X]\to k$，$f\mapsto f(P)$ を定め，その核は $k[X]$ の極大イデアル $\m_P/\Ideal(X)$ である（\ref{sec:ch04-duality}節）．
+  \item \textbf{部分集合}：$X$ に含まれる代数的集合は，$k[X]$ の根基イデアルと一対一に対応する（定理\ref{thm:ch04-correspondence}を $X$ に制限したもの）．
+  \item \textbf{既約性}：$X$ が既約 $\iff$ $k[X]$ が整域．
+  \item \textbf{写像}：代数的集合の間の多項式写像は座標環の間の $k$-代数準同型（向きは逆）と対応する．
+\end{itemize}
+最後の点を含め，座標環の詳しい性質と「アフィン代数的集合の圏 $\simeq$ 被約有限生成 $k$-代数の圏の逆」（既約なもの，すなわちアフィン多様体に制限すれば有限生成整域 $k$-代数の圏の逆）という対応は第5章で詳しく扱う．
+ここで強調しておきたいのは，座標環は \textbf{埋め込み $X\subset\A^n$ に依存しない} 不変量だという点である．
+例えば放物線 $\Zero(y-x^2)\subset\A^2$ と直線 $\A^1$ は座標環がともに $k[x]$ であり，代数幾何学的には同じ対象とみなされる．
+
+\subsection{幾何学的対象の代数的表現}
+
+以上をまとめると，代数的集合 $X$ は次のいずれの方法でも表現できる．
+\begin{enumerate}
+  \item 点集合 $X\subset\A^n$ として（外在的な記述）．
+  \item 根基イデアル $\Ideal(X)\subset k[x_1,\dots,x_n]$ として（方程式による記述）．
+  \item 被約有限生成 $k$-代数 $k[X]$ とその生成系として（関数による記述）．
+\end{enumerate}
+(3) で生成系を忘れて環 $k[X]$ だけを見ることが，「埋め込みによらない内在的な幾何学」への第一歩である．
+これは，多様体を $\R^N$ の部分集合としてではなく，局所座標の貼り合わせとして内在的に定義する微分幾何学の発想と並行している．
+
+\begin{physbox}[カイラル環]
+$\mathcal N=1$ 超対称ゲージ理論において，カイラル演算子のなす環（カイラル環）は，古典的には
+ゲージ不変なカイラル超場の多項式環を F 項関係式 $\partial W/\partial\phi_i=0$ で割った環として与えられる．
+これはまさに「真空のモジュライ空間の座標環」であり，カイラル演算子の真空期待値 $\langle\mathcal O\rangle$ は真空（＝モジュライ空間の点）での関数の値に相当する．
+例えば $\mathcal N=4$ 理論のゲージ群 $U(1)$ の場合のように F 項関係式が自明なら，カイラル環は多項式環で，モジュライ空間はアフィン空間である．
+量子効果で環の関係式が変形されること（例えば $N_f=N_c$ の $\mathcal N=1$ $SU(N_c)$ 超 QCD における $\det M-B\tilde B=\Lambda^{2N_c}$）は，モジュライ空間の幾何学の変形として理解される．
+\end{physbox}
+
+\exprob{prob:ch04-8} ねじれ3次曲線 $C=\Zero(y-x^2,\ z-x^3)\subset\A^3$ の座標環が $k[t]$ と同型であることを示せ．
+
+\exprob{prob:ch04-9} $X=\Zero(x^2+y^2-1)\subset\A^2_\C$ の座標環が $\C[u,u^{-1}]$ と同型であることを示せ．
+
+%======================================================================
+\section{代数と幾何の双対性}
+\label{sec:ch04-duality}
+%======================================================================
+
+\subsection{点と極大イデアル}
+
+\begin{mythm}{点と極大イデアルの対応}{ch04-points-max}
+$k$ を代数閉体とする．
+\begin{enumerate}
+  \item 写像 $\A^n\to\{R\text{ の極大イデアル}\}$，$P\mapsto\m_P$ は全単射である．
+  \item より一般に，代数的集合 $X$ に対し，$P\mapsto\m_P/\Ideal(X)$ は $X$ の点と $k[X]$ の極大イデアルの間の全単射を与える．
+\end{enumerate}
+\end{mythm}
+
+\begin{proof}
+(1) 単射性は $\Zero(\m_P)=\{P\}$ から，全射性は弱零点定理（定理\ref{thm:ch04-weak-null}(1)）から従う．
+(2) $k[X]=R/\Ideal(X)$ の極大イデアルは，$\Ideal(X)$ を含む $R$ の極大イデアル $\m_P$ と対応する（第2章，剰余環のイデアルの対応）．
+$\Ideal(X)\subset\m_P=\Ideal(\{P\})\iff\{P\}\subset X$（命題\ref{prop:ch04-inclusion}）．
+\end{proof}
+
+点 $P\in X$ は評価写像 $\mathrm{ev}_P\colon k[X]\to k$ と同一視でき，逆に任意の $k$-代数準同型 $\varphi\colon k[X]\to k$ はその核が極大イデアルなので，ある点での評価写像になる．すなわち
+\[
+  X\ \cong\ \Hom_{k\text{-alg}}(k[X],\ k)\ \cong\ \{k[X]\text{ の極大イデアル}\}.
+\]
+「空間の点とは，関数環から数への準同型である」というこの視点は，Gelfand--Naimark の定理（コンパクト Hausdorff 空間 $\leftrightarrow$ 可換 $C^*$ 代数）と全く同じ精神である．
+
+\subsection{既約代数的集合と素イデアル}
+
+第3章の定理（既約性と素イデアル）と強零点定理を組み合わせると，次が得られる．
+
+\begin{mythm}{既約集合と素イデアルの対応}{ch04-irred-prime}
+$k$ を代数閉体とする．対応 $X\mapsto\Ideal(X)$，$\p\mapsto\Zero(\p)$ により
+\[
+  \{\A^n\text{ の既約代数的集合}\}\ \longleftrightarrow\ \{R\text{ の素イデアル}\}
+\]
+は包含を逆転する全単射である．
+\end{mythm}
+
+\begin{proof}
+既約な $X$ に対し $\Ideal(X)$ は素（第3章）．素イデアル $\p$ は根基なので，定理\ref{thm:ch04-correspondence}により $\p=\Ideal(\Zero(\p))$ であり，再び第3章の定理から $\Zero(\p)$ は既約．
+あとは定理\ref{thm:ch04-correspondence}の全単射を制限すればよい．
+\end{proof}
+
+この対応のもとで，第3章の既約分解は次の代数的な事実に翻訳される：
+根基イデアル $I$ は，有限個の素イデアルの共通部分 $I=\p_1\cap\cdots\cap\p_r$（$\p_i\not\subset\p_j$）として一意に表され，$\p_i$ は $I$ を含む極小素イデアルである．
+例えば $(xy)=(x)\cap(y)$，$(xz,yz)=(z)\cap(x,y)$ である．
+
+\subsection{座標環による幾何学の再構成}
+
+以上により，代数的集合 $X$ の幾何学的性質は座標環 $k[X]$ から完全に再構成できる：
+\begin{itemize}
+  \item $X$ の点 $=$ $k[X]$ の極大イデアル．
+  \item $X$ の閉集合 $=$ $k[X]$ の根基イデアル（$Y\mapsto\Ideal(Y)/\Ideal(X)$）．
+  \item $X$ の既約閉集合 $=$ $k[X]$ の素イデアル．
+  \item Zariski 位相：$\Zero(\bar I)=\{\m\supset\bar I\}$ を閉集合とする．
+  \item $X$ 上の関数 $=$ $k[X]$ の元，点 $\m$ での値 $=$ $k[X]/\m\cong k$ における像．
+\end{itemize}
+すなわち，被約有限生成 $k$-代数 $A$ が与えられれば，その極大イデアル全体に Zariski 位相を入れた空間 $\mathrm{Specm}\,A$ として幾何学的対象を「作る」ことができる．
+この発想をさらに推し進め，極大イデアルの代わりに素イデアル全体を考え，任意の可換環に適用したものが第12章の $\Spec A$ である．
+素イデアル $\p$ は既約閉集合 $\Zero(\p)$ に対応するので，$\Spec$ には「既約閉集合を代表する点（生成点）」が加わることになる．
+
+\subsection{代数幾何学の基本的な対応}
+\label{subsec:ch04-nonclosed}
+
+\paragraph{代数閉でない場合．}
+零点定理は $k$ が代数閉であることを本質的に使う．$k=\R$ の場合を見てみよう．
+\begin{itemize}
+  \item $I=(x^2+1)\subset\R[x]$ は真のイデアル（実は極大イデアル）だが，$\Zero(I)=\emptyset\subset\A^1_\R$．弱零点定理が破れる．
+        剰余体は $\R[x]/(x^2+1)\cong\C\ne\R$ であり，Zariski の補題の「$K=k$」の部分が成り立たない．
+  \item 極大イデアル $(x^2+1)$ はどの実数点 $\m_a=(x-a)$ にも対応しない．$\C$ に移れば $(x^2+1)=(x-i)(x+i)$ であり，これは複素共役な2点 $\{\pm i\}$ の組を表すと解釈される．
+  \item $I=(x^2+y^2)\subset\R[x,y]$ について $\Zero(I)=\{(0,0)\}$ なので $\Ideal(\Zero(I))=(x,y)$．しかし $x^2+y^2$ は $\R$ 上既約で $(x^2+y^2)$ は素イデアル（したがって根基）であり，$(x,y)\ne\sqrt I=I$．強零点定理が破れる．
+  \item 同じ理由で，$\R$ 上では $\Zero(x^2+y^2)=\Zero(x,y)$ のように，一つの方程式で余次元2の集合が定まってしまう．任意の代数的集合 $\Zero(f_1,\dots,f_r)=\Zero(f_1^2+\cdots+f_r^2)$ は超曲面になる．
+\end{itemize}
+これらの病理は，$\R$ 上の代数的集合が「実点」だけでは方程式の情報を十分に反映しないことを示している．
+複素化して $\C$ 上で考えるか，スキーム論（第12章）で非 $k$-有理点（$(x^2+1)$ のような点）も含めて扱うことでこの問題は解消される．
+
+\paragraph{対応表．}
+最後に，本章と第3章で確立した代数と幾何の辞書をまとめておく（$k$ は代数閉体）．
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{l|l}
+\textbf{幾何学}（$\A^n$ の部分集合） & \textbf{代数学}（$R=k[x_1,\dots,x_n]$ のイデアル） \\ \hline
+代数的集合 $X$ & 根基イデアル $I=\Ideal(X)$ \\
+既約代数的集合 & 素イデアル \\
+点 $P=(a_1,\dots,a_n)$ & 極大イデアル $\m_P=(x_1-a_1,\dots,x_n-a_n)$ \\
+空集合 $\emptyset$ & $R$ 全体（$1\in I$） \\
+$\A^n$ 全体 & $0$ \\
+$X\subset Y$ & $\Ideal(X)\supset\Ideal(Y)$ \\
+$X\cup Y$ & $\Ideal(X)\cap\Ideal(Y)$（$=\sqrt{\Ideal(X)\Ideal(Y)}$） \\
+$X\cap Y$ & $\sqrt{\Ideal(X)+\Ideal(Y)}$ \\
+既約分解 $X=X_1\cup\dots\cup X_r$ & 素イデアルへの分解 $I=\p_1\cap\cdots\cap\p_r$ \\
+Zariski 閉包 $\overline S$ & $\Ideal(S)$ \\
+$X$ 上の多項式関数 & 座標環 $k[X]=R/\Ideal(X)$ の元 \\
+$X$ の点 & $k[X]$ の極大イデアル $=$ $\Hom_{k\text{-alg}}(k[X],k)$ \\
+$X$ が既約 & $k[X]$ が整域 \\
+\end{tabular}
+\caption{代数と幾何の辞書．}
+\label{tab:ch04-dictionary}
+\end{table}
+
+表の $X\cap Y$ の行で根基が必要なことは，例\ref{ex:ch04-intersection}（放物線と接線）が示している：
+$\Ideal(X)+\Ideal(Y)=(x^2,y)$ は根基でなく，その根基 $(x,y)$ が交点の消滅イデアルである．
+根基を取らない $(x^2,y)$ は「重複度2の交点」を表しており，この情報を幾何学的対象として扱うのが第9章の交点理論と第12章のスキーム論である．
+
+\begin{physbox}[古典的な真空と量子的な真空]
+物理では，古典的な真空のモジュライ空間は F 項条件のイデアル $J_W=(\partial_i W)$ の零点集合 $\Zero(J_W)$ である．
+零点定理によれば，真空の「点集合」を見る限り $J_W$ の情報は $\sqrt{J_W}$ までしか残らない．
+しかし例えば $W=\phi^3/3$ の場合，$J_W=(\phi^2)$ で真空は $\phi=0$ の一点だが，カイラル環 $\C[\phi]/(\phi^2)$ は2次元であり，$\phi$ は「真空期待値はゼロだが演算子としては非自明な」元である．
+Landau--Ginzburg 模型の Witten 指数（真空の数）は $\dim_\C\C[\phi]/J_W$ で与えられ，この例では $2$ になる．
+すなわち物理は根基を取る前のイデアル $J_W$ を必要としており，これがスキーム論的な視点が物理で自然に現れる理由の一つである（第12章）．
+\end{physbox}
+
+\exprob{prob:ch04-10} $\R[x]$ の極大イデアルをすべて決定し，それらが $\A^1_\C$ の点（あるいは点の組）とどう対応するかを述べよ．
+
+\exprob{prob:ch04-11} $k[x,y]$ の素イデアルを，対応する $\A^2$ の既約代数的集合の次元（$0,1,2$）に応じて分類し，各場合の例を挙げよ．（厳密な証明は第7章の次元論を用いてよい．）
+
+\section*{問題の解答}
+\addcontentsline{toc}{section}{問題の解答}
+
+\exsol{prob:ch04-1}
+$\Ideal(X)=(x-y,\ x^2-x)$ である．
+
+まず $x-y$ と $x^2-x=x(x-1)$ は $(0,0)$ でも $(1,1)$ でも $0$ になるので $(x-y,\ x^2-x)\subset\Ideal(X)$．
+逆に $f\in\Ideal(X)$ とする．$y=x-(x-y)$ と書き換えて $f(x,y)=f(x,\,x-(x-y))$ を $x-y$ について展開すると
+\[
+  f=(x-y)\,q(x,y)+h(x)\qquad(h(x)=f(x,x))
+\]
+と書ける．$f(0,0)=f(1,1)=0$ より $h(0)=h(1)=0$ なので，$h$ は $x$ と $x-1$ で割り切れ，$x\ne x-1$ は互いに素だから $h\in(x(x-1))$．
+よって $f\in(x-y,\ x^2-x)$．
+
+なお $\Ideal(X)=\m_{(0,0)}\cap\m_{(1,1)}=(x,y)\cap(x-1,y-1)$（命題\ref{prop:ch04-I-props}(2)）であり，
+$k[X]=k[x,y]/(x-y,x^2-x)\cong k[x]/(x(x-1))\cong k\times k$ は例\ref{ex:ch04-coord-examples}(6) と同じ形である．
+（$x-y,\ y^2-y$ や $x-y,\ xy-x$ なども同じイデアルの生成元である．）
+
+\exsol{prob:ch04-2}
+$\Ideal(X)=0$，$\overline X=\A^2_\C$ である．
+
+$f\in\Ideal(X)$ を $f=\sum_{i=0}^d a_i(x)\,y^i$（$a_i\in\C[x]$）と書く．整数 $m$ を一つ固定すると，一変数多項式 $f(m,y)=\sum_ia_i(m)y^i\in\C[y]$ はすべての整数 $y$ で $0$ になる．
+零でない一変数多項式の根は有限個なので $f(m,y)$ は零多項式，すなわち全ての $i$ で $a_i(m)=0$．
+これが全ての $m\in\Z$ で成り立つので，各 $a_i$ は無限個の根をもち $a_i=0$．よって $f=0$，$\Ideal(X)=0$．
+
+命題\ref{prop:ch04-VI-closure}により $\overline X=\Zero(\Ideal(X))=\Zero(0)=\A^2_\C$．
+すなわち格子点全体は Zariski 位相で稠密である．Euclid 位相では $\Z^2$ は離散的な閉集合であり，Zariski 位相の粗さがよく分かる例である．
+
+\exsol{prob:ch04-3}
+\textbf{直接の証明．}
+$f\in\Ideal(\bigcup_\lambda X_\lambda)$ $\iff$ $\bigcup_\lambda X_\lambda$ の全ての点で $f=0$ $\iff$ 全ての $\lambda$ について $X_\lambda$ の全ての点で $f=0$ $\iff$ $f\in\bigcap_\lambda\Ideal(X_\lambda)$．
+同様に，$P\in\Zero(\bigcup_\lambda S_\lambda)$ $\iff$ 全ての $\lambda$ と全ての $f\in S_\lambda$ について $f(P)=0$ $\iff$ $P\in\bigcap_\lambda\Zero(S_\lambda)$．
+
+\textbf{Galois 対応からの導出．}
+命題\ref{prop:ch04-galois}(1) の同値 $S\subset\Ideal(X)\iff X\subset\Zero(S)$ だけを用いて示す．任意の部分集合 $S\subset R$ について
+\[
+  \begin{aligned}
+  S\subset\Ideal\Bigl(\bigcup_\lambda X_\lambda\Bigr)
+  &\iff\bigcup_\lambda X_\lambda\subset\Zero(S)
+  \iff\forall\lambda:\ X_\lambda\subset\Zero(S)\\
+  &\iff\forall\lambda:\ S\subset\Ideal(X_\lambda)
+  \iff S\subset\bigcap_\lambda\Ideal(X_\lambda).
+  \end{aligned}
+\]
+ここで第2・第4の同値は和集合・共通部分の定義（それぞれ包含に関する上限・下限であること）にすぎない．
+$S$ として左辺 $\Ideal(\bigcup X_\lambda)$ 自身をとれば $\subset$ が，右辺 $\bigcap\Ideal(X_\lambda)$ をとれば $\supset$ が従う．
+$\Zero$ についても全く同様に，任意の $X\subset\A^n$ について
+\[
+  \begin{aligned}
+  X\subset\Zero\Bigl(\bigcup_\lambda S_\lambda\Bigr)
+  &\iff\bigcup_\lambda S_\lambda\subset\Ideal(X)
+  \iff\forall\lambda:\ S_\lambda\subset\Ideal(X)\\
+  &\iff\forall\lambda:\ X\subset\Zero(S_\lambda)
+  \iff X\subset\bigcap_\lambda\Zero(S_\lambda).
+  \end{aligned}
+\]
+一般に，包含で順序づけた二つの集合族の間の反変な写像の組 $(\Ideal,\Zero)$ が「$S\subset\Ideal(X)\iff X\subset\Zero(S)$」を満たす（Galois 接続である）と，
+各写像は一方の側の上限（和集合）を他方の側の下限（共通部分）に写す．上の二式はこの一般論の特別な場合である．
+
+\exsol{prob:ch04-4}
+$I=(x^3-y^2,\ y^3)$ とおく．答えは $\sqrt I=(x,y)$ である．
+
+まず $y^3\in I$ より $y\in\sqrt I$．次に
+\[
+  x^6=(x^3-y^2)(x^3+y^2)+y^4=(x^3-y^2)(x^3+y^2)+y\cdot y^3\in I
+\]
+より $x\in\sqrt I$．よって $(x,y)\subset\sqrt I$．
+一方 $I$ の生成元はどちらも定数項をもたないので $I\subset(x,y)$．$(x,y)$ は極大イデアル，したがって素イデアルで根基なので（命題\ref{prop:ch04-radical-props}(2)），
+$\sqrt I\subset\sqrt{(x,y)}=(x,y)$．以上より $\sqrt I=(x,y)$．
+
+幾何学的には $\Zero(I)=\{(0,0)\}$（$y^3=0$ から $y=0$，すると $x^3=0$ から $x=0$）であり，強零点定理とも整合する．
+なお $I\ne\sqrt I$ である（$I$ の元は1次以下の項をもたないので $x\notin I$）．
+
+\exsol{prob:ch04-5}
+命題\ref{prop:ch04-radical-props}(5) により，$(y^2-x^3)$ が根基イデアルであることを示せばよい．
+そのためには $(y^2-x^3)$ が素イデアルであることを示せば十分である（素イデアルは根基，命題\ref{prop:ch04-radical-props}(2)）．
+
+$f=y^2-x^3$ が $k[x,y]$ で既約であることを示す．$f$ を $k[x][y]$ の $y$ についてのモニックな2次式とみる．
+もし $f=gh$ と非自明に分解すると，$x$ だけの多項式の因子は $f$ の $y^2$ の係数 $1$ を割るので定数であり，したがって $g,h$ はともに $y$ について1次で，
+モニックに正規化して $g=y-a(x)$ と書ける．$y=a(x)$ を代入して $a(x)^2=x^3$．左辺の次数は偶数，右辺は $3$ なので矛盾．
+よって $f$ は既約であり，$k[x,y]$ は UFD なので既約元 $f$ は素元，$(f)$ は素イデアルである．
+（例\ref{ex:ch04-radical-ex}(3) の「被約部分」を使えば，$f$ がそれ自身の被約部分であることから直ちに $\sqrt{(f)}=(f)$ と言ってもよい．）
+
+以上により $(y^2-x^3)$ は根基イデアルで，$k[x,y]/(y^2-x^3)$ は被約である．
+別証として，例\ref{ex:ch04-coord-examples}(5) の証明で示した同型 $k[x,y]/(y^2-x^3)\cong k[t^2,t^3]\subset k[t]$ を使えば，
+整域 $k[t]$ の部分環は冪零元を $0$ 以外にもたない，と言ってもよい．
+
+\exsol{prob:ch04-6}
+$\Zero(f_2,f_3)=\{(1,1)\}$ であり，$f_1(1,1)=1+1-1=1\ne0$ なので $\Zero(f_1,f_2,f_3)=\emptyset$．
+
+$x^2=(x-1)(x+1)+1$，$y^2=(y-1)(y+1)+1$ を用いると
+\[
+  f_1=x^2+y^2-1=(x+1)(x-1)+(y+1)(y-1)+1=(x+1)f_2+(y+1)f_3+1 .
+\]
+したがって
+\[
+  g_1=1,\qquad g_2=-(x+1),\qquad g_3=-(y+1)
+\]
+とおけば $g_1f_1+g_2f_2+g_3f_3=1$ である．
+実際，右辺を展開すると $x^2+y^2-1-(x^2-1)-(y^2-1)=1$ となる．
+これは「$x=1,y=1$ を円の方程式に代入すると $1=0$ になる」という矛盾を，多項式の恒等式として書き下したものである（例\ref{ex:ch04-certificate}）．
+
+\exsol{prob:ch04-7}
+$I=(x^2-y^3,\ y^2-x^3)\subset\C[x,y]$ とおく．答えは
+\[
+  \Ideal(\Zero(I))=\sqrt I=(y-x^4,\ x^6-x)
+\]
+である．以下，(i) 零点集合を求め，(ii) 根基を代数的に計算し，(iii) 両者が強零点定理と整合することを確かめる．
+
+\textbf{(i) 零点集合．}
+$(a,b)\in\Zero(I)$ とすると $a^2=b^3$，$b^2=a^3$．$a=0$ なら $b^3=0$ より $b=0$．$a\ne0$ なら $b\ne0$ であり，
+\[
+  a^4=(a^2)^2=b^6=(b^2)^3=a^9
+\]
+から $a^5=1$．さらに $b=b^3/b^2=a^2/a^3=a^{-1}=a^4$．逆に $\zeta^5=1$ のとき $(\zeta,\zeta^4)$ は
+$\zeta^2=\zeta^{12}=(\zeta^4)^3$，$(\zeta^4)^2=\zeta^8=\zeta^3$ を満たす．よって
+\[
+  \Zero(I)=\{(0,0)\}\cup\{(\zeta,\zeta^4)\mid\zeta^5=1\}
+\]
+は6点からなる．これら6点はすべて曲線 $y=x^4$ 上にあり，$x$ 座標 $0,\zeta$ はちょうど $x^6-x=x(x^5-1)$ の6個の相異なる根である．
+
+\textbf{(ii) 根基の計算．}
+$J=(y-x^4,\ x^6-x)$ とおき，$\sqrt I=J$ を示す．
+
+\emph{$J$ は根基イデアルで $I\subset J$．}
+$y\mapsto x^4$ により $\C[x,y]/J\cong\C[x]/(x^6-x)$ であり，$x^6-x$ は相異なる6根をもつので中国剰余定理により $\C[x]/(x^6-x)\cong\C^6$．
+これは被約なので $J$ は根基イデアルである（命題\ref{prop:ch04-radical-props}(5)）．
+また $J$ を法として $y\equiv x^4$，$x^6\equiv x$ なので $x^8\equiv x^3$，$x^{12}\equiv x^7\equiv x^2$ となり，
+\[
+  x^2-y^3\equiv x^2-x^{12}\equiv0,\qquad y^2-x^3\equiv x^8-x^3\equiv0\pmod J.
+\]
+よって $I\subset J$，したがって $\sqrt I\subset\sqrt J=J$．
+
+\emph{$J\subset\sqrt I$．}
+$A=\C[x,y]/I$ において計算する（元の像も同じ文字で書く）．$A$ では $x^2=y^3$，$y^2=x^3$ である．
+\begin{enumerate}
+  \item[(a)] $x^2=y^3=y\cdot y^2=x^3y$．
+  \item[(b)] $x^6=(x^3)^2=(y^2)^2=y^4=y\cdot y^3=x^2y$．すなわち $x^2(y-x^4)=0$．
+  \item[(c)] (b) より $x^8=x^2\cdot x^6=x^2\cdot x^2y=x^4y$．一方 (a) より $x^3=x\cdot x^2=x^4y$．よって $x^8=x^3$．
+  \item[(d)] (a)(c)(a) を順に用いて $x^7=x^5\cdot x^2=x^5\cdot x^3y=x^8y=x^3y=x^2$．
+\end{enumerate}
+これを用いると，$u=y-x^4$ について，$y^2=x^3$ と $x^4y=x^2\cdot x^2y=x^2\cdot x^6=x^8$（(b)）から
+\[
+  u^2=y^2-2x^4y+x^8=x^3-2x^8+x^8=x^3-x^8=0\qquad(\text{(c)}),
+\]
+また $v=x^6-x$ について，(d) を2回使って $x^{12}=x^5\cdot x^7=x^7=x^2$ だから
+\[
+  v^2=x^{12}-2x^7+x^2=x^2-2x^2+x^2=0 .
+\]
+すなわち $(y-x^4)^2\in I$，$(x^6-x)^2\in I$ であり，$y-x^4,\ x^6-x\in\sqrt I$．よって $J\subset\sqrt I$．
+
+以上で $\sqrt I=J=(y-x^4,\ x^6-x)$ が示された．
+
+\textbf{(iii) 強零点定理による結論．}
+強零点定理（定理\ref{thm:ch04-strong-null}）より $\Ideal(\Zero(I))=\sqrt I=(y-x^4,\ x^6-x)$．
+実際 $\Zero(J)$ は $y=x^4$，$x^6=x$ で定まる6点であり (i) と一致する．
+また $\Ideal(\Zero(I))$ を直接計算しても同じ答えになる：$f\in\Ideal(\Zero(I))$ を $f=(y-x^4)q+h(x)$ と書けば，$h$ は6個の相異なる点 $0,\zeta$ で消えるので $x^6-x\mid h$．
+
+\textbf{$I$ は根基でない．}
+$I$ の生成元はどちらも2次以上の項しかもたないので，$I$ の元は1次以下の項をもたない．$y-x^4$ は1次の項 $y$ をもつので $y-x^4\notin I$，すなわち $I\subsetneq\sqrt I$．
+その原因は原点にある．原点以外の5点では $x$ が可逆なので，(b) の $x^2(y-x^4)=0$ から局所的には $y-x^4$ そのものが $I$ に入る（各点で重複度 $1$）．
+一方原点では (a) より $x^2(1-xy)=0$ で $1-xy$ は原点の近くで可逆なので，局所的に $x^2=0$，同様に $y^2=0$ となり，
+$I$ は原点の近くで $(x^2,y^2)$ のように振る舞う．$\C[x,y]/(x^2,y^2)$ は $1,x,y,xy$ を基底とする4次元の空間で，原点は重複度 $4$ の交点である．
+合計 $5\cdot1+4=9=3\times3$ は二つの3次曲線の交点数（Bézout の定理，第9章）に一致する．
+根基をとることは，この原点の「重複度4の厚み」を捨てて単なる1点にする操作である．
+
+\exsol{prob:ch04-8}
+$\varphi\colon k[x,y,z]\to k[t]$ を $x\mapsto t$，$y\mapsto t^2$，$z\mapsto t^3$ で定める．$\varphi$ は $x\mapsto t$ だけで既に全射である．
+$\Ker\varphi=(y-x^2,\ z-x^3)$ を示す．$\supset$ は明らか．$f\in\Ker\varphi$ とし，$y=x^2+(y-x^2)$，$z=x^3+(z-x^3)$ と書き換えて展開すると
+\[
+  f=(y-x^2)g_1+(z-x^3)g_2+h(x)\qquad(h(x)=f(x,x^2,x^3))
+\]
+と書ける．$0=\varphi(f)=h(t)$ より $h=0$．よって $f\in(y-x^2,z-x^3)$．
+したがって $k[x,y,z]/(y-x^2,z-x^3)\cong k[t]$．
+
+これは整域なので $(y-x^2,z-x^3)$ は素イデアル，特に根基であり，定理\ref{thm:ch04-correspondence}より $\Ideal(C)=(y-x^2,z-x^3)$．
+（直接にも，$f\in\Ideal(C)$ なら上の分解で $h(t)=f(t,t^2,t^3)=0$ が全ての $t\in k$ で成り立ち，$k$ は無限体なので $h=0$．）
+以上より $k[C]=k[x,y,z]/\Ideal(C)\cong k[t]$．幾何学的には，$C$ は $t\mapsto(t,t^2,t^3)$ によって $\A^1$ と同型であり，その逆は射影 $(x,y,z)\mapsto x$ である．
+
+\exsol{prob:ch04-9}
+$u=x+iy$，$v=x-iy$ とおく．これは可逆な線形変換で，逆は $x=(u+v)/2$，$y=(u-v)/(2i)$ なので $\C[x,y]=\C[u,v]$．
+$uv=x^2+y^2$ であるから
+\[
+  \C[x,y]/(x^2+y^2-1)=\C[u,v]/(uv-1).
+\]
+
+\emph{$\C[u,v]/(uv-1)\cong\C[u,u^{-1}]$．}
+$\psi\colon\C[u,v]\to\C[u,u^{-1}]$ を $u\mapsto u$，$v\mapsto u^{-1}$ で定める．$u^{\pm1}$ が像に入るので全射であり，$uv-1\in\Ker\psi$．
+逆に $f\in\Ker\psi$ とする．$uv$ を $1+(uv-1)$ に置き換えることを繰り返すと，$f$ は $(uv-1)$ を法として
+$\sum_{i\ge0}a_iu^i+\sum_{j\ge1}b_jv^j$（$u$ と $v$ を同時に含む単項式がない形）と合同になる．
+その像 $\sum_ia_iu^i+\sum_jb_ju^{-j}$ が $0$ なので全ての $a_i,b_j$ が $0$．よって $\Ker\psi=(uv-1)$．
+
+\emph{$\Ideal(X)=(x^2+y^2-1)$．}
+上の同型から $\C[x,y]/(x^2+y^2-1)$ は整域 $\C[u,u^{-1}]$ と同型なので $(x^2+y^2-1)$ は素イデアル，特に根基であり，
+強零点定理より $\Ideal(X)=\sqrt{(x^2+y^2-1)}=(x^2+y^2-1)$．
+
+以上より $\C[X]=\C[x,y]/\Ideal(X)\cong\C[u,u^{-1}]$（$u=x+iy$，$u^{-1}=x-iy$）．
+幾何学的には，複素円 $X$ は $(x,y)\mapsto x+iy$ によって $\C^\times=\A^1\setminus\{0\}$ と同型であり，実の円 $S^1$ はその中の $|u|=1$ の部分である．
+$x=(u+u^{-1})/2$，$y=(u-u^{-1})/(2i)$ は $u=e^{i\theta}$ とおけば $\cos\theta,\ \sin\theta$ の Euler の公式そのものである．
+
+\exsol{prob:ch04-10}
+\textbf{極大イデアルの決定．}
+$\R[x]$ は単項イデアル整域なので，零でない素イデアルは既約多項式 $p$ により $(p)$ と書け，それは極大である（$\R[x]/(p)$ は体）．$(0)$ は極大でない．
+$\R$ 上の既約なモニック多項式は，代数学の基本定理により（$\C$ 上で1次式の積に分解し，実係数なので非実根は共役な組で現れるから）
+\begin{itemize}
+  \item 1次式 $x-a$（$a\in\R$），
+  \item 判別式が負の2次式 $x^2+bx+c=(x-\alpha)(x-\bar\alpha)$（$b^2-4c<0$，$\alpha\in\C\setminus\R$）
+\end{itemize}
+のいずれかである．よって $\R[x]$ の極大イデアルは $(x-a)$（$a\in\R$）と $(x^2+bx+c)$（$b^2<4c$）で尽きる．
+剰余体はそれぞれ $\R$ と $\C$ である．
+
+\textbf{$\A^1_\C$ の点との対応．}
+$\alpha\in\C$ に対し評価写像 $\mathrm{ev}_\alpha\colon\R[x]\to\C$，$f\mapsto f(\alpha)$ を考える．その像 $\R[\alpha]$ は $\R$ または $\C$ で体なので，$\m_\alpha:=\Ker\mathrm{ev}_\alpha$ は極大イデアルであり，$\alpha$ の $\R$ 上の最小多項式で生成される．
+上の分類から全ての極大イデアルはこの形をしている．さらに実係数多項式 $f$ について $f(\bar\alpha)=\overline{f(\alpha)}$ なので $\m_\alpha=\m_{\bar\alpha}$ であり，
+逆に $\m_\alpha=\m_\beta$ なら $\beta$ は $\alpha$ の最小多項式の根なので $\beta\in\{\alpha,\bar\alpha\}$．したがって
+\[
+  \{\R[x]\text{ の極大イデアル}\}\ \overset{1:1}{\longleftrightarrow}\ \A^1_\C/(\text{複素共役})
+\]
+であり，
+\begin{itemize}
+  \item $(x-a)$（$a\in\R$）は実点 $a\in\A^1_\C$（共役で固定される点）1個に，
+  \item $(x^2+bx+c)$ は共役な非実点の組 $\{\alpha,\bar\alpha\}$ に
+\end{itemize}
+対応する．言い換えると $(p)$ は $\C$ 上の零点集合 $\Zero_\C(p)$ に対応し，$\R[x]\subset\C[x]$ の極大イデアル $(x-\alpha)$ と $(x-\bar\alpha)$ がともに $(p)$ の上にある（$(x-\alpha)\cap\R[x]=(p)$）．
+集合としては閉上半平面 $\{\mathrm{Im}\,\alpha\ge0\}$ と同一視できる．
+$(x^2+1)$ が $\{\pm i\}$ に対応するのは本文（\ref{subsec:ch04-nonclosed}小節）の通りである．
+
+\exsol{prob:ch04-11}
+$k$ は代数閉体である．$k[x,y]$ の素イデアルは次の3種類に分類される．
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{c|l|l|l}
+次元 & 素イデアル & 既約代数的集合 & 例 \\ \hline
+$2$ & $(0)$ & $\A^2$ 全体 & \\
+$1$ & $(f)$，$f$ 既約多項式 & 既約曲線 $\Zero(f)$ & $(y-x^2)$，$(y^2-x^3)$，$(x)$ \\
+$0$ & $\m_P=(x-a,\ y-b)$ & 点 $P=(a,b)$ & $(x,y)$，$(x-1,y+2)$
+\end{tabular}
+\end{center}
+
+\textbf{これらが素イデアルであること．}
+$(0)$ は $k[x,y]$ が整域なので素．$f$ が既約なら $k[x,y]$ は UFD なので $f$ は素元で $(f)$ は素．$\m_P$ は極大（例\ref{ex:ch04-basic}）なので素．
+
+\textbf{他にないこと．}
+$\p\ne0$ を素イデアルとする．$0\ne g\in\p$ を既約分解すると，$\p$ は素なのでどれかの既約因子 $f$ が $\p$ に属し，$(f)\subset\p$．
+$\p=(f)$ なら第2の型である．$\p\supsetneq(f)$ のとき，$h\in\p\setminus(f)$ をとる．$f$ は既約で $f\nmid h$ なので $f,h$ は共通因子をもたない．
+このとき $\Zero(f,h)$ は有限集合である．実際，Gauss の補題により $f,h$ は $k(x)[y]$ でも互いに素であり，$k(x)[y]$ は PID なので $af+bh=1$（$a,b\in k(x)[y]$）．分母を払うと
+$a'f+b'h=c(x)$，$0\ne c\in k[x]$ となり，$\Zero(f,h)$ の点の $x$ 座標は $c$ の有限個の根に限られる．同様に $y$ 座標も有限個なので $\Zero(f,h)$ は有限．
+したがって $\Zero(\p)\subset\Zero(f,h)$ は有限集合で，$\p\ne k[x,y]$ だから弱零点定理より空でなく，また $\p$ は素なので $\Zero(\p)$ は既約（定理\ref{thm:ch04-irred-prime}）．
+有限集合で既約なものは1点 $\{P\}$ のみ（2点以上なら1点ずつの閉集合に分解する）．よって定理\ref{thm:ch04-irred-prime}より $\p=\Ideal(\Zero(\p))=\Ideal(\{P\})=\m_P$．
+
+\textbf{次元との対応．}
+包含関係で見ると $(0)\subsetneq(f)\subsetneq\m_P$（$P\in\Zero(f)$）という長さ2の鎖があり，これが $\A^2$ の Krull 次元が $2$ であることに対応する（第7章）．
+対応する既約集合は $\A^2\supsetneq\Zero(f)\supsetneq\{P\}$ で，次元はそれぞれ $2,1,0$ である．
+既約曲線 $\Zero(f)$ が1次元であること（その座標環 $k[x,y]/(f)$ の超越次数が $1$ であること）の厳密な証明は第7章の次元論による．
+なお，代数閉でない体（例えば $\R$）では $(x^2+y^2)$ のように「零点集合は1点だが素イデアルは単項」というずれが起こり，この分類は幾何学的な意味を失う．

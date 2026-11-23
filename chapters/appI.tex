@@ -1,0 +1,462 @@
+% ==========================================================
+% 付録I 演習問題
+% ==========================================================
+\chapter{演習問題}\label{app:I}
+
+% 問題見出し用マクロ（この付録専用）
+%   \appIprob{I-3-2}{計算} → 「問題 I.3.2【計算】」＋解答へのリンク
+\newcommand{\appIprob}[2]{%
+  \par\bigskip\noindent\refstepcounter{exprob}\label{prob:#1}%
+  \textbf{問題\,\theexprob}\ 【#2】\hfill{\small\hyperref[sol:#1]{$\to$\,解答}}\par\nopagebreak\smallskip\noindent}
+
+\begin{chapterlead}
+この付録には、本編の内容に沿った演習問題を節ごとにまとめる。本編の各節末の問とは独立した問題集であり、ここだけを通して解いても代数幾何学の基本事項を一通り復習できるように配列してある。
+各問には次の種別タグを付けた。
+\begin{itemize}
+  \item 【基礎】定義の確認や簡単な例。解答は付録J.1。
+  \item 【証明】命題の証明を求める問題。解答は付録J.2。
+  \item 【計算】具体例の計算。途中計算を含む解答は付録J.3。
+  \item 【発展】本編の先にある話題や、複数の概念を組み合わせる問題。解答・解説は付録J.4。
+\end{itemize}
+各問の右肩の「$\to$\,解答」から解答へ、解答の見出しから問題へリンクしている。
+\end{chapterlead}
+
+\noindent\textbf{共通の約束.}
+特に断らない限り、$k$ は標数 $0$ の代数閉体とし、$\A^n=\A^n_k$、$\PP^n=\PP^n_k$ とする。環は単位元をもつ可換環である。
+
+% ----------------------------------------------------------
+\section{基礎演習}
+
+\appIprob{I-1-1}{基礎}
+$\A^2(\C)$ において、$f=x^2+y^2-1$ と $g=x-1$ の共通零点 $\Zero(f,g)$ を求めよ。また、直線 $x=1$ と円 $x^2+y^2=1$ の位置関係を幾何学的に説明し、交点が「重複度 $2$」で数えられるべき理由を述べよ。
+
+\appIprob{I-1-2}{基礎}
+ガウス整数環 $\Z[i]$ において、ノルム $N(a+bi)=a^2+b^2$ を用いて $5$ を既約元の積に分解せよ。さらに、$\Z$ の素イデアル $(5)$ から生成される $\Z[i]$ のイデアル $5\Z[i]$ は素イデアルでないことを示せ。
+
+\appIprob{I-1-3}{計算}
+次の同型を示せ。
+\begin{enumerate}
+  \item $\R[x]/(x^2+1)\cong\C$.
+  \item $\C[x]/(x^2+1)\cong\C\times\C$.
+\end{enumerate}
+また、この違いを「$x^2+1=0$ の解の集合」という幾何学的な言葉で説明せよ。
+
+\appIprob{I-1-4}{計算}
+$\Q[x]$ においてユークリッドの互除法を用いて $\gcd(x^6-1,\ x^4-1)$ を求め、それを $a(x)(x^6-1)+b(x)(x^4-1)$ の形に表せ。これからイデアルの等式 $(x^6-1,\ x^4-1)=(x^2-1)$ を導け。
+
+\appIprob{I-1-5}{証明}
+体 $k$ 上の $1$ 変数多項式環 $k[x]$ は単項イデアル整域（PID）であることを、割り算の原理を用いて証明せよ。また、$2$ 変数多項式環 $k[x,y]$ のイデアル $(x,y)$ は単項イデアルでないことを示せ。
+
+% ----------------------------------------------------------
+\section{環とイデアル}
+
+\appIprob{I-2-1}{基礎}
+$k[x,y]$ のイデアル $(x,y)$ は極大イデアルであり、$(x)$ は素イデアルであるが極大イデアルではないことを示せ。それぞれを $\A^2$ の部分集合として図示し、包含関係の逆転（イデアルが大きいほど図形は小さい）を確かめよ。
+
+\appIprob{I-2-2}{計算}
+$k[x,y]$ の次のイデアルの根基を求めよ。
+\begin{enumerate}
+  \item $I=(x^2,\ xy)$.
+  \item $J=(x^2y,\ xy^2)$.
+\end{enumerate}
+
+\appIprob{I-2-3}{証明}
+$\Z[x]$ において次を示せ。
+\begin{enumerate}
+  \item $(2,x)$ は極大イデアルであり、単項イデアルではない。
+  \item $(x)$ は素イデアルであるが極大イデアルではない。
+\end{enumerate}
+
+\appIprob{I-2-4}{証明}
+PID $A$ の $0$ でない素イデアルは極大イデアルであることを示せ。これより $\Spec\Z$ と $\Spec k[x]$ の点は「生成点 $(0)$」と「閉点」の $2$ 種類しかないことを結論せよ。
+
+\appIprob{I-2-5}{発展}
+$\Z[x]$ の任意の極大イデアル $\m$ に対し、$\m\cap\Z\neq 0$、すなわち $\m$ はある素数 $p$ を含むことを示せ。
+
+\noindent\emph{ヒント}：$\m\cap\Z=0$ と仮定すると $K=\Z[x]/\m$ は $\Q$ を含む体で、$\Z$ 上 $1$ 元で生成される。「$B\subset K$ が整拡大で $K$ が体なら $B$ も体」という事実を使う。
+
+% ----------------------------------------------------------
+\section{代数的集合}
+
+\appIprob{I-3-1}{計算}
+$\A^3$ の代数的集合 $X=\Zero(xy,\ xz)$ を既約成分に分解せよ。またイデアルの等式 $(xy,xz)=(x)\cap(y,z)$ を示せ。
+
+\appIprob{I-3-2}{証明}
+ねじれ $3$ 次曲線 $C=\{(t,t^2,t^3)\mid t\in k\}\subset\A^3$ について、
+\[
+  \Ideal(C)=(y-x^2,\ z-x^3)
+\]
+を示せ。特に $C$ は代数的集合であり、その座標環は $k[t]$ に同型である。
+
+\appIprob{I-3-3}{計算}
+$\A^3$ の代数的集合 $X=\Zero(x^2-yz,\ xz-x)$ を既約成分に分解せよ。
+
+\appIprob{I-3-4}{証明}
+$k[x_1,\dots,x_n]$ のイデアル $I,J$ およびイデアルの族 $\{I_\lambda\}_{\lambda\in\Lambda}$ に対して次を示せ。
+\[
+  \Zero(I)\cup\Zero(J)=\Zero(IJ)=\Zero(I\cap J),\qquad
+  \bigcap_{\lambda}\Zero(I_\lambda)=\Zero\Bigl(\sum_\lambda I_\lambda\Bigr).
+\]
+
+\appIprob{I-3-5}{基礎}
+\begin{enumerate}
+  \item $k[x]$ において $\Ideal(\Zero(x^2))=(x)\neq(x^2)$ であることを確かめ、これが零点定理 $\Ideal(\Zero(J))=\sqrt{J}$ の一例であることを説明せよ。
+  \item $\R^2$ において $\Zero(x^2+y^2+1)=\emptyset$ であるが、$(x^2+y^2+1)\neq\R[x,y]$ であることを確かめよ。これは弱零点定理において体が代数閉であるという仮定が必要であることを示している。
+\end{enumerate}
+
+% ----------------------------------------------------------
+\section{Zariski位相}
+
+\appIprob{I-4-1}{基礎}
+$\A^1$ の Zariski 閉集合は、有限集合と $\A^1$ 全体に限ることを示せ。またこの位相は Hausdorff でないことを示せ。
+
+\appIprob{I-4-2}{証明}
+$\A^2$ の Zariski 位相は、$\A^1\times\A^1$ の（Zariski 位相どうしの）積位相とは一致しないことを示せ。
+
+\noindent\emph{ヒント}：対角線 $\Delta=\Zero(x-y)$ が積位相で閉でないことを示す。
+
+\appIprob{I-4-3}{証明}
+既約な位相空間 $X$ の空でない開集合 $U$ は、$X$ で稠密であり、かつそれ自身既約であることを示せ。
+
+\appIprob{I-4-4}{証明}
+$\A^n$ は Zariski 位相に関して準コンパクトである（任意の開被覆が有限部分被覆をもつ）ことを、Hilbert の基底定理を用いて示せ。
+
+\appIprob{I-4-5}{計算}
+$S=\{(n,n^2)\mid n\in\Z\}\subset\A^2(\C)$ の Zariski 閉包を求めよ。また $S'=\{(n,0)\mid n\in\Z\}$ の Zariski 閉包も求め、Euclid 位相での閉包との違いを述べよ。
+
+% ----------------------------------------------------------
+\section{座標環}
+
+\appIprob{I-5-1}{基礎}
+$k[x,y]/(y-x^2)\cong k[x]$ を示せ。幾何学的には、放物線 $y=x^2$ が $\A^1$ に同型であることを意味する。同型写像を具体的に与えよ。
+
+\appIprob{I-5-2}{証明}
+$A=k[x,y]/(y^2-x^3)$ とする。
+\begin{enumerate}
+  \item $x\mapsto t^2,\ y\mapsto t^3$ により $A\cong k[t^2,t^3]\subset k[t]$ であることを示せ。
+  \item $A$ は整閉整域でないことを示せ。
+\end{enumerate}
+
+\appIprob{I-5-3}{証明}
+$B=k[t^2,t^3]$ は UFD でないことを示せ。
+
+\noindent\emph{ヒント}：$t^6=(t^2)^3=(t^3)^2$ を考える。
+
+\appIprob{I-5-4}{計算}
+写像 $\varphi:\A^1\to C=\Zero(y^2-x^3)$, $t\mapsto(t^2,t^3)$ について、
+\begin{enumerate}
+  \item $\varphi$ が全単射であることを示し、逆写像を与えよ。
+  \item 引き戻し $\varphi^*:k[C]\to k[t]$ を計算し、$\varphi$ が代数多様体の同型でないことを示せ。
+\end{enumerate}
+
+\appIprob{I-5-5}{証明}
+双曲線 $H=\Zero(xy-1)\subset\A^2$ について、$k[H]\cong k[x,x^{-1}]$ を示し、$H$ は $\A^1$ と同型でないことを示せ。
+
+% ----------------------------------------------------------
+\section{局所化}
+
+\appIprob{I-6-1}{基礎}
+素数 $p$ に対し $\Z_{(p)}=\{a/b\in\Q\mid p\nmid b\}$ とする。$\Z_{(p)}$ は局所環であり、その唯一の極大イデアルは $p\Z_{(p)}$ であることを示せ。剰余体は何か。
+
+\appIprob{I-6-2}{計算}
+$A=k[x,y]/(xy)$ とする。$x$ のべきによる局所化 $A_x=A[1/x]$ が $k[x,x^{-1}]$ に同型であることを示し、その幾何学的意味を述べよ。
+
+\appIprob{I-6-3}{証明}
+$S\subset A$ を積閉集合とし、$\varphi:A\to S^{-1}A$ を自然な写像とする。対応
+\[
+  \q\ \longmapsto\ \varphi^{-1}(\q),\qquad \p\ \longmapsto\ S^{-1}\p
+\]
+は、$S^{-1}A$ の素イデアル全体と、$S$ と交わらない $A$ の素イデアル全体との間の互いに逆な全単射であることを示せ。
+
+\appIprob{I-6-4}{計算}
+曲線 $C:\ y^2=x^3+x^2$ 上の点 $P$ における局所環 $\OO_{C,P}$ の極大イデアルを $\m_P$ とする。次の点で $\dim_k\m_P/\m_P^2$ を計算せよ。
+\begin{enumerate}
+  \item $P=(0,0)$.
+  \item $P=(-1,0)$.
+\end{enumerate}
+
+\appIprob{I-6-5}{発展}
+放物線 $C:\ y=x^2$ の原点における局所環 $\OO=\OO_{C,0}$ を考える。
+\begin{enumerate}
+  \item $\OO\cong k[x]_{(x)}$ であり、$\OO$ の $0$ でない元は単元 $u$ を用いて一意的に $u\,x^n$ ($n\geq 0$) と書けることを示せ（$\OO$ は離散付値環）。
+  \item 付値 $v(u x^n)=n$ について、$v(x),\ v(y),\ v(y-ax)$ ($a\neq 0$) を求めよ。
+  \item これらの値を、直線 $y=0$, $x=0$, $y=ax$ と $C$ の原点での交点数として解釈せよ。
+\end{enumerate}
+
+% ----------------------------------------------------------
+\section{次元と特異点}
+
+\appIprob{I-7-1}{計算}
+平面曲線 $C:\ y^2=x^3+x^2$ の特異点をすべて求め、その点での接錐を求めよ。
+
+\appIprob{I-7-2}{計算}
+\begin{enumerate}
+  \item 曲面 $X:\ x^2+y^2+z^2=0\subset\A^3$ の特異点を求めよ。
+  \item 射影平面曲線 $Q:\ x^2+y^2+z^2=0\subset\PP^2$ は滑らかであることを示せ。
+\end{enumerate}
+（1）の $X$ は（2）の $Q$ のアフィン錐であることに注意せよ。
+
+\appIprob{I-7-3}{証明}
+$k$ を標数 $p\geq 0$ の代数閉体とし、$p\nmid n$ とする。Fermat 曲線 $F_n:\ x^n+y^n+z^n=0\subset\PP^2$ は滑らかであることを示せ。また $p\mid n$ のときにはどうなるか。
+
+\appIprob{I-7-4}{計算}
+$X=\Zero(xy,\ xz)\subset\A^3$（問題 I.3.1 の集合）について、
+\begin{enumerate}
+  \item 各既約成分の次元と $X$ の次元を求めよ。
+  \item 点 $(0,0,0)$, $(0,1,0)$, $(1,0,0)$ における Zariski 接空間の次元を求めよ。どの点が特異点か。
+\end{enumerate}
+
+\appIprob{I-7-5}{計算}
+Whitney の傘 $W:\ x^2=y^2z\subset\A^3$ の特異点集合 $\Sing W$ を求めよ。
+
+\appIprob{I-7-6}{発展}
+問題 I.7.1 の曲線 $C:\ y^2=x^3+x^2$ を原点でブローアップせよ。すなわち、チャート $y=tx$ で $C$ の全変換を計算し、例外因子を取り除いた固有変換 $\widetilde{C}$ が滑らかであること、$\widetilde{C}$ と例外因子の交点が $2$ 点であることを示せ。これは原点の $2$ 本の枝とどう対応するか。
+
+% ----------------------------------------------------------
+\section{射影幾何}
+
+\appIprob{I-8-1}{基礎}
+放物線 $y=x^2$ を同次化して射影閉包 $\overline{C}\subset\PP^2$ を求めよ。無限遠直線 $z=0$ 上に加わる点はいくつあるか。
+
+\appIprob{I-8-2}{計算}
+アフィン曲線 $E:\ y^2=x^3-x$ について、
+\begin{enumerate}
+  \item 射影閉包 $\overline{E}\subset\PP^2$ の方程式と無限遠点を求めよ。
+  \item $\overline{E}$ は滑らかであることを示せ（無限遠点も含めて確認すること）。
+\end{enumerate}
+
+\appIprob{I-8-3}{計算}
+$2$ つの円 $C_1:\ x^2+y^2=1$, $C_2:\ (x-1)^2+y^2=1$ の $\PP^2(\C)$ における交点をすべて求め、各交点の交点数が $1$ であることを確かめて Bézout の定理（交点数の総和 $=2\cdot 2=4$）を検証せよ。
+
+\appIprob{I-8-4}{計算}
+$3$ 次曲線 $\overline{E}:\ y^2z=x^3-xz^2$ と次の直線の交点を重複度込みで求め、Bézout の定理を確かめよ。
+\begin{enumerate}
+  \item $L_1:\ y=0$.
+  \item $L_2:\ z=0$（無限遠直線）.
+\end{enumerate}
+
+\appIprob{I-8-5}{証明}
+$f\in k[x_1,\dots,x_n]$ を平方因子をもたない定数でない多項式とし、$d=\deg f$、$f^h(x_0,\dots,x_n)=x_0^d f(x_1/x_0,\dots,x_n/x_0)$ をその同次化とする。$\A^n=\{x_0\neq 0\}\subset\PP^n$ と見たとき、$\Zero(f)$ の $\PP^n$ における閉包は $\Zero(f^h)$ であることを示せ。
+
+% ----------------------------------------------------------
+\section{層}
+
+\appIprob{I-9-1}{証明}
+$\R$ の各開集合 $U$ に $U$ 上の有界連続関数全体 $\sheaf{B}(U)$ を対応させる前層 $\sheaf{B}$ は層でないことを示せ。どの公理が成り立ち、どの公理が破れるか。
+
+\appIprob{I-9-2}{基礎}
+アーベル群 $A\neq 0$ に対し、空でない開集合 $U$ に $A$ を、$\emptyset$ に $0$ を対応させ、制限写像を恒等写像とする前層（定数前層）を $A_{\mathrm{pre}}$ とする。
+\begin{enumerate}
+  \item $X=\R$ において $A_{\mathrm{pre}}$ は層でないことを示せ。
+  \item 定数層 $\underline{A}$（$U$ 上の局所定数関数 $U\to A$ の層）について、$\underline{A}\bigl((0,1)\cup(2,3)\bigr)$ を求めよ。
+\end{enumerate}
+
+\appIprob{I-9-3}{計算}
+$X=\C^*$ とし、$U_1=\C\setminus\R_{\leq 0}$、$U_2=\C\setminus\R_{\geq 0}$ とする。$U_1$ 上で偏角を $(-\pi,\pi)$、$U_2$ 上で偏角を $(0,2\pi)$ にとった対数関数の分枝を $L_1,L_2$ とする。
+\begin{enumerate}
+  \item $U_1\cap U_2$ 上で $L_2-L_1$ を計算せよ。
+  \item $\C^*$ 全体で定義された正則関数 $L$ で $e^{L}=z$ を満たすものは存在しないことを示せ。
+\end{enumerate}
+
+\appIprob{I-9-4}{証明}
+位相空間 $X$ 上の層の射 $\varphi:\sheaf{F}\to\sheaf{G}$ について、次は同値であることを示せ。
+\begin{enumerate}
+  \item すべての開集合 $U$ について $\varphi_U:\sheaf{F}(U)\to\sheaf{G}(U)$ は単射。
+  \item すべての点 $p$ について茎の写像 $\varphi_p:\sheaf{F}_p\to\sheaf{G}_p$ は単射。
+\end{enumerate}
+
+\appIprob{I-9-5}{発展}
+$X=\C^*$ 上の指数層系列
+\[
+  0\longrightarrow \underline{\Z}\longrightarrow \OO_X\xrightarrow{\ \exp(2\pi i\,\cdot)\ }\OO_X^*\longrightarrow 0
+\]
+について、
+\begin{enumerate}
+  \item これが層の完全系列であること（特に $\OO_X\to\OO_X^*$ が層の射として全射であること）を示せ。
+  \item 大域切断をとった $\OO_X(X)\to\OO_X^*(X)$ は全射でないことを示せ。
+\end{enumerate}
+この「ずれ」が何で測られるかを論ぜよ。
+
+% ----------------------------------------------------------
+\section{スキーム}
+
+\appIprob{I-10-1}{基礎}
+\begin{enumerate}
+  \item $X=\Spec k[x]/(x^2)$ の点を求め、大域切断 $\OO_X(X)$ を答えよ。$\Spec k$ と位相空間としては同じだがスキームとしては異なることを、「関数 $x$ の各点での値」に注目して説明せよ。
+  \item $\Spec(k\times k)$ の点を求めよ。
+\end{enumerate}
+
+\appIprob{I-10-2}{計算}
+$\Spec\Z[x]$ について、
+\begin{enumerate}
+  \item $(2)\subset\Z[x]$ は素イデアルであることを示せ。
+  \item $(2)$ を含む素イデアルのうち、$\F_2[x]$ の次数 $2$ 以下の既約多項式に対応するものをすべて列挙し、それぞれの剰余体を求めよ。
+  \item 点 $(x)\in\Spec\Z[x]$ の閉包を求めよ。
+\end{enumerate}
+
+\appIprob{I-10-3}{証明}
+環 $A$ と $\p\in\Spec A$ について、$\{\p\}$ の閉包は $\Zero(\p)=\{\q\in\Spec A\mid \q\supset\p\}$ であることを示せ。これより、$\p$ が閉点であることと $\p$ が極大イデアルであることは同値であることを導け。
+
+\appIprob{I-10-4}{計算}
+$\Spec\Z[i]\to\Spec\Z$ のファイバーを $p=2,3,5$ について求めよ。すなわち、$p$ の上にある $\Z[i]$ の素イデアルとその剰余体を求めよ。
+
+\appIprob{I-10-5}{発展}
+$k[\varepsilon]=k[x]/(x^2)$（$\varepsilon$ は $x$ の像）とし、$f\in k[x,y]$、$A=k[x,y]/(f)$ とする。$k$ 代数の準同型 $A\to k[\varepsilon]$（すなわちスキームの射 $\Spec k[\varepsilon]\to\Spec A$）は、
+\[
+  \{(a,b,u,v)\in k^4\mid f(a,b)=0,\ \ f_x(a,b)\,u+f_y(a,b)\,v=0\}
+\]
+と一対一に対応することを示せ。これを「点と接ベクトルの組」として解釈し、$f=y^2-x^3-x^2$ の原点で何が起こるかを述べよ。
+
+% ----------------------------------------------------------
+\section{複素幾何}
+
+\appIprob{I-11-1}{基礎}
+$\C P^1=\{[z_0:z_1]\}$ を $U_0=\{z_0\neq 0\}$, $U_1=\{z_1\neq 0\}$ で覆い、座標 $z=z_1/z_0$, $w=z_0/z_1$ をとる。座標変換を求め、$\C P^1$ が $1$ 次元複素多様体であることを確かめよ。
+
+\appIprob{I-11-2}{証明}
+\begin{enumerate}
+  \item コンパクトで連結な複素多様体上の正則関数は定数であることを示せ。
+  \item 複素トーラス $E=\C/\Lambda$（$\Lambda=\Z+\Z\tau$, $\mathrm{Im}\,\tau>0$）上の正則関数が定数であることを、Liouville の定理を用いて別証明せよ。
+\end{enumerate}
+
+\appIprob{I-11-3}{計算}
+$\C P^1$ 上の正則直線束 $\OO(n)$ を、$U_0\cap U_1$ 上の変換則 $s_0(z)=z^n s_1(w)$（$w=1/z$）で定める。ここで $s_0$, $s_1$ はそれぞれ $U_0$, $U_1$ 上の正則関数による局所表示である。大域切断の空間 $H^0(\C P^1,\OO(n))$ を求め、その次元を計算せよ。
+
+\appIprob{I-11-4}{計算}
+\begin{enumerate}
+  \item 複素トーラス $E=\C/\Lambda$ 上で $dz$ が至る所消えない正則 $1$ 形式を定めることを示し、標準束 $K_E$ が自明であることを確かめよ。
+  \item $\C P^1$ 上で $U_0$ の $1$ 形式 $dz$ を $U_1$ の座標 $w$ で表し、$\deg K_{\C P^1}=-2$ を確かめよ。
+\end{enumerate}
+いずれも $\deg K=2g-2$ と整合することを確認せよ。
+
+\appIprob{I-11-5}{計算}
+$f:\C P^1\to\C P^1$, $z\mapsto z^n$ ($n\geq 2$) の分岐点と分岐指数を求め、Riemann--Hurwitz の公式
+\[
+  2g(X)-2=\deg f\,\bigl(2g(Y)-2\bigr)+\sum_{p\in X}(e_p-1)
+\]
+を確かめよ。
+
+\appIprob{I-11-6}{発展}
+Weierstrass の $\wp$ 関数は $E=\C/\Lambda$ 上で $0$ にのみ $2$ 位の極をもつ。$\wp:E\to\C P^1$ は $2$ 次の正則写像である。Riemann--Hurwitz の公式を用いて分岐点の個数を求め、それらが $0$ と $3$ つの半周期 $\tfrac12,\ \tfrac\tau2,\ \tfrac{1+\tau}{2}$ であることを示せ。これは $E$ が $y^2=4(x-e_1)(x-e_2)(x-e_3)$ と書けることとどう関係するか。
+
+% ----------------------------------------------------------
+\section{Calabi--Yau多様体}
+
+\appIprob{I-12-1}{計算}
+$X\subset\PP^4$ を滑らかな $5$ 次超曲面（quintic）とする。随伴公式を用いて $K_X\cong\OO_X$ を示せ。また Fermat 型 quintic $\sum_{i=1}^5 x_i^5=0$ が滑らかであることを確かめよ。
+
+\appIprob{I-12-2}{基礎}
+重み付き射影空間 $\PP(w_1,\dots,w_5)$ の次数 $d$ の（準滑らかな）超曲面について、Calabi--Yau 条件は $d=\sum_i w_i$ である。次のうち Calabi--Yau 条件を満たすものはどれか。
+\begin{enumerate}
+  \item $\PP(1,1,1,1,4)$ の $8$ 次超曲面.
+  \item $\PP(1,1,1,1,2)$ の $6$ 次超曲面.
+  \item $\PP(1,1,1,6,9)$ の $18$ 次超曲面.
+  \item $\PP(1,1,1,1,4)$ の $10$ 次超曲面.
+\end{enumerate}
+また（1）の一般の超曲面は $\PP(1,1,1,1,4)$ の特異点 $[0:0:0:0:1]$ を通らないことを確かめよ。
+
+\appIprob{I-12-3}{計算}
+quintic の複素構造変形のパラメータ数 $h^{2,1}=101$ を次の手順で数えよ。
+\begin{enumerate}
+  \item $5$ 変数の $5$ 次単項式の個数を求めよ。
+  \item 座標変換 $\GL(5,\C)$ の次元を引け。
+\end{enumerate}
+
+\appIprob{I-12-4}{計算}
+quintic $X\subset\PP^4$ の全 Chern 類は、$H$ を超平面類として
+\[
+  c(X)=\frac{(1+H)^5}{1+5H}\Big|_X
+\]
+で与えられる。$c_1,c_2,c_3$ を計算し、$\int_X H^3=5$ を用いて Euler 数 $\chi(X)$ を求めよ。$h^{1,1}=1$, $h^{2,1}=101$ と整合することを確かめよ。
+
+\appIprob{I-12-5}{発展}
+$X\subset\PP^5$ を $2$ つの $3$ 次式の滑らかな完全交差（$(3,3)$ 完全交差）とする。
+\begin{enumerate}
+  \item $c_1(X)=0$ を示せ。
+  \item $c(X)=(1+H)^6/(1+3H)^2|_X$ と $\int_X H^3=9$ を用いて $\chi(X)$ を計算せよ。
+  \item 問題 I.12.3 と同様のパラメータ数えで $h^{2,1}$ を求め、$h^{1,1}=1$ と合わせて（2）と整合することを確かめよ。
+\end{enumerate}
+
+\appIprob{I-12-6}{証明}
+コンパクト Kähler $3$ 次元多様体 $X$ が $h^{0,0}=h^{3,0}=1$, $h^{1,0}=h^{2,0}=0$ を満たすとする。Hodge 対称性 $h^{p,q}=h^{q,p}$ と Serre 双対性 $h^{p,q}=h^{3-p,3-q}$ を用いて、Hodge ダイヤモンドが $h^{1,1}$ と $h^{2,1}$ だけで決まること、および
+\[
+  \chi(X)=2\bigl(h^{1,1}-h^{2,1}\bigr)
+\]
+を示せ。
+
+% ----------------------------------------------------------
+\section{モジュライ空間}
+
+\appIprob{I-13-1}{基礎}
+$\tau\in\mathbb{H}$（上半平面）に対し $\Lambda_\tau=\Z+\Z\tau$ とする。$\Lambda_{\tau+1}=\Lambda_\tau$、および $\Lambda_{-1/\tau}$ が $\Lambda_\tau$ と相似（$\Lambda_\tau=\lambda\Lambda_{-1/\tau}$ となる $\lambda\in\C^*$ が存在）であることを示せ。これより $\C/\Lambda_\tau$ の同型類が $\tau$ の $\SL(2,\Z)$ 軌道にしかよらないことを説明せよ。
+
+\appIprob{I-13-2}{計算}
+$S=\begin{pmatrix}0&-1\\1&0\end{pmatrix}$, $T=\begin{pmatrix}1&1\\0&1\end{pmatrix}$ とし、$\rho=e^{2\pi i/3}$ とする。
+\begin{enumerate}
+  \item $S(i)=i$, $(ST)(\rho)=\rho$ を確かめ、$S^2=(ST)^3=-1$ を示せ。
+  \item $\tau=\dfrac{2+i}{5}$ を $S,T$ を用いて基本領域 $\mathcal{F}=\{|\mathrm{Re}\,\tau|\leq\tfrac12,\ |\tau|\geq 1\}$ の点に移せ。
+\end{enumerate}
+
+\appIprob{I-13-3}{証明}
+格子 $\Lambda$ に対し $g_2(\Lambda)=60\sum'_{\omega\in\Lambda}\omega^{-4}$, $g_3(\Lambda)=140\sum'_{\omega\in\Lambda}\omega^{-6}$,
+$j=1728\,g_2^3/(g_2^3-27g_3^2)$ とする（$\sum'$ は $\omega\neq0$ の和）。$j(i)=1728$, $j(\rho)=0$ を示せ。
+
+\noindent\emph{ヒント}：$g_2(\lambda\Lambda)=\lambda^{-4}g_2(\Lambda)$, $g_3(\lambda\Lambda)=\lambda^{-6}g_3(\Lambda)$ と、$i\Lambda_i=\Lambda_i$, $\rho\Lambda_\rho=\Lambda_\rho$ を用いる。
+
+\appIprob{I-13-4}{計算}
+楕円曲線 $y^2=x^3+ax+b$ の $j$ 不変量は $j=1728\cdot\dfrac{4a^3}{4a^3+27b^2}$ で与えられる。次の曲線の $j$ 不変量を求めよ。滑らかでないものがあればそれを指摘せよ。
+\begin{enumerate}
+  \item $y^2=x^3-x$.
+  \item $y^2=x^3+1$.
+  \item $y^2=x^3-3x+2$.
+\end{enumerate}
+
+\appIprob{I-13-5}{発展}
+\begin{enumerate}
+  \item $E_1:\ y^2=x^3-x$ には、原点（無限遠点 $O$）を固定する位数 $4$ の自己同型が存在することを示せ。
+  \item $E_2:\ y^2=x^3+1$ には $O$ を固定する位数 $6$ の自己同型が存在することを示せ。
+  \item これを $\SL(2,\Z)$ における $i$, $\rho$ の固定部分群と比較し、$\mathcal{M}_{1,1}=\mathbb{H}/\SL(2,\Z)$ のオービフォールド点について述べよ。
+\end{enumerate}
+
+% ----------------------------------------------------------
+\section{物理的応用問題}
+
+\appIprob{I-14-1}{計算}
+$G$ を行列 Lie 群、$A$ を $\mathfrak{g}$ 値 $1$ 形式（接続）、$F=dA+A\wedge A$ をその曲率とする。ゲージ変換
+\[
+  A\ \longmapsto\ A'=gAg^{-1}+g\,d(g^{-1})
+\]
+（$g$ は $G$ 値関数）のもとで $F'=gFg^{-1}$ となることを直接計算で示せ。（第14章の規約 $A\mapsto g^{-1}Ag+g^{-1}dg$ は、ここでの $g$ を $g^{-1}$ に置き換えたものである。）
+
+\appIprob{I-14-2}{計算}
+$S^2$ を北半球 $U_N$ と南半球 $U_S$ で覆い、極座標 $(\theta,\phi)$ を用いて
+\[
+  A_N=\frac n2(1-\cos\theta)\,d\phi,\qquad A_S=-\frac n2(1+\cos\theta)\,d\phi
+\]
+とする（Dirac モノポール）。
+\begin{enumerate}
+  \item $A_N$, $A_S$ がそれぞれ $U_N$, $U_S$ 上で滑らかであることを確かめよ。
+  \item 重なりで $A_N-A_S=d\lambda$ となる $\lambda$ を求め、ゲージ変換 $e^{i\lambda}$ が一価であるためには $n\in\Z$ が必要であることを示せ。
+  \item 第 $1$ Chern 数 $\dfrac{1}{2\pi}\displaystyle\int_{S^2}F$ を計算せよ。
+\end{enumerate}
+
+\appIprob{I-14-3}{計算}
+F 理論の Weierstrass モデル $y^2=x^3+f(z)x+g(z)$（$\Delta=4f^3+27g^2$）について、$z=0$ での $(\mathrm{ord}f,\ \mathrm{ord}g,\ \mathrm{ord}\Delta)$ から Kodaira のファイバー型と対応するゲージ代数（分裂型を仮定）を求めよ。
+\begin{enumerate}
+  \item $f=z^4$, $g=z^5$.
+  \item $f=z^3$, $g=z^5$.
+  \item $f=-3$, $g=2+z^n$ ($n\geq 2$).
+  \item $f=-3z^2$, $g=2z^3+z^4$.
+\end{enumerate}
+
+\appIprob{I-14-4}{発展}
+変形コニフォールド $X_\varepsilon=\{w\in\C^4\mid w_1^2+w_2^2+w_3^2+w_4^2=\varepsilon\}$（$\varepsilon>0$）を考える。
+\begin{enumerate}
+  \item $X_\varepsilon$ は滑らかで、$X_0$ は原点のみに特異点をもつことを示せ。
+  \item 実部分 $S=X_\varepsilon\cap\R^4$ は半径 $\sqrt\varepsilon$ の $3$ 次元球面であることを示し、$\C^4$ の平坦計量から誘導される計量での体積を求めよ。
+  \item 正則 $3$ 形式 $\Omega=\dfrac{dw_1\wedge dw_2\wedge dw_3}{w_4}$ の周期 $\displaystyle\int_S\Omega$ を計算せよ（符号は向きによる）。
+  \item $\varepsilon\to0$ の極限の物理的意味を述べよ。
+\end{enumerate}
+
+\appIprob{I-14-5}{基礎}
+ヘテロティック弦理論を Calabi--Yau $3$ 次元多様体 $X$ 上に標準埋め込みでコンパクト化すると、$4$ 次元の正味の世代数は $|\chi(X)|/2$ で与えられる。問題 I.12.4、I.12.5 の結果を用いて、quintic と $\PP^5$ の $(3,3)$ 完全交差の場合の世代数を求めよ。

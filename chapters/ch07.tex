@@ -1,0 +1,1302 @@
+% ==========================================================
+% 第7章 次元・接空間・特異点
+% ==========================================================
+\chapter{次元・接空間・特異点}
+\label{ch:ch07}
+
+\begin{chapterlead}
+多様体を調べるとき最初に問うべきは「それは何次元か」「その点のまわりで滑らかか」である．
+微分幾何では次元は局所座標の個数として，滑らかさは多様体の定義そのものに組み込まれていた．
+代数幾何では，方程式で定義された図形に最初から座標系が与えられているわけではなく，
+しかも $y^2=x^3$ のような尖った点（特異点）をもつ図形も自然に現れる．
+本章では，次元を座標環の素イデアルの鎖の長さ（Krull次元）として代数的に定義し，
+接空間を極大イデアル $\m_p$ を用いて $(\m_p/\m_p^2)^*$ として定義する．
+さらに Jacobian 行列による正則点・特異点の判定法を与え，cusp，node，$A_n$ 特異点などの典型例を調べる．
+最後に，オービフォールドや conifold といった物理に現れる特異点と，特異点解消の考え方を概観する．
+\end{chapterlead}
+
+本章を通じて $k$ は代数閉体とする．アフィン多様体 $X\subset\A^n$ とは既約なアフィン代数的集合のことであり，
+その座標環を $k[X]=k[x_1,\dots,x_n]/\Ideal(X)$ と書く（第5章）．点 $p\in X$ における局所環 $\OO_{X,p}$ と
+その極大イデアル $\m_p$ は第6章で導入したものである．
+
+% ==========================================================
+\section{代数的な次元}
+% ==========================================================
+
+\subsection{次元の幾何学的意味}
+
+直感的には，直線は1次元，平面は2次元，空間は3次元である．微分幾何ではこれを「点の近傍が $\R^d$ の開集合と同相（微分同相）になるときの $d$」として定式化した．
+しかし代数幾何でこの定義をそのまま使うことはできない．理由は二つある．
+
+第一に，Zariski位相は非常に粗く（第3章），既約な曲線の空でない開集合は「有限個の点を除いた全体」であるから，
+「$\A^1$ の開集合と同相な近傍」という言い方はほとんど情報をもたない．実際，Zariski位相では $\A^1$ と $\A^2$ の空でない開集合は
+どちらも既約で稠密な集合であり，位相的な局所性から次元を読み取るのは難しい．
+第二に，特異点では局所的に $\R^d$（あるいは $\C^d$）と同相にならないことがある．たとえば二重錐 $x^2+y^2=z^2$ の頂点の近傍は二つの円板を一点で貼り合わせたものであり，どんな $\R^d$ とも同相でない．
+
+そこで代数幾何では，次元を次のような\textbf{包含の鎖の長さ}として捉える．
+3次元空間 $\A^3$ の中には
+\[
+  \{\text{点}\}\subsetneq\{\text{直線}\}\subsetneq\{\text{平面}\}\subsetneq\A^3
+\]
+という既約閉集合の鎖があり，その長さ（真の包含の個数）は3である．しかも，これより長い鎖は作れないと期待される．
+「点から出発して，既約閉集合を真に大きくしていく操作を最大何回できるか」が次元である，という考え方は位相だけで定義でき，
+しかも代数側では素イデアルの鎖として言い換えられる（既約閉集合 $\leftrightarrow$ 素イデアルの対応，第4章）．
+
+\begin{mydef}{位相空間の次元}{ch07-topdim}
+位相空間 $X$ の空でない既約閉集合の鎖
+\[
+  Z_0\subsetneq Z_1\subsetneq\cdots\subsetneq Z_n
+\]
+の長さ $n$ の上限を $X$ の\textbf{次元}といい，$\dim X$ と書く．
+\end{mydef}
+
+この定義は位相のみを用いており，Hausdorff空間（たとえば $\R^d$ の通常の位相）ではすべての既約閉集合が一点なので次元は常に $0$ になってしまう．
+すなわちこれは Zariski位相のような「粗い」位相のための定義である．
+
+\subsection{Krull次元}
+
+第4章の対応により，アフィン多様体 $X$ の既約閉部分集合 $Z$ と座標環 $k[X]$ の素イデアル $\p$ は
+\[
+  Z\longmapsto \Ideal(Z)/\Ideal(X),\qquad \p\longmapsto \Zero(\p)
+\]
+によって包含関係を逆にしながら一対一に対応する．したがって，既約閉集合の鎖は素イデアルの鎖と同じものである．
+この観察から，一般の可換環に対して次元を定義することができる．
+
+\begin{mydef}{Krull次元}{ch07-krulldim}
+可換環 $R$ の素イデアルの鎖
+\[
+  \p_0\subsetneq\p_1\subsetneq\cdots\subsetneq\p_n
+\]
+の長さ $n$ の上限を $R$ の\textbf{Krull次元}といい，$\dim R$ と書く．
+\end{mydef}
+
+\begin{myprop}{幾何的次元と Krull 次元}{ch07-dim-eq}
+アフィン代数的集合 $X$ に対し，$\dim X=\dim k[X]$ が成り立つ．
+\end{myprop}
+
+\begin{proof}
+$X$ の既約閉集合 $Z_0\subsetneq\cdots\subsetneq Z_n$ に対し，$\p_i=\Ideal(Z_i)/\Ideal(X)$ は $k[X]$ の素イデアルで，
+$\p_n\subsetneq\cdots\subsetneq\p_0$ となる（Nullstellensatz により包含が真であることも保たれる）．逆も同様である．
+\end{proof}
+
+\begin{myex}{体と単項イデアル整域}{ch07-dim-pid}
+(1) 体 $K$ の素イデアルは $(0)$ のみなので $\dim K=0$．幾何的には一点 $\A^0$ の次元である．
+
+(2) $k[x]$ は単項イデアル整域で，素イデアルは $(0)$ と $(x-a)$（$a\in k$）のみ．最長の鎖は $(0)\subsetneq(x-a)$ であり，$\dim k[x]=1$．
+幾何的には「$\A^1$ 全体 $\supsetneq$ 一点」という鎖である．
+
+(3) $\Z$ も同様に $(0)\subsetneq(p)$ が最長であり，$\dim\Z=1$．数論的には $\Spec\Z$ が「曲線」のように振る舞うことの最初の現れである（第12章）．
+\end{myex}
+
+\subsection{素イデアルの鎖}
+
+素イデアルの鎖の扱いには，局所化（第6章）が便利である．
+
+\begin{mydef}{高さと余高さ}{ch07-height}
+素イデアル $\p\subset R$ に対し，$\p$ で終わる素イデアルの鎖 $\p_0\subsetneq\cdots\subsetneq\p_n=\p$ の長さの上限を
+$\p$ の\textbf{高さ}（height）といい $\operatorname{ht}\p$ と書く．
+$\p$ から始まる鎖の長さの上限を\textbf{余高さ}（coheight）という．
+\end{mydef}
+
+局所化 $R_\p$ の素イデアルは $\p$ に含まれる $R$ の素イデアルと一対一に対応する（第6章）から，
+\[
+  \operatorname{ht}\p=\dim R_\p,\qquad \text{余高さ}(\p)=\dim R/\p
+\]
+である．幾何的には，$X$ の既約閉集合 $Z=\Zero(\p)$ について，$\dim R/\p=\dim Z$ は $Z$ 自身の次元，
+$\operatorname{ht}\p$ は「$Z$ が $X$ の中でどれだけ余分な方向をもつか」，すなわち余次元（\S\ref{sec:ch07-codim}）を表す．
+特に $X$ の点 $p$ に対応する極大イデアル $\m_p$ については $\operatorname{ht}\m_p=\dim\OO_{X,p}$ であり，
+これを\textbf{$X$ の点 $p$ における局所次元}と呼ぶ．
+
+一般のNoether環では奇妙な現象が起こりうる（無限次元のNoether環，極大な鎖の長さが一定でない環など）が，
+体上有限生成な整域（アフィン多様体の座標環）ではそのような病理は起こらない．次の定理がその基礎となる．
+
+\begin{mythm}{鎖の長さの一様性}{ch07-catenary}
+$A$ を $k$ 上有限生成な整域とする．このとき，$A$ のどの極大な（それ以上細分できない）素イデアルの鎖
+$(0)=\p_0\subsetneq\cdots\subsetneq\p_n$（$\p_n$ は極大イデアル）も同じ長さ $n=\dim A$ をもつ．
+特に任意の素イデアル $\p$ に対して
+\[
+  \operatorname{ht}\p+\dim A/\p=\dim A
+\]
+が成り立つ．
+\end{mythm}
+
+証明はNoetherの正規化定理と going-up/going-down 定理を用いる標準的なものであり，ここでは省略する．
+幾何的には「既約多様体 $X$ の既約閉集合 $Z$ について $\dim Z+\codim Z=\dim X$」という，期待どおりの等式である．
+
+\subsection{Krull次元の定義}
+
+ここまでの議論をアフィン多様体についてまとめておく．
+
+\begin{mydef}{アフィン代数的集合の次元}{ch07-affdim}
+アフィン代数的集合 $X$ の次元を $\dim X=\dim k[X]$（Krull次元）と定める．
+$X$ のすべての既約成分が同じ次元 $d$ をもつとき，$X$ は\textbf{純 $d$ 次元}であるという．
+$\dim X=1$ の多様体を\textbf{曲線}，$\dim X=2$ のものを\textbf{曲面}という．
+\end{mydef}
+
+可約な場合，$\dim X$ は既約成分の次元の最大値である．たとえば $X=\Zero(xz,yz)\subset\A^3$ は平面 $\{z=0\}$ と直線 $\{x=y=0\}$ の和であり，
+$\dim X=2$ だが純次元ではない．
+
+Krull次元を実際に計算するための最も強力な道具は，\textbf{超越次数}との一致である．
+体の拡大 $K/k$ について，$k$ 上代数的に独立な元の最大個数を超越次数 $\mathop{\mathrm{tr.deg}}\nolimits_k K$ という（付録B）．
+既約多様体 $X$ の関数体を $k(X)=\Frac k[X]$ とする（第10章で詳しく扱う）．
+
+\begin{mythm}{次元と超越次数}{ch07-trdeg}
+$A$ を $k$ 上有限生成な整域とすると
+\[
+  \dim A=\mathop{\mathrm{tr.deg}}\nolimits_k\Frac(A).
+\]
+したがって，アフィン多様体 $X$ に対して $\dim X=\mathop{\mathrm{tr.deg}}\nolimits_k k(X)$ である．
+\end{mythm}
+
+\begin{proof}[証明の概略]
+\textbf{Noetherの正規化定理}により，代数的に独立な元 $y_1,\dots,y_d\in A$ で，$A$ が $k[y_1,\dots,y_d]$ 上有限（整）となるものがとれる．
+このとき $\Frac A$ は $k(y_1,\dots,y_d)$ の有限次拡大だから $\mathop{\mathrm{tr.deg}}\nolimits_k\Frac A=d$．
+一方，整拡大 $B=k[y_1,\dots,y_d]\subset A$ について，lying-over と going-up により $B$ の素イデアルの鎖は $A$ の鎖に持ち上がり，
+incomparability により $A$ の鎖は $B$ の同じ長さの鎖に落ちる．よって $\dim A=\dim k[y_1,\dots,y_d]$ となり，
+問題は多項式環の場合（次小節）に帰着する．
+\end{proof}
+
+幾何的な意味は明快である．Noetherの正規化は「$X$ から $\A^d$ への有限全射（各点の逆像が有限個）」を与えており，
+有限対一の写像で次元は変わらないということである．
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.1]
+  % curve
+  \draw[thick,blue!70!black] plot[domain=-1.6:1.6,samples=60,variable=\t] ({\t},{1.6+0.5*sin(150*\t)+0.25*\t*\t});
+  \draw[thick,blue!70!black] plot[domain=-1.6:1.6,samples=60,variable=\t] ({\t},{2.6-0.3*\t*\t});
+  \node[blue!70!black] at (2.1,2.6) {$X$};
+  \draw[thick] (-1.8,0)--(1.8,0) node[right]{$\A^1$};
+  \draw[->,thick] (2.1,1.6)--(2.1,0.3) node[midway,right]{$\pi$ (有限)};
+  \foreach \x in {-0.9,0.7}{
+    \draw[dashed,gray] (\x,0)--(\x,2.9);
+    \fill (\x,0) circle(1.5pt);
+  }
+  \fill[red] (-0.9,{1.6+0.5*sin(-135)+0.25*0.81}) circle(1.5pt);
+  \fill[red] (-0.9,{2.6-0.3*0.81}) circle(1.5pt);
+  \fill[red] (0.7,{1.6+0.5*sin(105)+0.25*0.49}) circle(1.5pt);
+  \fill[red] (0.7,{2.6-0.3*0.49}) circle(1.5pt);
+\end{tikzpicture}
+\caption{Noetherの正規化：$X$ は $\A^d$ の上に有限対一に乗っている（図は $d=1$）．}
+\end{figure}
+
+\subsection{多項式環の次元}
+
+\begin{mythm}{多項式環の次元}{ch07-polydim}
+$\dim k[x_1,\dots,x_n]=n$．すなわち $\dim\A^n=n$ である．
+\end{mythm}
+
+\begin{proof}[証明の概略]
+\textbf{$\ge$}：
+\[
+  (0)\subsetneq(x_1)\subsetneq(x_1,x_2)\subsetneq\cdots\subsetneq(x_1,\dots,x_n)
+\]
+は長さ $n$ の素イデアルの鎖である（$k[x_1,\dots,x_n]/(x_1,\dots,x_i)\cong k[x_{i+1},\dots,x_n]$ は整域）．
+幾何的には $\A^n\supsetneq\A^{n-1}\supsetneq\cdots\supsetneq\{0\}$ という座標部分空間の旗である．
+
+\textbf{$\le$}：$A$ を $k$ 上有限生成な整域，$\p\subsetneq\q$ を素イデアルとすると
+\[
+  \mathop{\mathrm{tr.deg}}\nolimits_k\Frac(A/\q)<\mathop{\mathrm{tr.deg}}\nolimits_k\Frac(A/\p)
+\]
+が成り立つことを示せばよい．実際これが示されれば，長さ $m$ の鎖 $\p_0\subsetneq\cdots\subsetneq\p_m$ に沿って
+超越次数は真に減少していくから，$m\le\mathop{\mathrm{tr.deg}}\nolimits_k k(x_1,\dots,x_n)=n$ となる．
+
+不等式を示す．$A/\p$ の生成元の像を $\bar a_1,\dots,\bar a_N$ とし，$\mathop{\mathrm{tr.deg}}\nolimits\Frac(A/\q)=r$ として，
+$A/\q$ で代数的に独立な元 $a_1,\dots,a_r$ を（添字を並べ替えて）選ぶ．すると $A/\p$ でも $a_1,\dots,a_r$ は代数的に独立である
+（$A/\p$ での関係式は $A/\q$ に落ちるから）．よって $\mathop{\mathrm{tr.deg}}\nolimits\Frac(A/\p)\ge r$．
+等号が成り立つと仮定すると，$S=k[a_1,\dots,a_r]\setminus\{0\}$ で局所化した $S^{-1}(A/\p)$ は体 $k(a_1,\dots,a_r)$ 上の有限次拡大体の部分環で，
+$k(a_1,\dots,a_r)$ 上整であるから，それ自身が体になる．一方 $\q/\p$ は $S$ と交わらない（$S$ の元は $A/\q$ で $0$ にならない）ので，
+$S^{-1}(\q/\p)$ は $S^{-1}(A/\p)$ の $0$ でない真のイデアルとなり矛盾する．
+\end{proof}
+
+\begin{myex}{簡単な次元計算}{ch07-dim-ex}
+(1) 放物線 $X=\Zero(y-x^2)\subset\A^2$：$k[X]=k[x,y]/(y-x^2)\cong k[x]$ だから $\dim X=1$．
+
+(2) 円錐 $X=\Zero(x^2+y^2-z^2)\subset\A^3$：$k(X)$ では $z$ が $x,y$ 上代数的（$z^2=x^2+y^2$）で，$x,y$ は代数的に独立だから
+$\mathop{\mathrm{tr.deg}}\nolimits k(X)=2$，すなわち $\dim X=2$．
+
+(3) ねじれ3次曲線 $X=\{(t,t^2,t^3)\}\subset\A^3$：$k[X]\cong k[t]$ より $\dim X=1$．
+\end{myex}
+
+\exprob{ch07-prob-chain}
+$R=k[x,y]$ において素イデアルの鎖 $(0)\subsetneq(y-x^2)\subsetneq(x-1,y-1)$ を幾何的に説明せよ．
+またこの鎖が細分できない（間に素イデアルが入らない）ことを，次元の議論を用いて示せ．
+
+% ==========================================================
+\section{多様体の次元}
+% ==========================================================
+
+\subsection{アフィン多様体の次元}
+
+前節の結果をまとめると，アフィン多様体 $X$ について次の三つの量が一致する：
+\[
+  \underbrace{\dim X}_{\text{既約閉集合の鎖}}
+  =\underbrace{\dim k[X]}_{\text{Krull次元}}
+  =\underbrace{\mathop{\mathrm{tr.deg}}\nolimits_k k(X)}_{\text{独立な関数の個数}}.
+\]
+さらに，次元は局所的な量でもある．
+
+\begin{myprop}{次元の局所性}{ch07-dim-local}
+(1) アフィン多様体 $X$ の任意の点 $p$ で $\dim\OO_{X,p}=\dim X$．
+
+(2) $U\subset X$ が空でない開集合ならば $\dim U=\dim X$．特に基本開集合 $D(f)$ は座標環 $k[X]_f$ をもつアフィン多様体であり，$\dim k[X]_f=\dim k[X]$．
+\end{myprop}
+
+\begin{proof}
+(1) 定理\ref{thm:ch07-catenary}で $\p=\m_p$ とすると $\dim A/\m_p=0$ より $\operatorname{ht}\m_p=\dim A$，すなわち $\dim\OO_{X,p}=\dim A_{\m_p}=\dim A$．
+(2) 関数体は開集合で変わらない（$k(U)=k(X)$）ので，超越次数による特徴づけから従う．
+\end{proof}
+
+この命題は「既約多様体はどの点でも同じ次元をもつ」ことを述べている．可約な集合では，例えば $\Zero(xz,yz)$ の直線上の点（平面上にない点）
+では局所次元が1，平面上の点では2となる．
+
+\subsection{次元と自由度}
+
+物理学の言葉で言えば，次元は\textbf{独立な自由度の数}である．
+超越次数による定義 $\dim X=\mathop{\mathrm{tr.deg}}\nolimits_k k(X)$ はまさに「$X$ 上の関数のうち，互いに代数的関係をもたないものが最大いくつとれるか」を数えている．
+
+\begin{myex}{パラメータ付けと自由度}{ch07-param}
+(1) $X=\Zero(x^2+y^2-1)\subset\A^2$（$\mathrm{char}\,k\ne2$）．$x$ と $y$ は $x^2+y^2=1$ で結ばれているので，独立な関数は1つ：$\dim X=1$．
+実際，$t\mapsto\left(\frac{1-t^2}{1+t^2},\frac{2t}{1+t^2}\right)$ という1パラメータの有理パラメータ付けがある．
+
+(2) $2\times2$ 行列で行列式が $1$ のもの全体 $\SL_2=\Zero(ad-bc-1)\subset\A^4$ は $\dim=3$．Lie群 $\SL(2,\C)$ の複素次元が $3$ であることと一致する．
+
+(3) 階数が $1$ 以下の $m\times n$ 行列全体 $M_{\le1}=\{u v^{T}\}$ は，$u\in k^m$，$v\in k^n$ のパラメータ付けをもつが，
+$(\lambda u,\lambda^{-1}v)$ が同じ行列を与えるので $\dim M_{\le1}=m+n-1$．パラメータの数から「冗長性（ゲージ自由度）」を引くと次元が得られる，というのは物理で馴染みの数え方である．
+\end{myex}
+
+最後の例は一般化できる：全射的な射 $\varphi:Y\to X$ があれば，一般の点の逆像（ファイバー）の次元を用いて
+\[
+  \dim X=\dim Y-\dim(\text{一般ファイバー})
+\]
+となる（ファイバー次元定理）．これは「拘束条件の付いていないパラメータ空間」から「ゲージ軌道の次元」を引くという物理的直感の代数版である．
+
+\begin{physbox}[自由度の数え方]
+ゲージ理論で真空のモジュライ空間の次元を数えるとき，「場の成分の数 $-$ 独立な拘束条件（F項・D項条件）の数 $-$ ゲージ自由度の数」という勘定をよく行う．
+これは本節の次元公式（ファイバー次元定理と，次小節の単項イデアル定理）の素朴な形である．
+ただし拘束条件が独立でない（後述の完全交差でない）場合や，ゲージ群の作用が自由でない点（安定化部分群をもつ点）では素朴な勘定が破れ，
+そのような点はしばしばモジュライ空間の特異点となる．モジュライ空間については第16章で扱う．
+\end{physbox}
+
+\subsection{次元と方程式の数}
+
+線形代数では，$\A^n$ の中で $r$ 個の独立な1次方程式の解空間は $n-r$ 次元である．
+非線形の場合にもこれに相当する主張があり，その基礎となるのが次の定理である．
+
+\begin{mythm}{Krullの単項イデアル定理}{ch07-pit}
+$R$ をNoether環，$f\in R$ を単元でない元とする．$\p$ が $(f)$ を含む極小な素イデアルならば $\operatorname{ht}\p\le1$．
+さらに $f$ が零因子でなければ $\operatorname{ht}\p=1$ である．
+
+より一般に，$(f_1,\dots,f_r)$ を含む極小素イデアルの高さは $r$ 以下である（Krullの標高定理）．
+\end{mythm}
+
+証明は可換環論の教科書（Artin環の長さの議論を用いる）に譲る．幾何的な帰結は次のとおりである．
+
+\begin{mycor}{超曲面切断の次元}{ch07-hypsec}
+$X$ をアフィン多様体，$f\in k[X]$ とする．$X\cap\Zero(f)$ の任意の既約成分 $Z$ について
+\[
+  \dim Z\ge\dim X-1
+\]
+であり，$f$ が $X$ 上恒等的に $0$ でなく，$X\cap\Zero(f)\ne\emptyset$ ならば $X\cap\Zero(f)$ は純 $(\dim X-1)$ 次元である．
+したがって $r$ 個の方程式 $f_1=\cdots=f_r=0$ で切ると，空でない限り各既約成分の次元は $\dim X-r$ 以上である．
+\end{mycor}
+
+\begin{proof}
+$Z$ は $k[X]$ の $(f)$ を含む極小素イデアル $\p$ に対応する．単項イデアル定理より $\operatorname{ht}\p\le1$，
+定理\ref{thm:ch07-catenary}より $\dim Z=\dim k[X]/\p=\dim X-\operatorname{ht}\p\ge\dim X-1$．
+$f\neq0$ なら（$k[X]$ は整域なので）$f$ は零因子でなく $\operatorname{ht}\p=1$．
+\end{proof}
+
+ここで重要なのは，\textbf{不等式 $\ge$ は常に成り立つが等号は保証されない}ことである．
+方程式が「独立でない」場合，次元は期待より大きくなる．
+
+\begin{myex}{方程式の数と次元の関係}{ch07-eqnum}
+(1) $\A^3$ において $\Zero(x,\,x+y^2)=\Zero(x,y)$ は $z$ 軸で，2本の方程式で1次元：期待どおり．
+
+(2) $\A^3$ において $\Zero(xy,\,xz)=\{x=0\}\cup\{y=z=0\}$ は2次元の成分をもつ．2本の方程式だが，平面 $\{x=0\}$ 上では両方が同時に消えるので，実質1本としてしか効いていない．
+
+(3) ねじれ3次曲線 $C=\{(t,t^2,t^3)\}\subset\A^3$ は $\Ideal(C)=(y-x^2,\,z-x^3)$ と2本の方程式で書ける（余次元2）．
+これは期待どおりだが，同じ $C$ を $(y-x^2,\,xz-y^2,\,z-xy)$ のように3本で書くこともできる．何本で「書けるか」と最小本数は別問題である．
+
+(4) $\A^4$ の二つの平面の和 $X=\Zero(x,y)\cup\Zero(z,w)$ は余次元2だが，$\Ideal(X)=(x,y)\cap(z,w)=(xz,xw,yz,yw)$ は2個の元では生成できない．
+\end{myex}
+
+\begin{mydef}{完全交差}{ch07-ci}
+$X\subset\A^n$ が余次元 $r$ の代数的集合で，$\Ideal(X)$ が $r$ 個の多項式で生成されるとき，$X$ を（イデアル論的）\textbf{完全交差}という．
+\end{mydef}
+
+完全交差は「方程式がちょうど独立である」状況であり，Calabi–Yau多様体の構成（第15章の完全交差Calabi–Yau）で重要な役割を果たす．
+
+\subsection{余次元}
+\label{sec:ch07-codim}
+
+\begin{mydef}{余次元}{ch07-codim}
+$X$ を既約な代数的集合，$Y\subset X$ を既約閉集合とする．$Y$ を含む既約閉集合の鎖 $Y=Z_0\subsetneq Z_1\subsetneq\cdots\subsetneq Z_r\subset X$ の長さの上限を
+$Y$ の $X$ における\textbf{余次元}といい $\codim_XY$ と書く．$Y$ が可約なら既約成分の余次元の最小値と定める．
+\end{mydef}
+
+代数的には，$Y$ に対応する素イデアル $\p\subset k[X]$ について $\codim_XY=\operatorname{ht}\p$ である．
+定理\ref{thm:ch07-catenary}により，アフィン多様体では
+\[
+  \dim Y+\codim_XY=\dim X
+\]
+が成り立つ．これは自明に見えるが，一般の位相空間やNoether環では成り立たない，アフィン多様体の良い性質である．
+
+余次元の言葉では，単項イデアル定理は「1本の方程式で切ると余次元は高々1増える」，標高定理は「$r$ 本の方程式で切った集合の各成分は余次元 $r$ 以下」と言い換えられる．
+余次元は「拘束条件の数」に相当する量で，埋め込む空間 $\A^n$ の取り方によらない次元 $\dim Y$ と違い，相対的な量である．
+
+\begin{myex}{交わりの次元}{ch07-intersect}
+$X,Y\subset\A^n$ を既約で $\dim X=r$，$\dim Y=s$ とすると，$X\cap Y$ の任意の既約成分 $Z$ は
+\[
+  \dim Z\ge r+s-n,\qquad\text{すなわち}\qquad \codim Z\le\codim X+\codim Y.
+\]
+（証明：$X\cap Y$ は $X\times Y\subset\A^{2n}$ と対角集合 $\Delta=\Zero(x_1-y_1,\dots,x_n-y_n)$ の交わりと同一視でき，$\Delta$ は $n$ 本の方程式で定義されるので標高定理を適用する．）
+たとえば $\A^3$ の二つの曲面は（交われば）少なくとも曲線で交わる．
+射影空間ではさらに（$r+s\ge n$ なら）「交わりが空でない」ことまで保証される（第9章の射影次元定理\ref{thm:ch09-projdimthm}）．
+\end{myex}
+
+\subsection{超曲面}
+
+\begin{mydef}{超曲面}{ch07-hypersurface}
+定数でない多項式 $f\in k[x_1,\dots,x_n]$ の零点集合 $\Zero(f)\subset\A^n$ を\textbf{超曲面}という．$n=2$ なら平面曲線，$n=3$ なら曲面である．
+\end{mydef}
+
+\begin{mythm}{超曲面の次元}{ch07-hypdim}
+$\A^n$ の超曲面は純 $(n-1)$ 次元である．逆に，$\A^n$ の純 $(n-1)$ 次元代数的集合は超曲面である．
+\end{mythm}
+
+\begin{proof}
+$f=f_1^{e_1}\cdots f_s^{e_s}$ を既約分解すると $\Zero(f)=\bigcup\Zero(f_i)$ で，各 $\Zero(f_i)$ は既約（$k[x]$ はUFDで $(f_i)$ は素イデアル）．
+$f_i$ が $x_n$ を含むとしてよい．$k(\Zero(f_i))=\Frac(k[x]/(f_i))$ において，$x_n$ は $f_i(x_1,\dots,x_n)=0$ により $x_1,\dots,x_{n-1}$ 上代数的である．
+また $x_1,\dots,x_{n-1}$ の間に代数関係 $g(x_1,\dots,x_{n-1})\in(f_i)$ があったとすると，$f_i\mid g$ だが $g$ は $x_n$ を含まないので $g=0$．
+よって $\mathop{\mathrm{tr.deg}}\nolimits=n-1$ で $\dim\Zero(f_i)=n-1$．
+（単項イデアル定理からも直ちに $\operatorname{ht}(f_i)=1$ が分かる．）
+
+逆に $X$ が純 $(n-1)$ 次元で既約とすると，$\p=\Ideal(X)$ は高さ1の素イデアル．$0\neq g\in\p$ をとりその既約因子のうち $\p$ に含まれるもの $f$ をとると，
+$(0)\subsetneq(f)\subset\p$ で $(f)$ は素イデアルだから，高さの比較より $\p=(f)$．可約な場合は各成分の積をとればよい．
+\end{proof}
+
+この定理は，UFDである多項式環に特有の現象「高さ1の素イデアルは単項」の幾何的な表れである．
+一般の多様体 $X$ の中で余次元1の部分多様体（因子）が1本の方程式で\emph{大域的には}書けるとは限らず，その「ずれ」を測るのが Picard群 $\Pic X$ である（第9章・第11章）．
+
+\begin{myex}{いろいろな超曲面}{ch07-hyp-ex}
+(1) $\Zero(x^2+y^2+z^2-1)\subset\A^3$：（複素）2次元球面．\quad
+(2) $\Zero(y^2-x^3-ax-b)\subset\A^2$：アフィン楕円曲線（1次元）．\quad
+(3) $\Zero(z_1^5+\cdots+z_5^5)\subset\A^5$：4次元の超曲面．その射影版 $\{z_1^5+\cdots+z_5^5=0\}\subset\PP^4$ は3次元の quintic Calabi–Yau 多様体である（第15章）．
+\end{myex}
+
+\exprob{ch07-prob-sl2}
+$X=\Zero(xw-yz)\subset\A^4$（$2\times2$ 行列で行列式 $0$ のもの全体）の次元を，(a) 超曲面の次元として，(b) $u v^{T}$ によるパラメータ付けから，の二通りで求めよ．
+
+\exprob{ch07-prob-twocurve}
+$\A^3$ において，曲面 $\Zero(z-xy)$ と $\Zero(z)$ の交わりを求め，その各既約成分の次元が例\ref{ex:ch07-intersect}の下限と一致することを確かめよ．
+
+% ==========================================================
+\section{接空間}
+% ==========================================================
+
+\subsection{微分幾何における接空間の復習}
+
+$M\subset\R^n$ を $C^\infty$ 部分多様体とする．点 $p\in M$ を通る $M$ 上の曲線 $\gamma(t)$（$\gamma(0)=p$）の速度ベクトル $\gamma'(0)$ 全体が接空間 $T_pM$ であった（付録F）．
+$M$ が方程式 $f_1=\cdots=f_r=0$ で定義され，Jacobi行列 $(\partial f_i/\partial x_j)(p)$ の階数が $r$ のとき，陰関数定理により
+\[
+  T_pM=\Bigl\{v\in\R^n\;\Bigm|\;\sum_j\frac{\partial f_i}{\partial x_j}(p)\,v_j=0\ (i=1,\dots,r)\Bigr\},\qquad \dim T_pM=n-r
+\]
+である．すなわち，接空間は\textbf{方程式の1次近似（線形化）の解空間}である．
+
+また，抽象多様体では接ベクトルを\textbf{点 $p$ での微分（derivation）}として定義した：
+線形写像 $v:C^\infty(M)\to\R$ で Leibniz則 $v(fg)=f(p)v(g)+g(p)v(f)$ を満たすもの．
+$v$ は定数関数を $0$ に写し，$p$ で消える2つの関数の積 $fg$ も $0$ に写す（$f(p)=g(p)=0$ だから）．
+したがって $v$ は「$p$ で消える関数全体 $\m_p$」の「2次以上で消える関数 $\m_p^2$」を法とした商 $\m_p/\m_p^2$ 上の線形形式とみなせる．
+この観察が代数幾何での定義の出発点となる：
+\[
+  \text{余接空間}\;T_p^*M\cong\m_p/\m_p^2,\qquad T_pM\cong(\m_p/\m_p^2)^*.
+\]
+$\m_p/\m_p^2$ の元は関数の「$p$ における1次の Taylor 係数」すなわち微分 $df|_p$ に他ならない．
+
+\subsection{代数幾何における接空間}
+
+代数幾何では次の二点が微分幾何と異なる．
+
+\begin{itemize}
+  \item 特異点があるため，陰関数定理が使えない点がある．接空間は「多様体の次元と同じ次元のベクトル空間」とは限らない．
+  \item 曲線 $\gamma(t)$ による定義は，Zariski位相では使いにくい（多様体上の代数曲線は十分にあるが，速度ベクトルの「極限」を考えるのに解析が要る）．
+\end{itemize}
+
+そこで代数幾何では，(i) 方程式の線形部分による素朴な定義と，(ii) 極大イデアルによる内在的な定義の二つを用意し，それらが一致することを示す．
+多項式の微分は形式的に定義できる（$\partial x^m/\partial x=mx^{m-1}$）ので，任意の体 $k$ 上で (i) は意味をもつ．
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  \begin{scope}
+    \draw[->,gray] (-2,0)--(2,0) node[right]{$x$};
+    \draw[->,gray] (0,-1.6)--(0,1.8) node[above]{$y$};
+    \draw[thick,blue!70!black] (0,0) circle(1.2);
+    \fill (0.849,0.849) circle(1.5pt) node[above right]{$p$};
+    \draw[red,thick] ($(0.849,0.849)+(-1.2,1.2)$)--($(0.849,0.849)+(1.0,-1.0)$) node[right]{$T_pX$};
+    \node at (0,-2.1) {$x^2+y^2=1$：接空間は1次元};
+  \end{scope}
+  \begin{scope}[xshift=6cm]
+    \draw[->,gray] (-1.5,0)--(2.2,0) node[right]{$x$};
+    \draw[->,gray] (0,-1.8)--(0,1.8) node[above]{$y$};
+    \draw[thick,blue!70!black] plot[domain=-1.15:1.15,samples=80,variable=\t] ({\t*\t*1.4},{\t*\t*\t*1.2});
+    \fill[red!25,opacity=0.5] (-1.4,-1.6) rectangle (2.1,1.6);
+    \fill (0,0) circle(1.5pt);
+    \node at (0.3,-2.1) {$y^2=x^3$：原点の接空間は $k^2$ 全体};
+  \end{scope}
+\end{tikzpicture}
+\caption{滑らかな点と特異点での接空間．}
+\label{fig:ch07-tangent}
+\end{figure}
+
+\subsection{接空間の定義}
+
+多項式 $f\in k[x_1,\dots,x_n]$ と点 $p=(p_1,\dots,p_n)\in\A^n$ に対し，$f$ を $p$ のまわりで展開すると
+\[
+  f(x)=f(p)+\sum_{i=1}^n\frac{\partial f}{\partial x_i}(p)(x_i-p_i)+(\text{$x-p$ について2次以上の項})
+\]
+となる（多項式なのでこれは有限和で厳密に成り立つ）．1次の部分を
+\[
+  d_pf=\sum_{i=1}^n\frac{\partial f}{\partial x_i}(p)(x_i-p_i)
+\]
+と書き，$f$ の $p$ における\textbf{微分}（線形部分）という．
+
+\begin{mydef}{埋め込まれた接空間}{ch07-tangent}
+$X\subset\A^n$ をアフィン代数的集合，$p\in X$ とする．
+\[
+  T_pX=\Zero\bigl(d_pf\;:\;f\in\Ideal(X)\bigr)\subset\A^n
+\]
+を $X$ の $p$ における（埋め込まれた）\textbf{接空間}という．$p$ を原点とみなせば $T_pX$ は $k^n$ の線形部分空間である．
+\end{mydef}
+
+$d_p(fg)=f(p)d_pg+g(p)d_pf$ であり，$f\in\Ideal(X)$ なら $f(p)=0$ だから，
+$\Ideal(X)=(f_1,\dots,f_m)$ のとき $d_p(\sum g_if_i)=\sum g_i(p)d_pf_i$．したがって
+\[
+  T_pX=\Zero(d_pf_1,\dots,d_pf_m)
+\]
+と\textbf{生成元だけで計算できる}．
+
+\begin{note}
+ここで $\Ideal(X)$ を使うことが重要である．$X$ を定義する任意の多項式を使うと誤った答えが出る．たとえば $X=\Zero(x^2)=\{x=0\}\subset\A^2$ で $f=x^2$ を使うと
+$d_0f=0$ となり「接空間 $=k^2$」となってしまうが，$\Ideal(X)=(x)$ を使えば正しく $T_0X=\{x=0\}$ を得る．
+（$\Zero(x^2)$ を「重複度2の直線」として区別する視点はスキーム論で扱う：第12章．）
+\end{note}
+
+\begin{myex}{円の接空間}{ch07-circle}
+$X=\Zero(x^2+y^2-1)$，$p=(a,b)\in X$．$d_pf=2a(x-a)+2b(y-b)$．$(a,b)\neq(0,0)$ だから（$\mathrm{char}\,k\ne2$ で）$T_pX$ は直線 $a(x-a)+b(y-b)=0$，すなわち点 $p$ における通常の接線である．
+\end{myex}
+
+\subsection{接空間と極大イデアル}
+
+定義\ref{def:ch07-tangent}は $X$ の $\A^n$ への埋め込みに依存しているように見える．これを内在的な量で書き直す．
+
+$M_p=(x_1-p_1,\dots,x_n-p_n)\subset k[x_1,\dots,x_n]$ を点 $p$ に対応する極大イデアルとする．
+$M_p$ の元 $f$（$f(p)=0$）に対して $d_pf$ は $k^n$ 上の線形形式とみなせる．
+
+\begin{mylem}{$\A^n$ の余接空間}{ch07-cotan-An}
+$d_p:M_p\to(k^n)^*$，$f\mapsto d_pf$ は全射 $k$-線形写像で，その核は $M_p^2$ である．したがって $M_p/M_p^2\cong(k^n)^*$．
+\end{mylem}
+
+\begin{proof}
+$d_p(x_i-p_i)$ は第 $i$ 座標関数なので全射．$f\in M_p$ を $p$ のまわりで展開すると，$d_pf=0$ は「定数項も1次の項もない」ことを意味し，
+これは $f$ が $(x_i-p_i)(x_j-p_j)$ の形の積の $k[x]$-線形結合であること，すなわち $f\in M_p^2$ と同値である．
+\end{proof}
+
+\begin{mythm}{接空間の内在的特徴づけ}{ch07-zariski-tangent}
+$X\subset\A^n$ をアフィン代数的集合，$p\in X$，$\m_p\subset k[X]$ を $p$ に対応する極大イデアルとする．このとき自然な同型
+\[
+  T_pX\;\cong\;(\m_p/\m_p^2)^*
+\]
+がある．さらに局所環 $\OO_{X,p}$ の極大イデアル（同じ記号 $\m_p$ で書く）についても $\m_p/\m_p^2$ は同じものである．
+\end{mythm}
+
+\begin{proof}
+$I=\Ideal(X)\subset M_p$ とすると $\m_p=M_p/I$ であり，
+\[
+  \m_p/\m_p^2=M_p/(M_p^2+I).
+\]
+補題\ref{lem:ch07-cotan-An}の同型 $M_p/M_p^2\cong(k^n)^*$ によりこれは $(k^n)^*/d_p(I)$ と同型である．ここで $d_p(I)\subset(k^n)^*$ は線形形式 $d_pf$（$f\in I$）の張る部分空間である．
+線形代数より，商空間 $(k^n)^*/W$ の双対は $W$ の零化空間 $W^\perp=\{v\in k^n\mid \lambda(v)=0\ \forall\lambda\in W\}$ と同型である（付録C）．$W=d_p(I)$ の零化空間はまさに $T_pX$ であるから
+\[
+  (\m_p/\m_p^2)^*\cong\bigl((k^n)^*/d_p(I)\bigr)^*\cong d_p(I)^\perp=T_pX.
+\]
+局所環については，$A=k[X]$，$\m=\m_p$ として $\m A_\m/\m^2A_\m\cong(\m/\m^2)_\m$ であり，$\m/\m^2$ は $\m$ で消される $A$-加群なので，$\m$ に含まれない $s$ は $\m/\m^2$ 上で非零スカラー $s(p)$ 倍として可逆に作用する．よって局所化しても変わらない．
+\end{proof}
+
+この定理により，\textbf{接空間は $X$ の点 $p$ の近傍の関数環だけから決まる}．埋め込み $X\hookrightarrow\A^n$ を取り換えても $T_pX$ は（同型を除いて）変わらない．
+「余接ベクトル $=$ 1次で消える関数 $/$ 2次で消える関数」という微分幾何の描像がそのまま代数幾何の定義になったわけである．
+
+\subsection{Zariski接空間}
+
+\begin{mydef}{Zariski接空間}{ch07-zts}
+$X$ を多様体，$p\in X$ とする．$k$-ベクトル空間
+\[
+  T_p^*X=\m_p/\m_p^2,\qquad T_pX=(\m_p/\m_p^2)^*=\Hom_k(\m_p/\m_p^2,k)
+\]
+をそれぞれ $p$ における\textbf{Zariski余接空間}，\textbf{Zariski接空間}という．ここで $\m_p\subset\OO_{X,p}$ である．
+\end{mydef}
+
+この定義は局所環 $\OO_{X,p}$ だけで書かれているので，アフィンでない多様体（射影多様体など，第8章）やスキームにもそのまま適用できる．
+また微分幾何での derivation による定義とも一致する：
+
+\begin{myprop}{derivation による記述}{ch07-derivation}
+$k$-線形写像 $D:\OO_{X,p}\to k$ で $D(fg)=f(p)D(g)+g(p)D(f)$ を満たすもの（$p$ における $k$-derivation）全体を $\operatorname{Der}_k(\OO_{X,p},k)$ とすると，
+$D\mapsto D|_{\m_p}$ により $\operatorname{Der}_k(\OO_{X,p},k)\cong(\m_p/\m_p^2)^*$．
+\end{myprop}
+
+\begin{proof}
+Leibniz則から $D(1)=2D(1)$ より $D(1)=0$，$f,g\in\m_p$ なら $D(fg)=0$ なので $D|_{\m_p}$ は $\m_p/\m_p^2$ 上の線形形式を誘導する．
+逆に $\lambda\in(\m_p/\m_p^2)^*$ に対し $D(f)=\lambda(f-f(p))$ と定めると derivation になる：$fg-f(p)g(p)=(f-f(p))(g-g(p))+f(p)(g-g(p))+g(p)(f-f(p))$ で第1項は $\m_p^2$ に入る．
+\end{proof}
+
+もう一つの見方として，\textbf{双対数}を用いた記述がある．$k[\varepsilon]=k[t]/(t^2)$（$\varepsilon$ は $t$ の像で $\varepsilon^2=0$）とし，「$X$ の $k[\varepsilon]$-値点」すなわち $f_i(p+\varepsilon v)=0$（$\bmod\ \varepsilon^2$）を満たす $v$ を考えると
+\[
+  f_i(p+\varepsilon v)=f_i(p)+\varepsilon\,d_pf_i(v)=\varepsilon\,d_pf_i(v)
+\]
+なので，その全体はちょうど $T_pX$ である．これは「無限小だけずらしても方程式を満たす方向」という物理的な接ベクトルの描像そのものであり，$\varepsilon^2=0$ という冪零元の扱いはスキーム論（第12章）や変形理論（第16章）で本格的に使われる．
+
+\begin{physbox}[無限小変位と線形化]
+物理で「微小変位 $\delta x$ を加えて1次まで展開する」操作は，まさに $k[\varepsilon]/(\varepsilon^2)$ 上の点を考えることに相当する．
+たとえば古典的な真空の空間 $\{\partial W=0\}$（$W$ は超ポテンシャル）の点のまわりの揺らぎのうち，1次の運動方程式を満たすものが接空間 $T_p$ であり，
+これが質量ゼロのモード（モジュライ）の候補を与える．ただし接空間の次元が多様体の次元より大きい点（特異点）では，
+1次では許される揺らぎが2次以上で妨げられる（「障害」がある）ことがあり，これは変形理論の基本問題となる（第16章）．
+\end{physbox}
+
+\subsection{接空間の具体例}
+
+\begin{myex}{cuspの接空間}{ch07-cusp-ts}
+$X=\Zero(y^2-x^3)\subset\A^2$．$f=y^2-x^3$ は既約で $\Ideal(X)=(f)$．$d_pf=-3a^2(x-a)+2b(y-b)$（$p=(a,b)$）．
+$p\neq(0,0)$ なら $(a,b)\neq0$ かつ $b^2=a^3$ より $-3a^2,2b$ の一方は $0$ でなく（$\mathrm{char}\,k\neq2,3$），$T_pX$ は直線．
+$p=(0,0)$ では $d_pf=0$ なので $T_pX=k^2$ で，$\dim T_pX=2>1=\dim X$．
+
+内在的に見ると：$\m=(x,y)\subset k[X]$ で，$f=y^2-x^3\in M_0^2$ だから $\m/\m^2=M_0/(M_0^2+(f))=M_0/M_0^2$ となり，$x,y$ の像が基底をなして $\dim\m/\m^2=2$．
+\end{myex}
+
+\begin{myex}{二重錐の接空間}{ch07-cone-ts}
+$X=\Zero(x^2+y^2-z^2)\subset\A^3$．$d_pf=2a(x-a)+2b(y-b)-2c(z-c)$．原点以外では接平面（2次元），原点では $d_0f=0$ で $T_0X=k^3$．
+\end{myex}
+
+\begin{myex}{パラメータ表示からの計算}{ch07-twisted-ts}
+ねじれ3次曲線 $C=\Zero(y-x^2,z-x^3)$ の点 $p=(t,t^2,t^3)$：
+\[
+  d_p(y-x^2)=-2t\,dx+dy,\qquad d_p(z-x^3)=-3t^2\,dx+dz
+\]
+（$dx=x-t$ などと略記）．これらは常に一次独立なので $T_pC$ は1次元で，$(1,2t,3t^2)$ で張られる．これは $\gamma(t)=(t,t^2,t^3)$ の速度ベクトル $\gamma'(t)$ に一致する．
+\end{myex}
+
+\exprob{ch07-prob-ts}
+$X=\Zero(xy,\,xz,\,yz)\subset\A^3$（3本の座標軸の和）について，原点における接空間を $\Ideal(X)$ から計算せよ．
+また $\Ideal(X)$ が2元では生成できないことを示せ（ヒント：$\Ideal(X)\subset M_0^2$ であり，$\Ideal(X)$ は1次独立な3つの2次式で生成される．$\Ideal(X)/M_0\Ideal(X)$ の次元を考えよ）．
+
+% ==========================================================
+\section{Jacobianと正則点}
+% ==========================================================
+
+\subsection{Jacobian行列}\label{sec:ch07-jacmat}
+
+$\Ideal(X)=(f_1,\dots,f_m)$ のとき，接空間の計算は行列の核の計算になる．
+
+\begin{mydef}{Jacobian行列}{ch07-jacobian}
+多項式 $f_1,\dots,f_m\in k[x_1,\dots,x_n]$ の\textbf{Jacobian行列}を
+\[
+  J=J(f_1,\dots,f_m)=\left(\frac{\partial f_i}{\partial x_j}\right)_{1\le i\le m,\;1\le j\le n}
+\]
+とし，点 $p$ での値を $J(p)$ と書く．
+\end{mydef}
+
+定義から直ちに
+\[
+  T_pX=\Ker J(p)\subset k^n,\qquad \dim T_pX=n-\rank J(p)
+\]
+である．$J$ の成分は多項式なので，$\rank J(p)\le r$ という条件は「$J$ の $(r+1)$ 次小行列式がすべて $p$ で消える」という多項式条件である．
+よって
+\[
+  \{p\in X\mid \dim T_pX\ge s\}=X\cap\Zero\bigl((n-s+1)\text{次小行列式全体}\bigr)
+\]
+は $X$ の閉集合である．すなわち関数 $p\mapsto\dim T_pX$ は\textbf{上半連続}（値が大きくなるのは閉集合上）である．
+
+\subsection{Jacobian criterion}
+
+接空間の次元と多様体の次元の関係が本節の主題である．
+
+\begin{mythm}{接空間の次元}{ch07-tsdim}
+$X$ をアフィン多様体とする．
+\begin{enumerate}
+  \item すべての $p\in X$ について $\dim T_pX\ge\dim X$．
+  \item $\{p\in X\mid\dim T_pX=\dim X\}$ は空でない開集合である．
+\end{enumerate}
+\end{mythm}
+
+\begin{proof}[証明の概略]
+$d=\dim X$ とする．
+\textbf{超曲面の場合}：$X=\Zero(f)\subset\A^n$，$f$ 既約，$d=n-1$．$\dim T_pX=n-1$ でないのは $\partial f/\partial x_i(p)=0$（全ての $i$）のとき（このとき $\dim T_pX=n$）に限る．
+もし全ての $\partial f/\partial x_i$ が $X$ 上で恒等的に消えたとすると $f\mid\partial f/\partial x_i$ だが，次数の比較から $\partial f/\partial x_i=0$（多項式として）．
+標数 $0$ ではこれは $f$ が定数であることを意味し矛盾．（標数 $p>0$ では $f$ が $p$ 乗の多項式 $g^p$ となり，$k$ が代数閉なので $f$ が既約であることに矛盾．）
+よって $\{p\mid\dim T_pX=n-1\}$ は空でない開集合で，(1) も明らか．
+
+\textbf{一般の場合}：$k(X)$ は $k$ 上分離的に生成されるので，原始元定理により $k(X)=k(y_1,\dots,y_d,y_{d+1})$ と $d+1$ 個の元で生成される．
+これは $X$ が超曲面 $Y\subset\A^{d+1}$ と\textbf{双有理同値}であること，すなわち空でない開集合 $U\subset X$，$V\subset Y$ で $U\cong V$ となるものがあることを意味する（第10章）．
+同型な開集合上では接空間の次元は等しい（定理\ref{thm:ch07-zariski-tangent}より接空間は局所環で決まる）から，$U\cap V$ の上で超曲面の場合の結果を使えば，$\dim T_pX=d$ となる点からなる空でない開集合が得られる．
+最後に (1)：$\{p\mid\dim T_pX\ge d\}$ は閉集合で，空でない開集合（すなわち稠密集合）を含むから $X$ 全体である．
+\end{proof}
+
+\begin{mythm}{Jacobian criterion}{ch07-jacobian-crit}
+$X\subset\A^n$ を $d$ 次元アフィン多様体，$\Ideal(X)=(f_1,\dots,f_m)$ とする．点 $p\in X$ について
+\[
+  \rank J(f_1,\dots,f_m)(p)\le n-d
+\]
+が常に成り立ち，
+\[
+  \dim T_pX=\dim X\iff\rank J(p)=n-d.
+\]
+\end{mythm}
+
+\begin{proof}
+$\dim T_pX=n-\rank J(p)$ と定理\ref{thm:ch07-tsdim}から直ちに従う．
+\end{proof}
+
+物理的には，この判定法は「拘束条件の勾配ベクトルが期待どおりの個数だけ一次独立か」を見ていることになる．
+特に $X$ が余次元 $r$ の完全交差 $\Zero(f_1,\dots,f_r)$ のときは，「$df_1,\dots,df_r$ が $p$ で一次独立」が条件であり，
+微分幾何の陰関数定理（正則値定理）の仮定と全く同じ形をしている．
+
+\begin{note}
+Jacobian criterion を使うときは，$f_i$ が $\Ideal(X)$ を生成していることが必要である．$\Ideal(X)$ の生成元でない方程式（たとえば $f^2$ や，根基でないイデアルの生成元）を使うと，
+滑らかな点が特異に見えることがある．逆に，$J(p)$ の階数が $n-d$ になれば（$f_i$ が $\Ideal(X)$ の生成元でなくとも $\Ideal(X)$ に属しているなら）$p$ が正則点であることは結論できる．
+\end{note}
+
+\subsection{正則点}
+
+\begin{mydef}{正則点・特異点}{ch07-regular}
+多様体 $X$ の点 $p$ で $\dim T_pX=\dim X$ となるものを\textbf{正則点}（非特異点，滑らかな点）といい，そうでない点（$\dim T_pX>\dim X$）を\textbf{特異点}という．
+すべての点が正則点であるとき $X$ は\textbf{非特異}（滑らか）であるという．
+\end{mydef}
+
+代数的には，Noether局所環 $(R,\m)$ について常に $\dim_k\m/\m^2\ge\dim R$（$k=R/\m$）が成り立ち（これは Nakayama の補題と標高定理から従う），
+等号が成り立つとき $R$ を\textbf{正則局所環}という．したがって
+\[
+  p\in X\text{ が正則点}\iff\OO_{X,p}\text{ が正則局所環}
+\]
+である．この定義は埋め込みによらず，局所環だけで決まる内在的な性質である．
+
+正則局所環は必ず整域であり，さらに UFD であることが知られている（Auslander–Buchsbaum）．
+幾何的には，正則点の近傍では「余次元1の部分多様体は局所的に1本の方程式で書ける」ことを意味する．
+
+\begin{myprop}{複素数体上での意味}{ch07-complex-smooth}
+$k=\C$ とする．$X\subset\C^n$ の点 $p$ が正則点であることと，$p$ の（通常の位相での）近傍で $X$ が $\dim X$ 次元の複素部分多様体であることは同値である．
+\end{myprop}
+
+\begin{proof}[証明の概略]
+正則点では，$\Ideal(X)$ の生成元から $J(p)$ の階数 $r=n-d$ を与える $r$ 個 $f_{i_1},\dots,f_{i_r}$ を選ぶ．
+正則関数の陰関数定理より $Y=\{f_{i_1}=\cdots=f_{i_r}=0\}$ は $p$ の近くで $d$ 次元複素多様体であり，$X\subset Y$．
+$X$ も $p$ の近くで $d$ 次元なので，$Y$ の連結な $d$ 次元多様体の中の $d$ 次元解析的部分集合として $X$ と $Y$ は $p$ の近くで一致する．
+逆向きは解析的な議論を要する（第13章）．
+\end{proof}
+
+\subsection{正則性の判定}
+
+実際に特異点を求める手順をまとめておく．
+
+\begin{enumerate}
+  \item $X$ の定義イデアル $\Ideal(X)=(f_1,\dots,f_m)$ と次元 $d$ を求める．
+  \item Jacobian行列 $J$ の $(n-d)$ 次小行列式をすべて計算する．
+  \item 特異点集合は $\Sing X=X\cap\Zero(\text{$(n-d)$ 次小行列式全体})$ である．
+\end{enumerate}
+
+超曲面 $X=\Zero(f)$（$f$ は平方因子をもたない）の場合は特に簡単で，
+\[
+  \Sing X=\Zero\Bigl(f,\frac{\partial f}{\partial x_1},\dots,\frac{\partial f}{\partial x_n}\Bigr)
+\]
+である．（$f$ が可約の場合も，既約成分の交わりの点は自動的に特異点として検出される：例\ref{ex:ch07-nonisolated}の $xy=0$ 参照．）
+
+\begin{myex}{楕円曲線の非特異性}{ch07-elliptic}
+$X=\Zero(y^2-x^3-ax-b)\subset\A^2$（$\mathrm{char}\,k\neq2,3$）．特異点の条件は
+\[
+  y^2=x^3+ax+b,\qquad 2y=0,\qquad 3x^2+a=0.
+\]
+$y=0$ より $x$ は $g(x)=x^3+ax+b$ と $g'(x)=3x^2+a$ の共通根．すなわち $g$ が重根をもつことであり，これは判別式
+\[
+  \Delta=-16(4a^3+27b^2)
+\]
+が $0$ になることと同値である．よって $\Delta\neq0$ のとき $X$ は非特異である．
+$\Delta=0$ のときは $a=-3c^2$，$b=2c^3$ と書け，$g(x)=(x-c)^2(x+2c)$ となり，$c\ne0$ なら $(c,0)$ が node，$c=0$ なら cusp $y^2=x^3$ になる．
+楕円曲線族の特異ファイバーは F理論におけるゲージ群の起源となる（第17章）．
+\end{myex}
+
+\subsection{正則点の具体例}
+
+\begin{myex}{非特異な例}{ch07-smooth-ex}
+(1) $\A^n$ 自身：$\Ideal=0$，$J$ は空行列で $\dim T_p=n$．全点正則．
+
+(2) 球面 $\Zero(x_1^2+\cdots+x_n^2-1)$（$\mathrm{char}\ne2$）：$\partial f/\partial x_i=2x_i$ が全て消えるのは原点のみで，原点は $X$ 上にない．非特異．
+
+(3) $\SL_n=\Zero(\det-1)$：$\det$ の $x_{ij}$ による偏微分は余因子 $\tilde x_{ij}$ であり，$\sum_j x_{ij}\tilde x_{ij}=\det=1$ より全てが同時に消えることはない．非特異（Lie群は滑らか，の代数版）．
+
+(4) ねじれ3次曲線：例\ref{ex:ch07-twisted-ts}より非特異．
+
+(5) Fermat曲面 $\Zero(x^d+y^d+z^d-1)$（$\mathrm{char}\,k\nmid d$）：偏微分 $dx^{d-1},dy^{d-1},dz^{d-1}$ が全て消えるのは原点のみで，$X$ 上にないので非特異．
+\end{myex}
+
+\exprob{ch07-prob-jac}
+$X=\Zero(x^2-y^2z)\subset\A^3$（Whitney の傘）の特異点集合を求めよ．また特異点集合上の点で，原点とそれ以外の点とで $X$ の局所的な形がどう違うかを考察せよ（$z>0$，$z<0$ での実断面を描いてみよ）．
+
+% ==========================================================
+\section{特異点}
+% ==========================================================
+
+\subsection{特異点の定義}
+
+前節の定義を改めて述べておく．$X$ を多様体，$p\in X$ とする．$p$ が\textbf{特異点}であるとは
+\[
+  \dim_k\m_p/\m_p^2>\dim\OO_{X,p}
+\]
+となること，すなわち局所環 $\OO_{X,p}$ が正則局所環でないことである．差
+\[
+  \dim T_pX-\dim X
+\]
+は特異性の粗い尺度であるが，これだけでは特異点の種類は区別できない（cusp も node も差は1）．
+そこで本節では，接空間よりも精密な不変量として\textbf{接錐}と\textbf{重複度}を導入する．
+
+\subsection{特異点と接空間の関係}
+
+正則点では，$X$ は $p$ の近くで接空間 $T_pX$（線形空間）によく近似される．特異点では $T_pX$ は大きすぎて，$X$ の形を反映しない．
+例えば cusp $y^2=x^3$ の原点での接空間は平面全体であり，「曲線がどの方向に出ていくか」の情報が失われている．
+
+この情報を捉えるのが，方程式の\textbf{最低次の項}である．$p=0$ とし，$f\in\Ideal(X)$ を
+\[
+  f=f_m+f_{m+1}+\cdots\qquad(f_j\text{ は }j\text{ 次同次式},\ f_m\neq0)
+\]
+と同次成分に分解して，最低次の成分 $f_m$ を $f_*$ と書く（$f$ の\textbf{初項}）．
+接空間は1次の部分 $d_0f=f_1$ だけを見るので，$m\ge2$ の $f$ からは何の制約も受けない．接錐はそれを改良する．
+
+\begin{mydef}{接錐と重複度}{ch07-tangent-cone}
+$X\subset\A^n$，$0\in X$ に対し
+\[
+  C_0X=\Zero\bigl(f_*\;:\;f\in\Ideal(X)\bigr)
+\]
+を $X$ の原点における\textbf{接錐}という．一般の点 $p$ では平行移動して定義する．
+超曲面 $X=\Zero(f)$ では $C_pX=\Zero(f_*)$ であり，$f_*$ の次数 $m$ を $p$ における\textbf{重複度}という．
+\end{mydef}
+
+$f_*$ は同次式なので $C_0X$ は原点を頂点とする錐（$v\in C_0X\Rightarrow\lambda v\in C_0X$）である．$\dim C_0X=\dim X$ が成り立ち，
+$C_0X\subset T_0X$ で，等号が成り立つのは $0$ が正則点のときに限る．
+直感的には，$C_0X$ は $X$ を原点のまわりで無限に拡大した極限 $\lim_{t\to\infty}tX$ である（$f(x/t)\,t^m\to f_*(x)$）．
+超曲面の場合，重複度 $m=1$ であることと正則点であることは同値である．
+
+\subsection{曲線の特異点}
+
+平面曲線 $C=\Zero(f)\subset\A^2$ の原点が特異点であるとき（$f(0)=0$，$f_1=0$），$f_*=f_m$（$m\ge2$）は2変数の $m$ 次同次式なので，$k$ が代数閉であれば
+\[
+  f_m(x,y)=\prod_{i=1}^m(a_ix+b_iy)
+\]
+と一次式の積に分解される．各直線 $a_ix+b_iy=0$ を原点における $C$ の\textbf{接線}（重複を込めて $m$ 本）という．
+\begin{itemize}
+  \item $m$ 本の接線が相異なるとき，原点を\textbf{通常 $m$ 重点}（ordinary $m$-fold point）という．$m=2$ のものが node（結節点）である．
+  \item 接線が重複するとき，さらに高次の項を見て分類する．cusp（尖点）はその典型である．
+\end{itemize}
+
+\begin{myex}{3重点}{ch07-triple}
+$f=(x^2+y^2)^2+3x^2y-y^3$ は $f_*=3x^2y-y^3=-y(y-\sqrt3x)(y+\sqrt3x)$ を初項にもつので，原点は通常3重点（3本の相異なる接線）である．
+実部分は「3枚の花びら」の形をした曲線（三葉線）である．
+\end{myex}
+
+曲線の特異点の分類には，より細かい不変量として\textbf{$\delta$ 不変量}（特異点が幾何種数をどれだけ下げるか）や\textbf{Milnor数} $\mu=\dim_k k[[x,y]]/(f_x,f_y)$ が用いられる．
+例えば node では $\mu=1$，cusp $y^2=x^3$ では $\mu=\dim k[[x,y]]/(x^2,y)=2$ である．
+
+\subsection{cuspとnode}
+
+最も基本的な2つの平面曲線の特異点を詳しく見る．
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.25]
+  \begin{scope}
+    \draw[->,gray] (-0.8,0)--(2.2,0) node[right]{$x$};
+    \draw[->,gray] (0,-1.9)--(0,1.9) node[above]{$y$};
+    \draw[very thick,blue!70!black] plot[domain=-1.2:1.2,samples=100,variable=\t] ({\t*\t*1.4},{\t*\t*\t*1.15});
+    \draw[red,thick,dashed] (0,0)--(2.0,0);
+    \fill (0,0) circle(1.4pt);
+    \node at (0.7,-2.3) {cusp：$y^2=x^3$};
+  \end{scope}
+  \begin{scope}[xshift=5cm]
+    \draw[->,gray] (-1.6,0)--(1.6,0) node[right]{$x$};
+    \draw[->,gray] (0,-1.6)--(0,1.6) node[above]{$y$};
+    \draw[very thick,blue!70!black] plot[domain=-1.55:1.55,samples=120,variable=\t] ({\t*\t-1},{\t*(\t*\t-1)});
+    \draw[red,thick,dashed] (-1.2,-1.2)--(1.3,1.3);
+    \draw[red,thick,dashed] (-1.2,1.2)--(1.3,-1.3);
+    \fill (0,0) circle(1.4pt);
+    \node at (0,-2.3) {node：$y^2=x^2(x+1)$};
+  \end{scope}
+\end{tikzpicture}
+\caption{cusp と node の実部分．赤い破線は原点における接錐．cusp では接線が重複し（$y^2=0$），node では2本の相異なる接線 $y=\pm x$ をもつ．}
+\label{fig:ch07-cusp-node}
+\end{figure}
+
+\paragraph{cusp（尖点）}
+$C=\Zero(y^2-x^3)$．原点での初項は $f_*=y^2$ なので重複度2で，接錐は $\Zero(y^2)$ すなわち $x$ 軸（を2重に数えたもの）．
+接線は1本しかなく，曲線は原点で「尖って」折り返す．$C$ は
+\[
+  \A^1\to C,\qquad t\mapsto(t^2,t^3)
+\]
+で全単射にパラメータ付けされるが，これは同型ではない．実際，座標環の準同型 $k[x,y]/(y^2-x^3)\to k[t]$，$x\mapsto t^2,\ y\mapsto t^3$ の像は $k[t^2,t^3]$ であり，$t$ を含まない．
+$k[t^2,t^3]$ は整閉でない：$t=t^3/t^2$ は分数体に属し，モニック方程式 $T^2-t^2=0$（係数 $t^2\in k[t^2,t^3]$）を満たす整元だが，$k[t^2,t^3]$ には含まれない．
+特異点 $\leftrightarrow$ 座標環の非正規性，という対応の一例である．
+また $\gamma(t)=(t^2,t^3)$ は $\gamma'(0)=0$ となり，速度が消える点として尖りが生じる．
+
+\paragraph{node（結節点）}
+$C=\Zero(y^2-x^2(x+1))$．原点での初項は $f_*=y^2-x^2=(y-x)(y+x)$ なので重複度2で，接線は $y=x$ と $y=-x$ の2本．
+曲線は原点を2回，異なる方向に通過する．パラメータ付けは
+\[
+  \A^1\to C,\qquad t\mapsto(t^2-1,\;t(t^2-1))
+\]
+で，$t=\pm1$ がともに原点に写る．$k=\C$ で原点の近くを見ると，$y^2-x^2(1+x)=(y-x\sqrt{1+x})(y+x\sqrt{1+x})$（$\sqrt{1+x}$ は原点近くの正則関数）と\textbf{解析的には}2つの滑らかな枝に分解する．
+すなわち node は解析的局所的に $\{uv=0\}$（2本の座標軸の交わり）と同型である．
+これに対し $y^2-x^2(x+1)$ は多項式としては既約であり，\textbf{代数的（Zariski位相）には既約だが，解析的局所的には可約}という現象が起きている．
+
+\begin{myprop}{cuspとnodeの区別}{ch07-cusp-node}
+cusp と node の原点は，どちらも $\dim T_0=2$，重複度2の特異点だが，接錐（cusp：重複した1直線，node：相異なる2直線）により区別され，互いに解析的に同型でない．
+\end{myprop}
+
+\begin{physbox}[縮退するサイクルと特異ファイバー]
+node は滑らかな曲線族の極限として自然に現れる．$k=\C$ で $C_\epsilon=\{y^2=x^2(x+1)+\epsilon\}$ を考えると，$\epsilon\neq0$ では（原点の近くで）滑らかで，原点付近は $uv=\epsilon$ という円柱（細い管）に見える．
+$\epsilon\to0$ でこの管の「くびれ」の円周 $S^1$ が一点に潰れて node になる（消滅サイクル）．
+楕円曲線のトーラスのサイクルが潰れるこの退化は，Seiberg–Witten 理論ではモノポールが質量ゼロになる点に，F理論では 7-brane の位置に対応する（第17章）．
+\end{physbox}
+
+\subsection{高次元の特異点}
+
+曲面以上では，さらに豊富な特異点が現れる．ここでは物理で特に重要なものを紹介する．
+
+\begin{myex}{二重錐（$A_1$ 特異点）}{ch07-a1}
+$X=\Zero(x^2+y^2-z^2)\subset\A^3$．$\Sing X=\{0\}$，接錐は $X$ 自身（$f$ が同次式なので）．
+実部分は図のような二重錐であり，頂点で局所的に $\R^2$ と同相でない．
+$k=\C$ では座標変換 $z\mapsto iz$ により $x^2+y^2+z^2=0$ とも書け，さらに $u=x+iy$，$v=x-iy$ とすれば $uv=-z^2$ である．
+\end{myex}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  \draw[thick,blue!70!black] (0,1.6) ellipse (1.6 and 0.35);
+  \draw[thick,blue!70!black,dashed] (1.6,-1.6) arc (0:180:1.6 and 0.35);
+  \draw[thick,blue!70!black] (-1.6,-1.6) arc (180:360:1.6 and 0.35);
+  \draw[thick,blue!70!black] (-1.6,1.6)--(1.6,-1.6);
+  \draw[thick,blue!70!black] (1.6,1.6)--(-1.6,-1.6);
+  \fill[red] (0,0) circle(1.8pt) node[right=3pt]{特異点（頂点）};
+  \draw[->,gray] (0,-2.3)--(0,2.4) node[above]{$z$};
+  \node at (0,-2.7) {$x^2+y^2=z^2$};
+\end{tikzpicture}
+\caption{二重錐．頂点の近傍は2つの円板を一点で貼り合わせたもので，多様体ではない．}
+\label{fig:ch07-cone}
+\end{figure}
+
+\begin{mydef}{$A_n$ 特異点}{ch07-an}
+$n\ge1$ に対し，曲面
+\[
+  X_{A_n}=\Zero(x^2+y^2+z^{n+1})\subset\C^3
+\]
+の原点を\textbf{$A_n$ 型特異点}という．$u=x+iy$，$v=x-iy$ とおけば $uv=-z^{n+1}$，符号を $z$ の定数倍で吸収して $uv=z^{n+1}$ とも書ける．
+\end{mydef}
+
+偏微分 $2x,2y,(n+1)z^n$ が全て消えるのは原点のみなので，$A_n$ 特異点は孤立特異点である．Milnor数は $\mu=\dim\C[[x,y,z]]/(x,y,z^n)=n$．
+
+\begin{myprop}{商特異点としての $A_n$}{ch07-an-quot}
+巡回群 $\Z_{n+1}=\langle\omega\rangle$（$\omega=e^{2\pi i/(n+1)}$）を $\C^2$ に $(a,b)\mapsto(\omega a,\omega^{-1}b)$ で作用させる．
+不変式環は $\C[a,b]^{\Z_{n+1}}=\C[a^{n+1},b^{n+1},ab]$ であり，$u=a^{n+1}$，$v=b^{n+1}$，$z=ab$ は唯一の関係式 $uv=z^{n+1}$ を満たす．
+したがって商空間 $\C^2/\Z_{n+1}$ は $A_n$ 特異点 $X_{A_n}$ と同型である．
+\end{myprop}
+
+\begin{proof}[証明の概略]
+単項式 $a^ib^j$ が不変 $\iff$ $i\equiv j\pmod{n+1}$．このような単項式は $(ab)^{\min(i,j)}$ と $a^{n+1}$ または $b^{n+1}$ の冪の積に書けるので不変式環は $u,v,z$ で生成される．
+$\C[u,v,z]/(uv-z^{n+1})$ は整域で次元2，不変式環も次元2（$\C[a,b]$ がその上整）なので，全射 $\C[u,v,z]/(uv-z^{n+1})\to\C[a,b]^{\Z_{n+1}}$ は同型である．
+\end{proof}
+
+$A_n$ は ADE 分類（$A_n,D_n,E_6,E_7,E_8$）と呼ばれる，$\SL(2,\C)$ の有限部分群による商特異点（Du Val 特異点，Klein特異点）の系列の一部である．
+これらはいずれも $\C^3$ の超曲面として書ける：
+\begin{gather*}
+  D_n:\ x^2+y^2z+z^{n-1}=0,\qquad E_6:\ x^2+y^3+z^4=0,\\
+  E_7:\ x^2+y^3+yz^3=0,\qquad E_8:\ x^2+y^3+z^5=0.
+\end{gather*}
+
+\begin{myex}{3次元の錐：conifold}{ch07-conifold}
+$X=\Zero(x_1^2+x_2^2+x_3^2+x_4^2)\subset\C^4$ は原点を孤立特異点にもつ3次元の超曲面であり，\textbf{conifold}（の局所モデル）と呼ばれる．
+変数変換で $\Zero(xy-zw)$ とも書ける（$2\times2$ 行列の行列式 $=0$）．
+接錐は $X$ 自身で，その「底」（単位球面との交わり）は $S^2\times S^3$ と同相である．
+\end{myex}
+
+\subsection{特異集合}
+
+\begin{mydef}{特異集合}{ch07-sing}
+多様体 $X$ の特異点全体を $\Sing X$ と書き，\textbf{特異集合}（特異点集合）という．$X_{\mathrm{reg}}=X\setminus\Sing X$ を正則部分という．
+\end{mydef}
+
+\begin{mythm}{特異集合は真閉集合}{ch07-sing-closed}
+$X$ を多様体とすると，$\Sing X$ は $X$ の真の閉集合である．したがって正則部分 $X_{\mathrm{reg}}$ は $X$ の空でない（稠密な）開集合であり，$\dim\Sing X<\dim X$．
+\end{mythm}
+
+\begin{proof}
+アフィンの場合に示せば十分である．$\Sing X=\{p\mid\dim T_pX\ge\dim X+1\}$ は，Jacobian行列の $(n-d)$ 次小行列式の共通零点と $X$ の交わりなので閉集合（\S\ref{sec:ch07-jacmat}）．
+定理\ref{thm:ch07-tsdim}(2) より $X_{\mathrm{reg}}\neq\emptyset$．既約空間の空でない開集合は稠密であり，真閉集合の次元は真に小さい．
+\end{proof}
+
+この定理は，「代数多様体はほとんどいたるところ滑らかである」ことを保証する．特異点は（いわば）余次元1以上の「例外」として現れる．
+さらに次の事実が知られている：
+
+\begin{itemize}
+  \item \textbf{正規}多様体（各局所環が整閉整域）では $\codim\Sing X\ge2$．特に正規曲線は非特異である．cusp の座標環 $k[t^2,t^3]$ が整閉でなかったことと対応している．
+  \item 非特異多様体 $X$ と多項式 $f$ に対し，$\Zero(f)\cap X$ が非特異になる $f$ は一般的（Bertiniの定理）である．超曲面族 $\{f+\epsilon g=0\}$ では，特異になるパラメータは真閉集合（判別式軌跡）をなす．
+\end{itemize}
+
+\begin{myex}{非孤立特異点}{ch07-nonisolated}
+(1) $X=\Zero(xy)\subset\A^3$（2平面の和）：$\Sing X=\{x=y=0\}$ は $z$ 軸で1次元．$\dim\Sing X=1<2$．
+
+(2) Whitney の傘 $X=\Zero(x^2-y^2z)$：$\Sing X$ は $z$ 軸 $\{x=y=0\}$．$z=c\ne0$ の点では解析的局所的に $\{x^2=cy^2\}$（2枚の平面が交差したもの），原点では「傘の柄」が付いた，より複雑な特異点となる．
+\end{myex}
+
+\exprob{ch07-prob-sing}
+曲面 $X=\Zero(x^2+y^3+z^5)\subset\C^3$（$E_8$ 特異点）の特異点集合が原点のみであることを示し，原点における接錐と重複度を求めよ．
+
+\exprob{ch07-prob-cuspnorm}
+cusp $C=\Zero(y^2-x^3)$ について，正規化写像 $\nu:\A^1\to C$，$t\mapsto(t^2,t^3)$ が全単射であるが同型でないことを，原点における接空間の次元を比較して説明せよ．
+
+% ==========================================================
+\section{特異点と物理}
+% ==========================================================
+
+\subsection{特異空間と滑らかな空間}
+
+一般相対論では時空の特異点（曲率の発散）は理論の破綻を意味する．しかし弦理論や超対称ゲージ理論では，\textbf{幾何学的には特異な空間の上でも物理は滑らかに振る舞いうる}．
+むしろ，特異点は新しい物理（質量ゼロの粒子，ゲージ対称性の増大，相転移）の起源となることが多い．
+本節では，本章で導入した特異点の言葉がどのように物理に現れるかを概観する．詳細は第15章（特異Calabi–Yauと解消），第17章（幾何学的遷移，F理論）で扱う．
+
+点粒子の場の理論では，標的空間の特異点で作用やラプラシアンがうまく定義できず，量子化に問題が生じる．
+一方，弦は広がった対象なので，特異点の近傍を「なめらかにする」自由度を内部にもちうる．
+代数幾何の言葉で言えば，物理は特異多様体 $X$ そのものではなく，それの\textbf{変形}（方程式を摂動して滑らかにする）や\textbf{解消}（特異点をより大きな滑らかな空間で置き換える）を通じて特異点を「見て」いる，ということになる．
+
+\subsection{コンパクト化空間の特異点}
+
+\paragraph{オービフォールド特異点}
+群 $\Gamma$ が多様体 $M$ に作用し，ある点を固定するとき，商空間 $M/\Gamma$ は固定点の像で特異になる．
+局所的には $\C^n/\Gamma$（$\Gamma\subset\GL(n,\C)$ の有限部分群）の形をしており，これを\textbf{オービフォールド特異点}あるいは商特異点という．
+命題\ref{prop:ch07-an-quot}の $\C^2/\Z_{n+1}\cong X_{A_n}$ が典型例である．
+
+\begin{myex}{$T^4/\Z_2$ とK3曲面}{ch07-t4z2}
+4次元トーラス $T^4=\C^2/\Lambda$ に $\Z_2$ を $(z_1,z_2)\mapsto(-z_1,-z_2)$ で作用させると，固定点は $2^4=16$ 個あり，各点の近傍は $\C^2/\Z_2\cong X_{A_1}$ である．
+$T^4/\Z_2$ の16個の $A_1$ 特異点を解消するとK3曲面（2次元の Calabi–Yau 多様体）が得られる（Kummer構成）．
+\end{myex}
+
+弦理論は，点粒子とは違いオービフォールド上でも整合的に定義でき，固定点に局在した\textbf{ツイストセクター}の状態が現れる（Dixon–Harvey–Vafa–Witten）．
+ツイストセクターに含まれる質量ゼロのモジュライ場は，ちょうど特異点の解消・変形のパラメータに対応している．
+
+\paragraph{conifold 特異点}
+例\ref{ex:ch07-conifold}の conifold $\{xy-zw=0\}\subset\C^4$ は，3次元 Calabi–Yau 多様体の複素構造モジュライ空間の「一般的な退化」として現れる．
+たとえば quintic 族 $\sum z_i^5-5\psi\prod z_i=0$ は $\psi^5=1$ で conifold 特異点をもつ．
+この点の近くの滑らかな Calabi–Yau では，$\{x_1^2+x_2^2+x_3^2+x_4^2=\epsilon\}$ の中の実3次元球面 $S^3=\{x\in\R^4,\ |x|^2=\epsilon\}$ が $\epsilon\to0$ で潰れる（消滅サイクル）．これは前節の node の高次元版である．
+
+\begin{physbox}[conifold と質量ゼロのブラックホール]
+IIB型弦理論で，潰れつつある $S^3$ に D3-brane が巻き付いた状態は4次元で荷電粒子（ブラックホール）に見え，その質量は $S^3$ の体積に比例する．
+conifold 点で $S^3$ が潰れるとこの粒子は質量ゼロとなる（Strominger）．
+低エネルギー有効理論にこの粒子を含めて初めて，conifold 点でのプレポテンシャルの対数的特異性が物理的に理解される．
+幾何学的特異点が「積分し忘れた質量ゼロの自由度」のサインである，という考え方は以後何度も現れる．
+\end{physbox}
+
+\subsection{特異点解消の概念}
+
+\begin{mydef}{特異点解消}{ch07-resolution}
+多様体 $X$ の\textbf{特異点解消}とは，非特異多様体 $\tilde X$ と射 $\pi:\tilde X\to X$ で，
+\begin{enumerate}
+  \item $\pi$ は固有（proper）であり，
+  \item $\pi$ は $\pi^{-1}(X_{\mathrm{reg}})\to X_{\mathrm{reg}}$ 上で同型である
+\end{enumerate}
+ものをいう．$\pi^{-1}(\Sing X)$ を\textbf{例外集合}という．
+\end{mydef}
+
+すなわち，特異点だけを「より大きなもの」で置き換え，それ以外は変えない操作である．標数0では，任意の多様体に特異点解消が存在する（広中の定理）．
+基本的な構成法は\textbf{blow-up}（爆発）であり，点 $p$ を「$p$ を通る方向全体」すなわち射影空間 $\PP(T_p)$ で置き換える．
+射影空間は第8章で，blow-up の詳細は第10章・第15章で扱う．ここでは例で雰囲気をつかむ．
+
+\begin{myex}{cusp と node の解消}{ch07-res-curve}
+曲線の場合，特異点解消は正規化 $\nu:\tilde C\to C$ で与えられる．
+cusp では $\A^1\to C$，$t\mapsto(t^2,t^3)$ が解消であり，例外集合は1点．
+node では $\A^1\to C$，$t\mapsto(t^2-1,t(t^2-1))$ が解消で，原点の逆像は2点 $t=\pm1$：node の2本の枝が切り離される．
+\end{myex}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.95]
+  \begin{scope}
+    \draw[very thick,blue!70!black] plot[domain=-1.5:1.5,samples=100,variable=\t] ({\t},{0.4*\t*\t*\t-0.6*\t+1.8});
+    \fill[red] (-1.2247,1.8) circle(1.6pt);
+    \fill[red] (1.2247,1.8) circle(1.6pt);
+    \node at (2.2,2.2) {$\tilde C\cong\A^1$};
+    \draw[->,thick] (0,0.9)--(0,0.2) node[midway,right]{$\nu$};
+    \draw[very thick,blue!70!black] plot[domain=-1.45:1.45,samples=120,variable=\t] ({0.9*(\t*\t-1)},{0.9*\t*(\t*\t-1)-0.9});
+    \fill[red] (0,-0.9) circle(1.6pt);
+    \node at (2.2,-0.9) {$C$（node）};
+  \end{scope}
+  \begin{scope}[xshift=7.5cm,yshift=0.3cm]
+    \draw[thick,blue!70!black] (-1.8,1.2) .. controls (-0.5,1.0) and (0.5,1.0) .. (1.8,1.2);
+    \draw[thick,blue!70!black] (-1.8,2.4) .. controls (-0.5,2.6) and (0.5,2.6) .. (1.8,2.4);
+    \draw[thick,blue!70!black] (-1.8,1.2)--(-1.8,2.4);
+    \draw[thick,blue!70!black] (1.8,1.2)--(1.8,2.4);
+    \draw[very thick,red] (0,1.8) ellipse (0.35 and 0.75);
+    \node[red] at (0.9,1.8) {$\PP^1$};
+    \node at (2.6,2.6) {$\tilde X$};
+    \draw[->,thick] (0,0.9)--(0,0.2) node[midway,right]{$\pi$};
+    \draw[thick,blue!70!black] (-1.4,0)--(1.4,-1.6);
+    \draw[thick,blue!70!black] (-1.4,-1.6)--(1.4,0);
+    \draw[thick,blue!70!black] (0,0) ellipse (1.4 and 0.12);
+    \draw[thick,blue!70!black] (0,-1.6) ellipse (1.4 and 0.12);
+    \fill[red] (0,-0.8) circle(1.6pt);
+    \node at (2.4,-0.8) {$X_{A_1}$};
+  \end{scope}
+\end{tikzpicture}
+\caption{特異点解消の模式図．左：node の正規化（原点の逆像は2点）．右：$A_1$ 特異点の解消（頂点が $\PP^1$ で置き換わる）．}
+\label{fig:ch07-resolution}
+\end{figure}
+
+\begin{myex}{$A_1$ 特異点の解消}{ch07-res-a1}
+$X=\Zero(uv-z^2)\subset\C^3$ の原点を blow-up すると，原点が射影直線 $E\cong\PP^1$ で置き換わった滑らかな曲面 $\tilde X$ が得られる．
+$\tilde X$ は $\PP^1$ 上の直線束 $\OO(-2)$ の全空間（$T^*\PP^1$）と同型で，$E$ の自己交点数は $-2$ である．
+一般に $A_n$ 特異点の極小解消の例外集合は $n$ 本の $\PP^1$ の鎖で，その交点行列は $-1$ 倍の $A_n$ 型 Cartan 行列になる．ADE 特異点という名前の由来である．
+\end{myex}
+
+一方，\textbf{変形}（deformation）では方程式を摂動する：$uv-z^2=\epsilon$ は $\epsilon\neq0$ で滑らかであり，原点の代わりに $S^2$（実2次元球面）が現れる（消滅サイクル）．
+同じ特異点に対して，「解消」と「変形」という2種類の滑らか化があるわけである．
+conifold では，解消（小さな解消，例外集合は $\PP^1\cong S^2$）と変形（$S^3$ が現れる）は位相的に異なる多様体を与え，この2つを特異点を経由して移り変わる過程が\textbf{conifold 遷移}である（第17章）．
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \node (res) at (-4,0) {解消：$\tilde X$（$S^2$ が現れる）};
+  \node (sing) at (0,0) {特異：$X$};
+  \node (def) at (4,0) {変形：$X_\epsilon$（$S^3$ が現れる）};
+  \draw[->,thick] (res)--(sing) node[midway,above]{\small $S^2\to$点};
+  \draw[->,thick] (def)--(sing) node[midway,above]{\small $S^3\to$点};
+\end{tikzpicture}
+\end{center}
+
+\subsection{特異点と物理的背景}
+
+本章の内容と物理の対応を，代表的な場面について表にまとめておく．
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{p{0.3\textwidth}p{0.6\textwidth}}
+\hline
+幾何 & 物理 \\
+\hline
+$A_n$ 特異点 $\C^2/\Z_{n+1}$ & IIA型弦理論を K3 上にコンパクト化：例外 $\PP^1$ に巻き付いた D2-brane が $W$ ボソンとなり，特異点の極限で $SU(n+1)$ ゲージ対称性が回復する \\
+ADE 分類（McKay対応：$\SL(2,\C)$ の有限部分群 $\leftrightarrow$ ADE型 Dynkin図形） & $A_n,D_n,E_{6,7,8}$ 特異点からそれぞれゲージ群 $SU(n+1),SO(2n),E_{6,7,8}$ が現れる \\
+例外曲線の体積 & ゲージ対称性の破れのスケール（Higgs の真空期待値）\\
+conifold 特異点 & 質量ゼロのブラックホール，トポロジー変化を伴う相転移 \\
+楕円曲線の特異ファイバー & F理論の 7-brane とゲージ群（第17章）\\
+モジュライ空間の特異点 & 新しい質量ゼロ状態・対称性の増大 \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{physbox}[特異点 $=$ 新しい質量ゼロの自由度]
+上の表の共通原理は，「\textbf{幾何が特異になる点では，それまで重かった状態が軽くなる}」ということである．
+滑らかな空間で有限の体積をもっていたサイクルに brane が巻き付いた状態の質量はその体積に比例し，特異点でサイクルが潰れるとゼロになる．
+代数幾何的には，(1) 特異点の位置（$\Sing X$）が物理の「どこで」を，(2) 接錐や例外集合の構造（$A_n$ なら $n$ 本の $\PP^1$）が「何が軽くなるか」を，(3) 解消と変形の選択がモジュライ空間の異なる「相」を決めている．
+これらを定量的に扱うための道具立て（Calabi–Yau 多様体，blow-up，モジュライ空間）は第15章〜第17章で準備する．
+\end{physbox}
+
+\exprob{ch07-prob-z3}
+$\Z_3$ を $\C^3$ に $(a,b,c)\mapsto(\omega a,\omega b,\omega c)$（$\omega=e^{2\pi i/3}$）で作用させる．
+不変式環 $\C[a,b,c]^{\Z_3}$ が3次の単項式全体で生成されることを示し，生成元の個数を求めよ．
+また $\C^3/\Z_3$ の特異点が超曲面特異点でない（$\C^4$ の超曲面として書けない）ことを，原点のZariski接空間の次元を計算して示せ．
+
+\section*{問題の解答}
+\addcontentsline{toc}{section}{問題の解答}
+
+\exsol{ch07-prob-chain}
+\textbf{幾何的な説明．}素イデアルと既約閉集合の対応は包含を逆にするので，鎖
+\[
+  (0)\subsetneq(y-x^2)\subsetneq(x-1,y-1)
+\]
+は既約閉集合の鎖
+\[
+  \A^2=\Zero(0)\ \supsetneq\ \Zero(y-x^2)\ \supsetneq\ \Zero(x-1,y-1)=\{(1,1)\}
+\]
+に対応する．すなわち「平面 $\supset$ 放物線 $y=x^2$ $\supset$ 放物線上の1点 $(1,1)$」という，次元 $2,1,0$ の既約閉集合の旗である．
+包含 $(y-x^2)\subset(x-1,y-1)$ は $y-x^2=(y-1)-(x-1)(x+1)$ から分かり，これは点 $(1,1)$ が放物線上にあることの言い換えである．
+各イデアルが素であることは，$R/(0)=R$，$R/(y-x^2)\cong k[x]$，$R/(x-1,y-1)\cong k$ がいずれも整域であることから分かる．
+
+\textbf{細分できないこと．}定理\ref{thm:ch07-catenary}より，素イデアル $\p\subset R$ に対し $\operatorname{ht}\p+\dim R/\p=\dim R=2$（定理\ref{thm:ch07-polydim}）である．
+$\dim R/(y-x^2)=\dim k[x]=1$ なので $\operatorname{ht}(y-x^2)=1$，また $\dim R/(x-1,y-1)=0$ なので $\operatorname{ht}(x-1,y-1)=2$．
+
+(i) $(0)\subsetneq\p\subsetneq(y-x^2)$ となる素イデアル $\p$ があれば，$(0)\subsetneq\p\subsetneq(y-x^2)$ は長さ2の鎖なので $\operatorname{ht}(y-x^2)\ge2$ となり矛盾．
+幾何的には，$\A^2$ と放物線の間に「次元 $1.5$」の既約閉集合は入らない，ということである．
+
+(ii) $(y-x^2)\subsetneq\q\subsetneq(x-1,y-1)$ となる素イデアル $\q$ があれば，$(0)\subsetneq(y-x^2)\subsetneq\q\subsetneq(x-1,y-1)$ は長さ3の鎖となり $\operatorname{ht}(x-1,y-1)\ge3>2=\dim R$ で矛盾．
+あるいは直接に，$(y-x^2)$ を含む素イデアルは $R/(y-x^2)\cong k[x]$（$y\mapsto x^2$）の素イデアルに対応し，$k[x]$ は単項イデアル整域で $\dim k[x]=1$ だから（例\ref{ex:ch07-dim-pid}），$0$ でない素イデアルは極大であり間に入るものはない．
+幾何的には，放物線（曲線）の既約閉部分集合は放物線自身と点だけである．
+
+さらに鎖の両端も延ばせない（$(0)$ は最小の素イデアル，$(x-1,y-1)$ は極大イデアル）ので，これは長さ $2=\dim R$ の極大な鎖である．
+
+\exsol{ch07-prob-sl2}
+行列を $\begin{pmatrix}x&y\\z&w\end{pmatrix}$ と書く．
+
+(a) $f=xw-yz$ は既約である．実際 $f$ は $x$ について1次で $f=w\cdot x-yz$ と書け，係数 $w$ と $yz$ は $k[y,z,w]$ で互いに素だから，$f$ を2つの非定数多項式の積に分解すると一方は $x$ を含まず $w$ と $yz$ の共通因子でなければならず，それは定数に限る．
+よって $X=\Zero(f)$ は既約な超曲面で，定理\ref{thm:ch07-hypdim}より $\dim X=4-1=3$．
+
+(b) $u=(u_1,u_2)^T$，$v=(v_1,v_2)^T$ に対して
+\[
+  \Phi:\A^2\times\A^2\to X,\qquad (u,v)\mapsto uv^T=\begin{pmatrix}u_1v_1&u_1v_2\\u_2v_1&u_2v_2\end{pmatrix}
+\]
+を考える．$\det uv^T=u_1v_1u_2v_2-u_1v_2u_2v_1=0$ なので像は $X$ に入り，逆に階数 $\le1$ の行列は $uv^T$ の形に書ける（零行列は $u=0$，階数1なら列空間の生成元を $u$ とすれば各列が $u$ の定数倍）ので $\Phi$ は全射である．
+$uv^T=A\neq0$ のとき，$u'v'^T=A$ となる $(u',v')$ は $(\lambda u,\lambda^{-1}v)$（$\lambda\in k^*$）に限るので，一般のファイバーは1次元である．
+したがって例\ref{ex:ch07-param}(3)と同様に $\dim X=4-1=3$．
+
+この勘定は次のように確かめられる．$X\cap\{x\neq0\}$ では $w=yz/x$ と一意に決まるので，射影 $(x,y,z,w)\mapsto(x,y,z)$ は $X\cap\{x\neq0\}$ と $\{(x,y,z)\mid x\neq0\}\subset\A^3$ の間の全単射を与える（ゲージ固定 $u_1=1$ に相当）．
+特に関数体では $k(X)=k(x,y,z)$ で $x,y,z$ は代数的に独立だから，定理\ref{thm:ch07-trdeg}より $\dim X=\mathop{\mathrm{tr.deg}}\nolimits_kk(X)=3$．
+
+\exsol{ch07-prob-twocurve}
+$\Zero(z-xy)\cap\Zero(z)=\Zero(z-xy,\,z)=\Zero(z,\,xy)=\{z=0,\,x=0\}\cup\{z=0,\,y=0\}$．
+すなわち交わりは平面 $z=0$ 上の2本の座標軸（$y$ 軸と $x$ 軸）の和であり，既約成分は
+\[
+  Z_1=\Zero(x,z)\ (y\text{ 軸}),\qquad Z_2=\Zero(y,z)\ (x\text{ 軸})
+\]
+の2つで，ともに $\A^1$ と同型だから $\dim Z_1=\dim Z_2=1$．
+一方 $X=\Zero(z-xy)$，$Y=\Zero(z)$ はどちらも既約な超曲面で $r=s=2$，$n=3$ だから，例\ref{ex:ch07-intersect}の下限は $r+s-n=2+2-3=1$．
+各既約成分の次元 $1$ はちょうどこの下限に一致する（固有な交わり）．
+幾何的には，鞍形の曲面 $z=xy$ を接平面 $z=0$ で切ると，原点で交差する2本の直線が現れる．
+
+\exsol{ch07-prob-ts}
+\textbf{$\Ideal(X)$ の決定．}$X$ は3本の座標軸 $\Zero(y,z)$，$\Zero(x,z)$，$\Zero(x,y)$ の和だから
+\[
+  \Ideal(X)=(y,z)\cap(x,z)\cap(x,y).
+\]
+右辺は単項式イデアルの共通部分なので単項式イデアルであり，単項式 $x^ay^bz^c$ がこれに属するのは「$y,z$ の少なくとも一方」「$x,z$ の少なくとも一方」「$x,y$ の少なくとも一方」を含むとき，すなわち $x,y,z$ のうち少なくとも2つの変数を含むときである．
+そのような単項式は $xy,xz,yz$ のいずれかで割り切れるから，$\Ideal(X)=(xy,xz,yz)$．
+
+\textbf{接空間．}生成元 $f_1=xy$，$f_2=xz$，$f_3=yz$ はいずれも原点で1次の項をもたないので $d_0f_1=d_0f_2=d_0f_3=0$．
+したがって
+\[
+  T_0X=\Zero(d_0f_1,d_0f_2,d_0f_3)=k^3,\qquad \dim T_0X=3>1=\dim X
+\]
+であり，原点は特異点である．（3本の軸の方向ベクトル $e_1,e_2,e_3$ がすべて接ベクトルなので，それらが張る $k^3$ 全体が接空間になる，と見てもよい．）
+
+\textbf{2元では生成できないこと．}$I=\Ideal(X)$，$M_0=(x,y,z)$ とする．$I$ は2次の同次式で生成される同次イデアルなので，$I_d=I\cap S_d$ とすれば $I=\bigoplus_{d\ge2}I_d$ で，$I_2=\langle xy,xz,yz\rangle_k$ は3次元である．
+$M_0I$ は次数 $\ge3$ の部分に含まれ，逆に $I$ の次数 $d\ge3$ の同次元 $h=\sum g_if_i$（$g_i$ は $d-2\ge1$ 次同次）は $g_i\in M_0$ より $M_0I$ に属する．よって $M_0I=\bigoplus_{d\ge3}I_d$ であり
+\[
+  I/M_0I\cong I_2,\qquad \dim_kI/M_0I=3.
+\]
+もし $I=(g_1,g_2)$ と2元で生成されれば，$I/M_0I$ は $g_1,g_2$ の像で張られるので次元 $\le2$ となり矛盾する．よって $\Ideal(X)$ は2元では生成できない．
+特に $X$ は余次元2だが完全交差ではない（例\ref{ex:ch07-eqnum}(4)と同種の現象）．
+
+\exsol{ch07-prob-jac}
+$f=x^2-y^2z$ とする（$\mathrm{char}\,k\neq2$）．$f$ は $z$ について1次で係数 $-y^2$ と $x^2$ は互いに素なので既約であり，$\Ideal(X)=(f)$，$\dim X=2$．
+$X$ は超曲面だから，$p$ が特異点 $\iff$ $J(p)=(\partial_xf,\partial_yf,\partial_zf)(p)=0$ である．
+\[
+  \partial_xf=2x,\qquad \partial_yf=-2yz,\qquad \partial_zf=-y^2
+\]
+より $x=0$，$y=0$ が必要十分で（このとき $\partial_yf=0$ も自動的），$z$ は任意．$z$ 軸上の点は $f=0$ を満たすので
+\[
+  \Sing X=\{x=y=0\}=z\text{ 軸}
+\]
+であり，1次元の（非孤立）特異集合である．
+
+\textbf{局所的な形の違い．}特異点 $p=(0,0,c)$ で $z=c+t$ とおくと $f=x^2-cy^2-y^2t$．
+
+\begin{itemize}
+  \item $c\neq0$ のとき，最低次の項は $f_*=x^2-cy^2=(x-\sqrt c\,y)(x+\sqrt c\,y)$ で，重複度2，接錐は相異なる2平面 $x=\pm\sqrt c\,y$ である．
+  $k=\C$ では原点の近くで $\sqrt{c+t}$ が正則関数として取れるので $f=(x-\sqrt{c+t}\,y)(x+\sqrt{c+t}\,y)$ と解析的に分解し，$X$ は $p$ の近くで「2枚の滑らかな曲面が直線（$z$ 軸）に沿って横断的に交わったもの」，すなわち node $\times$ 直線である．
+  \item $c=0$（原点）のとき，$f=x^2-y^2z$ の最低次の項は $f_*=x^2$ で，重複度は同じく2だが接錐は\emph{重複した1枚の平面} $\{x=0\}$ である．
+  したがって原点は他の特異点と解析的に同型ではなく，より退化した特異点である（2枚のシートが原点で合流して区別できなくなる）．
+\end{itemize}
+
+\textbf{実断面．}$k=\R$ で平面 $z=c$ による断面 $x^2=cy^2$ を見る．
+\begin{itemize}
+  \item $c>0$：$x=\pm\sqrt c\,y$ の2直線で，原点（$z$ 軸との交点）で交差する．$c\to+0$ で2直線のなす角が閉じていく．
+  \item $c=0$：$x^2=0$，すなわち直線 $x=0$（2本の直線が重なったもの）．
+  \item $c<0$：$x^2+|c|y^2=0$ より $(x,y)=(0,0)$ の1点のみ．
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \begin{scope}
+    \draw[->,gray] (-1.5,0)--(1.5,0) node[right]{$y$};
+    \draw[->,gray] (0,-1.5)--(0,1.5) node[above]{$x$};
+    \draw[very thick,blue!70!black] (-1.3,-1.0)--(1.3,1.0);
+    \draw[very thick,blue!70!black] (-1.3,1.0)--(1.3,-1.0);
+    \fill[red] (0,0) circle(1.6pt);
+    \node at (0,-2.0) {$z=c>0$：2直線};
+  \end{scope}
+  \begin{scope}[xshift=4.2cm]
+    \draw[->,gray] (-1.5,0)--(1.5,0) node[right]{$y$};
+    \draw[->,gray] (0,-1.5)--(0,1.5) node[above]{$x$};
+    \draw[very thick,blue!70!black] (-1.3,0)--(1.3,0);
+    \fill[red] (0,0) circle(1.6pt);
+    \node at (0,-2.0) {$z=0$：重複直線 $x=0$};
+  \end{scope}
+  \begin{scope}[xshift=8.4cm]
+    \draw[->,gray] (-1.5,0)--(1.5,0) node[right]{$y$};
+    \draw[->,gray] (0,-1.5)--(0,1.5) node[above]{$x$};
+    \fill[red] (0,0) circle(2pt);
+    \node at (0,-2.0) {$z=c<0$：1点};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+これらを $z$ 方向に積み重ねると，$z>0$ の部分は2枚の面が $z$ 軸に沿って交差した「傘の布」，$z<0$ の部分は $z$ 軸だけ（「傘の柄」）となる．
+実の像では $z>0$ と $z<0$ で見た目がまったく異なるが，$\C$ 上では $c<0$ でも $x=\pm\sqrt c\,y$ の2直線であり，$c\neq0$ の点はすべて同じ型（node $\times$ 直線）である．
+本質的に異なるのは，2枚のシートが合流する原点だけである．
+
+\exsol{ch07-prob-sing}
+$f=x^2+y^3+z^5$ は既約である（$f$ は $\C[y,z][x]$ のモニックな2次式なので，可約なら $x$ について1次の因子 $x-h(y,z)$ をもち $h^2=-(y^3+z^5)$ となるが，右辺は $y$ について奇数次なので平方になりえない）．よって $\Ideal(X)=(f)$，$\dim X=2$．
+偏微分は
+\[
+  \partial_xf=2x,\qquad\partial_yf=3y^2,\qquad\partial_zf=5z^4
+\]
+であり（$\C$ 上なので $2,3,5\neq0$），これらが同時に消えるのは $x=y=z=0$ のときに限る．原点は $X$ 上にあるので $\Sing X=\{0\}$（孤立特異点）．
+
+原点での同次成分への分解は $f=\underbrace{x^2}_{2\text{次}}+\underbrace{y^3}_{3\text{次}}+\underbrace{z^5}_{5\text{次}}$ なので，初項は $f_*=x^2$ である．したがって
+\[
+  C_0X=\Zero(x^2)=\{x=0\}\quad(\text{平面 }x=0\text{ を2重に数えたもの}),\qquad \text{重複度}=2.
+\]
+$\dim C_0X=2=\dim X$ と整合している．なお $A_n$，$D_n$，$E_6,E_7,E_8$ のどれも $x^2$ を含むので，ADE 特異点はすべて重複度2の曲面特異点（2重点）であり，接錐だけでは区別できない．
+区別には Milnor 数（$E_8$ では $\mu=\dim\C[[x,y,z]]/(x,y^2,z^4)=1\cdot2\cdot4=8$）などのより精密な不変量が必要である．
+
+\exsol{ch07-prob-cuspnorm}
+\textbf{全単射であること．}$(t^2)^3=(t^3)^2$ より $\nu(t)\in C$．
+$C$ の点 $(a,b)$（$b^2=a^3$）について，$a\neq0$ なら $t=b/a$ とおくと $t^2=b^2/a^2=a$，$t^3=t\cdot t^2=ab/a=b$ で $\nu(t)=(a,b)$．
+$a=0$ なら $b^2=0$ より $b=0$ で，$\nu(0)=(0,0)$．よって全射．
+また $\nu(t)=\nu(s)$ なら，$t\neq0$ のとき $t=t^3/t^2=s^3/s^2=s$（$s^2=t^2\neq0$），$t=0$ のとき $s^2=0$ より $s=0$．よって単射．
+
+\textbf{同型でないこと．}同型 $\varphi:Y\to X$ は各点で局所環の同型 $\OO_{X,\varphi(p)}\cong\OO_{Y,p}$ を誘導し，極大イデアルを極大イデアルに写すので $\m/\m^2$ の同型，すなわち Zariski 接空間の同型を与える（定理\ref{thm:ch07-zariski-tangent}）．特に $\dim T_pY=\dim T_{\varphi(p)}X$ でなければならない．
+ところが
+\[
+  \dim T_0\A^1=1,\qquad \dim T_{(0,0)}C=2
+\]
+である（後者は例\ref{ex:ch07-cusp-ts}：$y^2-x^3\in M_0^2$ より $T_{(0,0)}C=k^2$）．よって $\nu$ も，他のどんな写像も，$\A^1$ と $C$ の同型にはなりえない．
+
+実際 $\nu$ の微分は $d\nu_0:T_0\A^1\to T_{(0,0)}C$，$\partial_t\mapsto(2t,3t^2)|_{t=0}=(0,0)$ で零写像である．
+環の言葉では，$\nu^*:k[C]=k[t^2,t^3]\to k[t]$ は単射だが全射でなく（$t$ が像にない），$\nu$ の逆写像 $(x,y)\mapsto y/x$ は原点で正則関数として延びない．
+「全単射な射が同型とは限らない」ことの典型例であり，その原因が原点での接空間の次元の跳び（特異点）にある．
+
+\exsol{ch07-prob-z3}
+\textbf{不変式環．}$R=\C[a,b,c]^{\Z_3}$ とおく．生成元 $g$ は単項式に $g\cdot a^ib^jc^l=\omega^{i+j+l}a^ib^jc^l$ と作用する．
+多項式 $h=\sum_dh_d$（$h_d$ は $d$ 次同次成分）について $g\cdot h=\sum_d\omega^dh_d$ だから，$h$ が不変 $\iff$ $\omega^d\neq1$ となる $d$ について $h_d=0$ $\iff$ $h$ は次数が3の倍数の同次成分のみからなる．よって
+\[
+  R=\bigoplus_{m\ge0}\C[a,b,c]_{3m}
+\]
+であり，$R$ は $3m$ 次単項式で張られる．$3m$ 次の単項式 $a^ib^jc^l$ は，変数を（$a$ を $i$ 個，$b$ を $j$ 個，$c$ を $l$ 個）順に並べて3個ずつ区切ることで，$m$ 個の3次単項式の積に書ける．
+したがって $R$ は3次単項式全体で生成される．その個数は3変数の3次単項式の個数
+\[
+  \binom{3+2}{2}=10\qquad(a^3,b^3,c^3,a^2b,a^2c,b^2a,b^2c,c^2a,c^2b,abc)
+\]
+である．これより少なくはできない：3次単項式は $R$ の次数3の部分 $R_3$ の基底であり，$R$ の他の元の積は次数 $\ge6$ なので，$R_3$ の元を他の生成元の多項式で書くには $R_3$ の生成元の線形結合を使うしかないからである．
+
+\textbf{原点の Zariski 接空間．}$X=\C^3/\Z_3$ の座標環は $R$ であり，原点の像は極大イデアル $\m=\bigoplus_{m\ge1}R_{3m}$（正の次数の部分）に対応する．
+$\m^2$ は次数 $\ge6$ の部分に含まれ，逆に $R_{3m}$（$m\ge2$）は上で見たように3次単項式2個以上の積で張られるから $\m^2$ に含まれる．よって $\m^2=\bigoplus_{m\ge2}R_{3m}$ で
+\[
+  \m/\m^2\cong R_3,\qquad \dim T_0X=\dim_\C\m/\m^2=10.
+\]
+（定理\ref{thm:ch07-zariski-tangent}より局所環で考えても同じ．）
+一方 $\C[a,b,c]$ は $R$ 上整（$a^3,b^3,c^3\in R$）なので $\dim X=\dim\C[a,b,c]=3$．
+
+もし $X$ がある超曲面 $Y=\Zero(g)\subset\C^4$ と（原点の近傍で）同型なら，対応する点 $p\in Y$ で $T_pY\subset\C^4$（埋め込まれた接空間）なので $\dim T_pY\le4$ である．
+しかし $\dim T_0X=10>4$ なので矛盾する．よって $\C^3/\Z_3$ の特異点は超曲面特異点ではない．
+（$\C^4$ どころか，原点の近傍を $\C^n$（$n<10$）に埋め込むこともできない．$X$ は $10$ 個の3次単項式による写像の像として $\C^{10}$ の中に実現され，これは Veronese 曲面 $v_3(\PP^2)\subset\PP^9$ のアフィン錐である．
+$A_n$ 特異点 $\C^2/\Z_{n+1}$ では不変式環が3元で生成され $\dim T_0=3$ の超曲面特異点であったこと（命題\ref{prop:ch07-an-quot}）と対照的である．）

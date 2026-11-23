@@ -1,0 +1,390 @@
+% ==========================================================
+\chapter{線形代数}\label{app:C}
+% ==========================================================
+
+この付録では体 $k$ 上の線形代数を，本編で用いる形にまとめる．
+基本事項（C.1〜C.3）に加え，Zariski 接空間 $(\m/\m^2)^*$（第7章）に必要な双対空間と商ベクトル空間，
+そして第14章・第15章で多用するテンソル積・対称積・外積を詳しく扱う．
+特に外積 $\Lambda^nV$ と行列式の関係は，canonical bundle $K_X=\Lambda^nT^*X$ と
+Calabi–Yau 条件を理解する鍵である．
+
+以下 $k$ は体とし，ベクトル空間はすべて $k$ 上のものとする．
+
+% ----------------------------------------------------------
+\section{ベクトル空間}
+% ----------------------------------------------------------
+
+\begin{mydef}{ベクトル空間}{appC-vs}
+可換群 $(V,+)$ とスカラー倍 $k\times V\to V$，$(a,v)\mapsto av$ が
+\[
+a(v+w)=av+aw,\quad (a+b)v=av+bv,\quad (ab)v=a(bv),\quad 1v=v
+\]
+を満たすとき，$V$ を $k$ 上の\textbf{ベクトル空間}（線形空間）という．
+部分集合 $W\subset V$ が加法とスカラー倍で閉じているとき\textbf{部分空間}という．
+\end{mydef}
+
+\begin{myex}{}{appC-vsex}
+$k^n$；行列の空間 $M_{m\times n}(k)$；多項式環 $k[x_1,\dots,x_n]$；
+$d$ 次同次多項式の空間 $k[x_0,\dots,x_n]_d$（次元 $\binom{n+d}{d}$，第8章・第15章）；
+体の拡大 $K/k$ における $K$（付録B）；
+環 $R$ のイデアル $\m$ に対し $R/\m=k$ のとき $\m/\m^2$（第7章）．
+\end{myex}
+
+部分空間 $W_1,W_2$ に対し $W_1+W_2=\{w_1+w_2\}$ と $W_1\cap W_2$ は部分空間である．
+$W_1\cap W_2=0$ のとき $W_1+W_2$ を $W_1\oplus W_2$ と書き\textbf{直和}という．
+外部的には $V\oplus W=V\times W$ に成分ごとの演算を入れたものを直和という．
+
+環 $R$ 上で同じ公理を満たすものを $R$-\textbf{加群}という．
+イデアル $I\subset R$ や剰余環 $R/I$ は $R$-加群であり，第11章の加群の層の基礎となる．
+
+% ----------------------------------------------------------
+\section{線形写像}
+% ----------------------------------------------------------
+
+\begin{mydef}{線形写像}{appC-linear}
+写像 $f\colon V\to W$ が $f(av+bv')=af(v)+bf(v')$ を満たすとき\textbf{線形写像}という．
+線形写像全体を $\Hom(V,W)$ と書く．これはベクトル空間である．$\End(V)=\Hom(V,V)$．
+$\Ker f=f^{-1}(0)$，$\Img f=f(V)$，$\Coker f=W/\Img f$ をそれぞれ核，像，余核という．
+\end{mydef}
+
+$f$ が単射 $\iff\Ker f=0$．全単射な線形写像を\textbf{同型}といい，$V\cong W$ と書く．
+$V$ の自己同型全体は群 $\GL(V)$ をなす．
+
+\begin{mydef}{完全系列}{appC-exact}
+線形写像の列 $\cdots\to V_{i-1}\xrightarrow{f_{i-1}}V_i\xrightarrow{f_i}V_{i+1}\to\cdots$ が
+各 $i$ で $\Img f_{i-1}=\Ker f_i$ を満たすとき\textbf{完全系列}という．
+特に $0\to U\xrightarrow{f}V\xrightarrow{g}W\to0$ が完全であることは，
+$f$ が単射，$g$ が全射，$\Img f=\Ker g$ を意味し，\textbf{短完全系列}という．
+\end{mydef}
+
+\begin{myex}{接空間と法空間}{appC-normal}
+部分多様体 $Y\subset X$ と点 $p\in Y$ について，短完全系列
+\[
+0\to T_pY\to T_pX\to N_{Y/X,p}\to0
+\]
+が成り立つ（$N$ は法空間 $=T_pX/T_pY$）．
+これは第15章で超曲面の canonical bundle を計算する随伴公式の線形代数的な核である．
+\end{myex}
+
+\begin{mydef}{行列表示}{appC-matrix}
+$V,W$ の基底 $\{e_j\}_{j=1}^n$，$\{f_i\}_{i=1}^m$ を固定すると，
+$f(e_j)=\sum_ia_{ij}f_i$ により $f\in\Hom(V,W)$ は行列 $A=(a_{ij})\in M_{m\times n}(k)$ と一対一に対応する．
+合成は行列の積に対応する．
+\end{mydef}
+
+基底を $e'_j=\sum_i P_{ij}e_i$（$P\in\GL_n(k)$）に取り替えると，自己準同型 $f$ の行列は $P^{-1}AP$ に変わる．
+したがって $\det A$，$\Tr A$，固有値などは $f$ のみで決まる量である．
+
+% ----------------------------------------------------------
+\section{基底と次元}
+% ----------------------------------------------------------
+
+\begin{mydef}{一次独立・基底}{appC-basis}
+$v_1,\dots,v_r\in V$ が $\sum a_iv_i=0\Rightarrow a_1=\dots=a_r=0$ を満たすとき\textbf{一次独立}という．
+一次独立で $V$ を張る（任意の元が一次結合で書ける）組を\textbf{基底}という．
+\end{mydef}
+
+\begin{mythm}{次元}{appC-dim}
+$V$ が有限個の元で張られるならば，$V$ は基底を持ち，基底の元の個数は基底の取り方によらない．
+これを $V$ の\textbf{次元} $\dim V$ という．
+$\dim V=n$ ならば $V\cong k^n$ である．
+\end{mythm}
+
+証明は「$m$ 個の元で張られる空間の $m+1$ 個の元は一次従属」という交換補題による（標準的な線形代数の教科書を参照）．
+
+\begin{mythm}{次元定理}{appC-ranknull}
+有限次元ベクトル空間の線形写像 $f\colon V\to W$ に対し
+\[
+\dim V=\dim\Ker f+\dim\Img f .
+\]
+$\dim\Img f$ を $f$ の\textbf{階数} $\rank f$ という．
+\end{mythm}
+\begin{proof}
+$\Ker f$ の基底 $u_1,\dots,u_r$ を $V$ の基底 $u_1,\dots,u_r,v_1,\dots,v_s$ に延長すると，
+$f(v_1),\dots,f(v_s)$ は $\Img f$ の基底になる．
+\end{proof}
+
+\begin{myex}{Jacobian criterion の線形代数}{appC-jac}
+$X=\Zero(f_1,\dots,f_r)\subset\A^n$ の点 $p$ におけるJacobi行列 $J=(\partial f_i/\partial x_j(p))$ は
+線形写像 $k^n\to k^r$ を定め，接空間は $T_pX=\Ker J$ である．
+次元定理より $\dim T_pX=n-\rank J$．$p$ が正則点であることは $\dim T_pX=\dim X$ と同値であり，
+これが第7章の Jacobian criterion である．
+\end{myex}
+
+$\dim(W_1+W_2)=\dim W_1+\dim W_2-\dim(W_1\cap W_2)$ も同様に示される．
+この公式から，$\PP^2$ の2直線（$k^3$ の2次元部分空間）は必ず交わることが分かる（第8章）．
+
+% ----------------------------------------------------------
+\section{双対空間}
+% ----------------------------------------------------------
+
+\begin{mydef}{双対空間}{appC-dual}
+$V^*=\Hom(V,k)$ を $V$ の\textbf{双対空間}といい，その元を線形形式（余ベクトル）という．
+線形写像 $f\colon V\to W$ に対し $f^*\colon W^*\to V^*$，$f^*(\xi)=\xi\circ f$ を\textbf{双対写像}（転置）という．
+$(g\circ f)^*=f^*\circ g^*$ である（反変性）．
+\end{mydef}
+
+\begin{myprop}{双対基底}{appC-dualbasis}
+$V$ の基底 $e_1,\dots,e_n$ に対し，$e^i(e_j)=\delta^i_j$ で定まる $e^1,\dots,e^n$ は $V^*$ の基底である
+（\textbf{双対基底}）．特に $\dim V^*=\dim V$．
+さらに $V\to V^{**}$，$v\mapsto(\xi\mapsto\xi(v))$ は自然な同型である．
+\end{myprop}
+\begin{proof}
+$\xi=\sum_i\xi(e_i)e^i$ と一意に書けるので基底．$V\to V^{**}$ は単射で次元が等しいので同型．
+\end{proof}
+
+\begin{note}
+$V\cong V^*$ も成り立つが，この同型は基底（あるいは内積）の選択に依存し自然ではない．
+一方 $V\cong V^{**}$ は基底を選ばずに定まる．
+付録Gの言葉では，後者は自然変換による同型（自然同型）である．
+物理では計量 $g_{\mu\nu}$ によって添字を上げ下げし $V\cong V^*$ を同一視するが，
+これは計量という追加の構造を用いている．
+\end{note}
+
+\begin{myex}{Zariski 接空間}{appC-zariski}
+多様体 $X$ の点 $p$ の局所環 $(\OO_{X,p},\m_p)$ について，$\m_p/\m_p^2$ は $k$ 上のベクトル空間であり，
+\textbf{Zariski 余接空間}という．その双対 $T_pX=(\m_p/\m_p^2)^*$ が Zariski 接空間である（第7章）．
+直観的には $\m_p/\m_p^2$ は「$p$ で消える関数の1次の部分」すなわち $df_p$ の全体であり，
+接ベクトル $v$ との対合が $\langle v,df_p\rangle=v(f)$（方向微分）である．
+\end{myex}
+
+物理の記法では，ベクトル $v=v^\mu e_\mu$（上付き添字）と余ベクトル $\xi=\xi_\mu e^\mu$（下付き添字）の
+対合が $\xi(v)=\xi_\mu v^\mu$ であり，基底変換で $v^\mu$ と $\xi_\mu$ は逆向きに変換する．
+
+% ----------------------------------------------------------
+\section{商ベクトル空間}
+% ----------------------------------------------------------
+
+\begin{mydef}{商ベクトル空間}{appC-quot}
+部分空間 $W\subset V$ に対し，$v\sim v'\iff v-v'\in W$ による商集合 $V/W=\{v+W\}$ は
+$(v+W)+(v'+W)=(v+v')+W$，$a(v+W)=av+W$ でベクトル空間になる．これを\textbf{商空間}という．
+\end{mydef}
+
+\begin{myprop}{商空間の性質}{appC-quotprop}
+\begin{enumerate}
+\item（普遍性）線形写像 $f\colon V\to U$ が $W\subset\Ker f$ を満たせば，$f=\bar f\circ\pi$ となる
+線形写像 $\bar f\colon V/W\to U$ が一意に存在する．
+\item（準同型定理）$V/\Ker f\cong\Img f$．
+\item $\dim V/W=\dim V-\dim W$．
+\item $(V/W)^*\cong W^\perp=\{\xi\in V^*\mid\xi|_W=0\}$．
+\end{enumerate}
+\end{myprop}
+\begin{proof}
+(1)(2) は付録Aの普遍性に線形性を加えたもの．(3) は $\pi\colon V\to V/W$ に次元定理を適用．
+(4) は (1) により $V/W\to k$ の線形写像と $W$ 上で消える $V\to k$ の線形写像が対応することによる．
+\end{proof}
+
+\begin{myex}{}{appC-quotex}
+\begin{enumerate}
+\item 剰余環 $k[x]/(x^n)$ は基底 $1,x,\dots,x^{n-1}$ を持つ $n$ 次元ベクトル空間．
+これは交点の重複度（第9章）や「重複した点」としてのスキーム（第12章）の次元を数える際に用いる．
+\item $k$ が代数閉体で $f,g$ の共通零点が有限個のとき，$k[x,y]/(f,g)$ の次元は，$\A^2$ における $f,g$ の共通零点を重複度込みで数えたものに等しい（第9章，Bézout の定理）．
+\item 複素構造の変形空間や Kähler モジュライは，コホモロジー群（閉形式の空間を完全形式の空間で割った商空間）
+として記述される（第16章）．
+\end{enumerate}
+\end{myex}
+
+% ----------------------------------------------------------
+\section{テンソル積}
+% ----------------------------------------------------------
+
+テンソル積は「双線形写像を線形写像に変換する」ための空間である．
+
+\begin{mydef}{双線形写像}{appC-bilinear}
+写像 $\beta\colon V\times W\to U$ が各変数について線形であるとき\textbf{双線形}という．
+\end{mydef}
+
+\begin{mythm}{テンソル積の存在と普遍性}{appC-tensor}
+ベクトル空間 $V,W$ に対し，ベクトル空間 $V\otimes W$ と双線形写像 $\otimes\colon V\times W\to V\otimes W$，
+$(v,w)\mapsto v\otimes w$ の組で，次の普遍性を持つものが同型を除いて一意に存在する：
+任意の双線形写像 $\beta\colon V\times W\to U$ に対し，$\beta(v,w)=\tilde\beta(v\otimes w)$ を満たす
+線形写像 $\tilde\beta\colon V\otimes W\to U$ がただ一つ存在する．
+\[
+\begin{tikzcd}
+V\times W \arrow[r,"\otimes"] \arrow[rd,"\beta"'] & V\otimes W \arrow[d,dashed,"\exists!\,\tilde\beta"]\\
+ & U
+\end{tikzcd}
+\]
+\end{mythm}
+\begin{proof}[構成の概略]
+$V\times W$ の元を基底とする（巨大な）ベクトル空間 $F$ を，
+$(v+v',w)-(v,w)-(v',w)$，$(av,w)-a(v,w)$ および第2成分についての同様の元で生成される部分空間 $N$ で割り，
+$V\otimes W=F/N$ とする．$(v,w)$ の類を $v\otimes w$ と書く．
+普遍性は商空間の普遍性から従い，一意性は付録Aと同じ議論による．
+\end{proof}
+
+定義から $v\otimes w$ は双線形である：
+\[
+(v+v')\otimes w=v\otimes w+v'\otimes w,\quad (av)\otimes w=a(v\otimes w)=v\otimes(aw).
+\]
+$v\otimes w$ の形の元を\textbf{分解可能テンソル}（純テンソル）という．$V\otimes W$ の一般の元は
+分解可能テンソルの和であり，それ自身は分解可能とは限らない（量子力学のもつれ状態）．
+
+\begin{myprop}{テンソル積の基底}{appC-tensorbasis}
+$\{e_i\}_{i=1}^m$，$\{f_j\}_{j=1}^n$ を $V,W$ の基底とすると，$\{e_i\otimes f_j\}$ は $V\otimes W$ の基底である．
+特に $\dim(V\otimes W)=\dim V\cdot\dim W$．
+\end{myprop}
+\begin{proof}
+張ることは双線形性から明らか．一次独立性：双対基底を用いた双線形写像
+$\beta_{kl}(v,w)=e^k(v)f^l(w)$ に普遍性を適用すると $\tilde\beta_{kl}(e_i\otimes f_j)=\delta_{ik}\delta_{jl}$．
+\end{proof}
+
+\begin{myprop}{基本的な同型}{appC-tensoriso}
+有限次元のとき，次の自然な同型がある．
+\begin{enumerate}
+\item $V\otimes W\cong W\otimes V$，$(U\otimes V)\otimes W\cong U\otimes(V\otimes W)$，$k\otimes V\cong V$．
+\item $(V\oplus V')\otimes W\cong(V\otimes W)\oplus(V'\otimes W)$．
+\item $V^*\otimes W\cong\Hom(V,W)$，$\xi\otimes w\mapsto(v\mapsto\xi(v)w)$．
+\item $(V\otimes W)^*\cong V^*\otimes W^*$．
+\item $\Hom(V\otimes W,U)\cong\Hom(V,\Hom(W,U))$（これは普遍性の言い換えである）．
+\end{enumerate}
+\end{myprop}
+
+(3) により，行列 $A=(a^i{}_j)$ はテンソル $\sum a^i{}_j\,e_i\otimes e^j\in V\otimes V^*$ と同一視される．
+一般に $(p,q)$ 型テンソルとは
+\[
+T^p_q(V)=\underbrace{V\otimes\cdots\otimes V}_{p}\otimes\underbrace{V^*\otimes\cdots\otimes V^*}_{q}
+\]
+の元であり，成分で書けば $T=T^{\mu_1\cdots\mu_p}{}_{\nu_1\cdots\nu_q}\,e_{\mu_1}\otimes\cdots\otimes e^{\nu_q}$ である．
+基底変換 $e'_\mu=e_\nu P^\nu{}_\mu$ のもとで，上付き添字は $P^{-1}$ で，下付き添字は $P$ で変換する．
+これは物理で「テンソル」を変換則によって定義する流儀と一致する．
+内積（計量）$g\in V^*\otimes V^*$ もこの意味でテンソルである．
+
+\begin{myex}{線形写像のテンソル積}{appC-tensormap}
+$f\colon V\to V'$，$g\colon W\to W'$ に対し $(f\otimes g)(v\otimes w)=f(v)\otimes g(w)$ により
+$f\otimes g\colon V\otimes W\to V'\otimes W'$ が定まる．
+行列で表すと Kronecker 積であり，$\det(f\otimes g)=(\det f)^{\dim W}(\det g)^{\dim V}$，
+$\Tr(f\otimes g)=\Tr f\cdot\Tr g$．
+群 $G$ の表現 $V,W$ に対しテンソル積表現 $V\otimes W$ が定まる（物理では粒子の合成系）．
+\end{myex}
+
+\begin{note}
+可換環 $R$ 上の加群に対しても同じ普遍性でテンソル積 $M\otimes_RN$ が定義される．
+例えば $R/I\otimes_RR/J\cong R/(I+J)$ であり，幾何学的には $\Zero(I)\cap\Zero(J)$ の座標環（スキーム論的交差）を与える．
+また $k[x]\otimes_kk[y]\cong k[x,y]$ は $\A^1\times\A^1=\A^2$ に対応する．
+ベクトル束のテンソル積 $E\otimes F$ はファイバーごとのテンソル積で定義される（付録F，第14章）．
+\end{note}
+
+% ----------------------------------------------------------
+\section{対称積と外積}
+% ----------------------------------------------------------
+
+$V^{\otimes p}=V\otimes\cdots\otimes V$（$p$ 個）には対称群 $S_p$ が
+$\sigma(v_1\otimes\cdots\otimes v_p)=v_{\sigma^{-1}(1)}\otimes\cdots\otimes v_{\sigma^{-1}(p)}$ で作用する．
+
+\begin{mydef}{対称積と外積}{appC-symext}
+\begin{enumerate}
+\item $V^{\otimes p}$ を $v_1\otimes\cdots\otimes v_p-\sigma(v_1\otimes\cdots\otimes v_p)$ の形の元で生成される部分空間で割った商を
+\textbf{$p$ 次対称積} $\mathrm{Sym}^pV$ といい，$v_1\otimes\cdots\otimes v_p$ の類を $v_1\cdots v_p$ と書く．
+\item $V^{\otimes p}$ を，ある $i\ne j$ で $v_i=v_j$ となる $v_1\otimes\cdots\otimes v_p$ で生成される部分空間で割った商を
+\textbf{$p$ 次外積} $\Lambda^pV$ といい，$v_1\otimes\cdots\otimes v_p$ の類を $v_1\wedge\cdots\wedge v_p$ と書く．
+\end{enumerate}
+$\mathrm{Sym}^0V=\Lambda^0V=k$，$\mathrm{Sym}^1V=\Lambda^1V=V$ とする．
+\end{mydef}
+
+定義から $v_1\cdots v_p$ は対称，$v_1\wedge\cdots\wedge v_p$ は交代的である：
+\[
+v\wedge v=0,\qquad v\wedge w=-w\wedge v,\qquad
+v_{\sigma(1)}\wedge\cdots\wedge v_{\sigma(p)}=\operatorname{sgn}(\sigma)\,v_1\wedge\cdots\wedge v_p .
+\]
+（$0=(v+w)\wedge(v+w)=v\wedge w+w\wedge v$ による．）
+これらは次の普遍性を持つ：$\Lambda^pV\to U$ の線形写像は，$V^p\to U$ の\textbf{交代多重線形写像}と一対一に対応する．
+対称積についても対称多重線形写像について同様である．
+
+\begin{myprop}{基底と次元}{appC-extbasis}
+$e_1,\dots,e_n$ を $V$ の基底とする．
+\begin{enumerate}
+\item $\{e_{i_1}\cdots e_{i_p}\mid i_1\leq\dots\leq i_p\}$ は $\mathrm{Sym}^pV$ の基底であり，$\dim\mathrm{Sym}^pV=\binom{n+p-1}{p}$．
+\item $\{e_{i_1}\wedge\cdots\wedge e_{i_p}\mid i_1<\dots<i_p\}$ は $\Lambda^pV$ の基底であり，$\dim\Lambda^pV=\binom{n}{p}$．
+特に $p>n$ なら $\Lambda^pV=0$，$\dim\Lambda^nV=1$．
+\end{enumerate}
+\end{myprop}
+
+\begin{myex}{対称積と多項式}{appC-sympoly}
+$V^*$ の基底を $x_0,\dots,x_n$ とすると $\mathrm{Sym}^d(V^*)\cong k[x_0,\dots,x_n]_d$（$d$ 次同次多項式の空間）．
+すなわち同次多項式は $V$ 上の対称多重線形形式と同じものである（標数 $0$ のとき）．
+例えば $\PP^4$ の5次超曲面（quintic，第15章）の定義多項式の空間は $\mathrm{Sym}^5(\C^5)^*$ で，
+次元は $\binom{9}{5}=126$ である．座標変換 $\GL_5(\C)$（次元 $25$）の作用を割ると（方程式全体のスカラー倍はスカラー行列の作用に含まれる），
+quintic の複素構造モジュライの次元は $126-25=101$ となる（第16章）．
+\end{myex}
+
+\begin{myprop}{外積と行列式}{appC-det}
+$\dim V=n$ とし $f\in\End(V)$ とする．$\Lambda^nV$ は1次元なので，
+$\Lambda^nf(v_1\wedge\cdots\wedge v_n)=f(v_1)\wedge\cdots\wedge f(v_n)$ で定まる
+$\Lambda^nf\colon\Lambda^nV\to\Lambda^nV$ はスカラー倍であり，そのスカラーは $\det f$ に等しい：
+\[
+f(e_1)\wedge\cdots\wedge f(e_n)=\det(f)\,e_1\wedge\cdots\wedge e_n .
+\]
+\end{myprop}
+\begin{proof}
+$f(e_j)=\sum_ia_{ij}e_i$ を代入して展開すると，交代性から添字が相異なる項のみ残り，
+$\sum_{\sigma\in S_n}a_{\sigma(1)1}\cdots a_{\sigma(n)n}\,e_{\sigma(1)}\wedge\cdots\wedge e_{\sigma(n)}
+=\bigl(\sum_\sigma\operatorname{sgn}\sigma\,a_{\sigma(1)1}\cdots a_{\sigma(n)n}\bigr)e_1\wedge\cdots\wedge e_n$．
+\end{proof}
+
+この命題は，$\det$ を「体積要素のスケール因子」として座標によらずに定義している．
+系として $\det(fg)=\det f\det g$ が $\Lambda^n(fg)=\Lambda^nf\circ\Lambda^ng$ から直ちに従い，
+また $v_1,\dots,v_n$ が一次独立 $\iff v_1\wedge\cdots\wedge v_n\ne0$ が分かる．
+
+\begin{mydef}{行列式直線}{appC-detline}
+$\dim V=n$ のとき，1次元空間 $\det V=\Lambda^nV$ を $V$ の\textbf{行列式直線}という．
+$\det V^*=\Lambda^nV^*\cong(\Lambda^nV)^*$ である．
+\end{mydef}
+
+\begin{myprop}{短完全系列と行列式}{appC-detexact}
+短完全系列 $0\to U\to V\to W\to0$ に対し自然な同型 $\det V\cong\det U\otimes\det W$ がある．
+\end{myprop}
+\begin{proof}[概略]
+$U$ の基底 $u_1,\dots,u_a$ と，$W$ の基底の $V$ への持ち上げ $\tilde w_1,\dots,\tilde w_b$ に対し
+$(u_1\wedge\cdots\wedge u_a)\otimes(w_1\wedge\cdots\wedge w_b)\mapsto u_1\wedge\cdots\wedge u_a\wedge\tilde w_1\wedge\cdots\wedge\tilde w_b$．
+持ち上げの取り方を変えても $U$ の元の差しか生じないので右辺は変わらない．
+\end{proof}
+
+\begin{myex}{canonical bundle と随伴公式}{appC-canonical}
+$n$ 次元複素多様体 $X$ の各点 $p$ で $\Lambda^nT_p^*X$ は1次元であり，局所座標 $z^1,\dots,z^n$ を用いると
+$dz^1\wedge\cdots\wedge dz^n$ が基底である．座標変換 $w=w(z)$ のもとで
+\[
+dw^1\wedge\cdots\wedge dw^n=\det\Bigl(\frac{\partial w^i}{\partial z^j}\Bigr)dz^1\wedge\cdots\wedge dz^n
+\]
+となる（命題\ref{prop:appC-det}）．これらを束ねた直線束が \textbf{canonical bundle} $K_X=\Lambda^nT^*X$（$=\det T^*X$）である．
+$K_X$ が自明 $\iff$ 至る所消えない正則 $n$ 形式 $\Omega$ が存在する，というのが Calabi–Yau 条件である（第15章）．
+また超曲面 $Y\subset X$ に対し，命題\ref{prop:appC-detexact}を $0\to N^*\to T^*X|_Y\to T^*Y\to0$ に適用すると
+$K_X|_Y\cong K_Y\otimes N^*_{Y/X}$，すなわち随伴公式 $K_Y\cong(K_X\otimes N_{Y/X})|_Y$ を得る．
+\end{myex}
+
+\begin{mydef}{外積代数}{appC-extalg}
+$\Lambda^\bullet V=\bigoplus_{p=0}^n\Lambda^pV$ は，
+$(v_1\wedge\cdots\wedge v_p)\wedge(w_1\wedge\cdots\wedge w_q)=v_1\wedge\cdots\wedge v_p\wedge w_1\wedge\cdots\wedge w_q$
+を積として結合的な代数となる．これを\textbf{外積代数}（Grassmann 代数）という．
+$\alpha\in\Lambda^pV$，$\beta\in\Lambda^qV$ に対し $\alpha\wedge\beta=(-1)^{pq}\beta\wedge\alpha$ が成り立つ．
+$\dim\Lambda^\bullet V=2^n$．
+\end{mydef}
+
+同様に $\mathrm{Sym}^\bullet V=\bigoplus_p\mathrm{Sym}^pV$ は可換代数であり，$\mathrm{Sym}^\bullet(V^*)\cong k[x_1,\dots,x_n]$（多項式環）．
+つまり多項式環とは「$V$ 上の多項式関数の代数」を座標によらず書いたものである．
+
+\begin{note}
+$\Lambda^pV^*$ の元は $V$ 上の交代 $p$ 重線形形式 $\omega(v_1,\dots,v_p)$ と同一視できる．
+規約により $\xi^1\wedge\cdots\wedge\xi^p(v_1,\dots,v_p)=\det(\xi^i(v_j))$ と定める．
+成分で書けば $\omega=\frac1{p!}\omega_{\mu_1\cdots\mu_p}e^{\mu_1}\wedge\cdots\wedge e^{\mu_p}$
+（$\omega_{\mu_1\cdots\mu_p}$ は完全反対称）であり，物理の文献の記法と一致する．
+微分形式（付録F）は，各点の余接空間 $T_p^*M$ に対するこの構成を多様体上で束ねたものである．
+\end{note}
+
+\begin{myex}{複素ベクトル空間の $(p,q)$ 分解}{appC-pq}
+$V$ を $n$ 次元複素ベクトル空間とし，実ベクトル空間 $V_\R$（実 $2n$ 次元）と見る．
+$V_\R^*\otimes\C$ は $\C$-線形な形式の空間 $V^{*(1,0)}$（基底 $dz^i$）と反線形な形式の空間 $V^{*(0,1)}$（基底 $d\bar z^i$）の直和に分かれ，
+\[
+\Lambda^r(V_\R^*\otimes\C)=\bigoplus_{p+q=r}\Lambda^pV^{*(1,0)}\otimes\Lambda^qV^{*(0,1)}
+\]
+となる．右辺の各成分が $(p,q)$ 形式の空間であり，第15章の Hodge 数 $h^{p,q}$ や Kähler 形式
+$\omega=i\,g_{i\bar j}dz^i\wedge d\bar z^j$（$g_{i\bar j}=g(\partial_i,\partial_{\bar j})$，第15章の規約）の記述に用いる．
+\end{myex}
+
+\begin{physbox}[フェルミオンと外積]
+外積代数は物理ではフェルミオンの Fock 空間として現れる．
+$n$ 個の1粒子状態 $e_1,\dots,e_n$ に対し，$p$ 粒子状態の空間は $\Lambda^pV$ であり，
+$e_i\wedge e_i=0$ が Pauli の排他原理を表す．$\Lambda^nV$ が1次元であること（「全部埋まった状態」は一つ）は，
+canonical bundle が直線束であることと同じ線形代数である．
+対称積 $\mathrm{Sym}^pV$ はボソンの $p$ 粒子状態の空間である．
+\end{physbox}

@@ -1,0 +1,391 @@
+% ==========================================================
+\chapter{微分幾何}\label{app:F}
+% ==========================================================
+
+この付録では，第7章（接空間），第13章（複素多様体），第14章（ベクトル束・接続・曲率），
+第15章（Kähler 幾何・Chern 類・canonical bundle）を読むのに必要な可微分多様体の基礎をまとめる．
+特に微分形式と外微分，およびベクトル束（変換関数による記述と切断）を丁寧に述べる．
+多様体はすべて $C^\infty$ 級，Hausdorff かつ第2可算とする．
+添字については Einstein の縮約規約（上下に同じ添字があれば和をとる）を用いる．
+
+% ----------------------------------------------------------
+\section{多様体の定義}
+% ----------------------------------------------------------
+
+\begin{mydef}{可微分多様体}{appF-manifold}
+Hausdorff かつ第2可算な位相空間 $M$ と，開被覆 $M=\bigcup_\alpha U_\alpha$ および同相写像
+$\varphi_\alpha\colon U_\alpha\to\varphi_\alpha(U_\alpha)\subset\R^n$（開集合への同相）の族
+$\{(U_\alpha,\varphi_\alpha)\}$ が与えられ，$U_\alpha\cap U_\beta\ne\emptyset$ のとき\textbf{座標変換}
+\[
+\varphi_\beta\circ\varphi_\alpha^{-1}\colon\varphi_\alpha(U_\alpha\cap U_\beta)\to\varphi_\beta(U_\alpha\cap U_\beta)
+\]
+がすべて $C^\infty$ 級であるとき，$M$ を $n$ 次元\textbf{可微分多様体}という．
+$(U_\alpha,\varphi_\alpha)$ を\textbf{チャート}（座標近傍），その族を\textbf{アトラス}という．
+\end{mydef}
+
+座標変換が\emph{正則}（付録D）な $\C^n$ 値チャートを用いれば\textbf{複素多様体}の定義になる（第13章）．
+また座標変換が実解析的，あるいは多項式・有理式であるといった条件を課すことで，さまざまな幾何構造が得られる．
+代数多様体は「座標変換が代数的」という条件を，チャートではなく関数の層（第11章）で定式化したものと見ることができる．
+
+\begin{myex}{多様体の例}{appF-manifoldex}
+\begin{enumerate}
+\item $\R^n$ の開集合．
+\item 球面 $S^n$：北極・南極からの立体射影の2枚のチャートで覆われ，座標変換は $y=x/|x|^2$．
+\item 射影空間 $\R\PP^n$，$\C\PP^n$：$U_i=\{x_i\ne0\}$ と非同次座標 $(x_0/x_i,\dots,\widehat{x_i/x_i},\dots,x_n/x_i)$（第8章）．
+$\C\PP^1$ では $U_0,U_1$ の座標 $z=x_1/x_0$，$w=x_0/x_1$ が $w=1/z$ で結ばれる．
+\item （正則値定理）$F\colon\R^{n+r}\to\R^r$ が $C^\infty$ で，$F^{-1}(0)$ の各点で Jacobi 行列の階数が $r$ ならば，
+$F^{-1}(0)$ は $n$ 次元多様体である．滑らかな代数的集合が多様体になるのはこの定理による（第7章）．
+\item Lie 群 $\GL_n(\R)$，$U(n)$，$SU(n)$ など．
+\end{enumerate}
+\end{myex}
+
+\begin{mydef}{滑らかな写像}{appF-smooth}
+多様体の間の連続写像 $f\colon M\to N$ が，チャートで書いたとき $\psi_\beta\circ f\circ\varphi_\alpha^{-1}$ がすべて $C^\infty$ であるとき\textbf{滑らか}（$C^\infty$ 級）という．
+滑らかな全単射で逆写像も滑らかなものを\textbf{微分同相}という．
+$M$ 上の滑らかな関数全体を $C^\infty(M)$ と書く．
+\end{mydef}
+
+% ----------------------------------------------------------
+\section{局所座標}
+% ----------------------------------------------------------
+
+チャート $(U,\varphi)$ に対し，$\varphi=(x^1,\dots,x^n)$ と成分で書いた関数 $x^\mu\colon U\to\R$ を\textbf{局所座標}という．
+$f\in C^\infty(M)$ は $U$ 上で $f\circ\varphi^{-1}(x^1,\dots,x^n)$ と書けるが，記号を濫用して $f(x)$ と書く．
+
+別のチャートの座標 $y^\mu$ との間の座標変換 $y=y(x)$ の Jacobi 行列 $\partial y^\mu/\partial x^\nu$ は，
+重なり $U\cap V$ の各点で正則行列である．以下に現れる量はすべて，この Jacobi 行列による変換則で特徴づけられる．
+
+\begin{mydef}{1の分割}{appF-partition}
+開被覆 $\{U_\alpha\}$ に従属する\textbf{1の分割}とは，滑らかな関数 $\rho_\alpha\colon M\to[0,1]$ で
+$\operatorname{supp}\rho_\alpha\subset U_\alpha$，局所有限，$\sum_\alpha\rho_\alpha=1$ を満たすものをいう．
+可微分多様体には常に1の分割が存在する．
+\end{mydef}
+
+1の分割により，局所的に定義された対象（計量，接続など）を貼り合わせて大域的な対象を作ることができる．
+\emph{正則関数や多項式には1の分割に相当するものが存在しない}（一致の定理，付録D）．
+このため複素幾何・代数幾何では局所から大域への移行が非自明となり，層とそのコホモロジー（第11章）が必要になる．
+
+% ----------------------------------------------------------
+\section{接空間}
+% ----------------------------------------------------------
+
+接ベクトルにはいくつか同値な定義がある．ここでは代数幾何（第7章）と相性の良い導分による定義を採用する．
+
+\begin{mydef}{接空間}{appF-tangent}
+点 $p\in M$ における\textbf{接ベクトル}とは，線形写像 $v\colon C^\infty(M)\to\R$ で
+Leibniz 則 $v(fg)=v(f)g(p)+f(p)v(g)$ を満たすもの（$p$ における\textbf{導分}）のことである．
+接ベクトル全体を $T_pM$ と書き，\textbf{接空間}という．
+\end{mydef}
+
+\begin{myprop}{接空間の基底}{appF-tangentbasis}
+局所座標 $x^1,\dots,x^n$ のもとで，$\left.\frac{\partial}{\partial x^\mu}\right|_p\colon f\mapsto\frac{\partial f}{\partial x^\mu}(p)$ は $T_pM$ の基底である．
+特に $\dim T_pM=n$．
+\end{myprop}
+\begin{proof}[概略]
+Leibniz 則から $v(\text{定数})=0$ が従う．$p$ を原点とする座標で Taylor の定理
+$f(x)=f(0)+x^\mu g_\mu(x)$，$g_\mu(0)=\partial_\mu f(0)$ を用いると，$v(f)=v(x^\mu)g_\mu(0)=v(x^\mu)\partial_\mu f(0)$．
+よって $v=v(x^\mu)\partial_\mu|_p$．
+\end{proof}
+
+接ベクトルは $v=v^\mu\partial_\mu$ と書け，座標変換 $y=y(x)$ のもとで
+$\frac{\partial}{\partial x^\nu}=\frac{\partial y^\mu}{\partial x^\nu}\frac{\partial}{\partial y^\mu}$，すなわち $v'^\mu=\frac{\partial y^\mu}{\partial x^\nu}v^\nu$ と変換する（反変ベクトル）．
+
+\begin{myex}{導分と $\m/\m^2$}{appF-derivation}
+$\m_p=\{f\mid f(p)=0\}$ とすると，導分 $v$ は $\m_p^2$ 上で消える（$v(fg)=0$ for $f,g\in\m_p$）．
+したがって $v$ は線形形式 $\m_p/\m_p^2\to\R$ を定め，逆も成り立つ：$T_pM\cong(\m_p/\m_p^2)^*$．
+この特徴づけは座標も微分も使わず環の言葉だけで書かれているので，代数多様体にそのまま持ち込める．
+これが第7章の Zariski 接空間の定義である．
+\end{myex}
+
+\begin{mydef}{微分（押し出し）}{appF-pushforward}
+滑らかな写像 $f\colon M\to N$ に対し，$df_p\colon T_pM\to T_{f(p)}N$ を $df_p(v)(g)=v(g\circ f)$ で定める．
+座標では Jacobi 行列 $\partial f^\mu/\partial x^\nu$ で表される．
+\end{mydef}
+
+$df_p$ が単射のとき $f$ は $p$ で\textbf{はめ込み}，全射のとき\textbf{沈め込み}という．
+逆関数定理により，$df_p$ が同型なら $f$ は $p$ の近傍で局所微分同相である．
+
+% ----------------------------------------------------------
+\section{ベクトル場}
+% ----------------------------------------------------------
+
+\begin{mydef}{ベクトル場}{appF-vf}
+各点 $p$ に接ベクトル $X_p\in T_pM$ を滑らかに対応させたものを\textbf{ベクトル場}という．
+局所的には $X=X^\mu(x)\partial_\mu$（$X^\mu$ は滑らかな関数）．
+ベクトル場は $f\mapsto X(f)=X^\mu\partial_\mu f$ により $C^\infty(M)$ の導分 $X(fg)=X(f)g+fX(g)$ と同一視される．
+ベクトル場全体を $\mathfrak X(M)$ と書く．
+\end{mydef}
+
+\begin{mydef}{Lie 括弧}{appF-bracket}
+$[X,Y](f)=X(Y(f))-Y(X(f))$ は再びベクトル場であり，成分で書くと
+\[
+[X,Y]^\mu=X^\nu\partial_\nu Y^\mu-Y^\nu\partial_\nu X^\mu .
+\]
+$[\ ,\ ]$ は反対称で Jacobi 恒等式を満たし，$\mathfrak X(M)$ を Lie 代数にする．
+\end{mydef}
+
+\begin{mydef}{積分曲線と流れ}{appF-flow}
+曲線 $c(t)$ が $\dot c(t)=X_{c(t)}$ を満たすとき $X$ の\textbf{積分曲線}という．
+常微分方程式の解の存在と一意性により，各点を通る積分曲線が局所的に一意に存在する．
+これらを束ねた局所的な微分同相の1パラメータ族 $\phi_t$ を $X$ の\textbf{流れ}という．
+\end{mydef}
+
+ベクトル場は無限小変換（対称性の生成子）であり，$[X,Y]$ は流れの非可換性を測る．
+物理では Killing ベクトル場（計量を保つ流れの生成子）が保存量と対応する．
+
+% ----------------------------------------------------------
+\section{微分形式}
+% ----------------------------------------------------------
+
+\begin{mydef}{余接空間と1形式}{appF-cotangent}
+$T_p^*M=(T_pM)^*$ を\textbf{余接空間}という．$f\in C^\infty(M)$ に対し $df_p\in T^*_pM$ を $df_p(v)=v(f)$ で定める．
+局所座標 $x^\mu$ について $dx^\mu|_p$ は $\partial_\mu|_p$ の双対基底であり，
+$df=\frac{\partial f}{\partial x^\mu}dx^\mu$ が成り立つ．
+各点に余接ベクトルを滑らかに対応させたもの $\omega=\omega_\mu(x)dx^\mu$ を\textbf{1形式}という．
+座標変換のもとで $dy^\mu=\frac{\partial y^\mu}{\partial x^\nu}dx^\nu$，$\omega'_\mu=\frac{\partial x^\nu}{\partial y^\mu}\omega_\nu$（共変ベクトル）．
+\end{mydef}
+
+\begin{mydef}{微分形式}{appF-forms}
+各点 $p$ に $\Lambda^pT_p^*M$（付録C）の元を滑らかに対応させたものを\textbf{$p$ 形式}（$p$ 次微分形式）という．局所的には
+\[
+\omega=\frac1{p!}\omega_{\mu_1\cdots\mu_p}(x)\,dx^{\mu_1}\wedge\cdots\wedge dx^{\mu_p}
+=\sum_{\mu_1<\cdots<\mu_p}\omega_{\mu_1\cdots\mu_p}dx^{\mu_1}\wedge\cdots\wedge dx^{\mu_p}
+\]
+（$\omega_{\mu_1\cdots\mu_p}$ は完全反対称）と書ける．$p$ 形式全体を $\Omega^p(M)$ と書く．
+$\Omega^0(M)=C^\infty(M)$，$p>n$ なら $\Omega^p(M)=0$．
+\end{mydef}
+
+外積 $\wedge\colon\Omega^p\times\Omega^q\to\Omega^{p+q}$ が各点ごとに定まり，$\alpha\wedge\beta=(-1)^{pq}\beta\wedge\alpha$．
+
+\begin{myex}{体積形式の変換則}{appF-volume}
+$n$ 形式は $\omega=f(x)\,dx^1\wedge\cdots\wedge dx^n$ と1つの成分で書け，座標変換で
+\[
+dy^1\wedge\cdots\wedge dy^n=\det\Bigl(\frac{\partial y^\mu}{\partial x^\nu}\Bigr)dx^1\wedge\cdots\wedge dx^n
+\]
+と変換する（付録C，命題\ref{prop:appC-det}）．これは多重積分の変数変換公式（Jacobian の絶対値を除いて）と同じであり，
+$n$ 形式が多様体上で積分できる対象であることを示す．
+\end{myex}
+
+\begin{mydef}{外微分}{appF-d}
+\textbf{外微分} $d\colon\Omega^p(M)\to\Omega^{p+1}(M)$ を局所座標で
+\[
+d\Bigl(\sum f\,dx^{\mu_1}\wedge\cdots\wedge dx^{\mu_p}\Bigr)=\sum\frac{\partial f}{\partial x^\nu}dx^\nu\wedge dx^{\mu_1}\wedge\cdots\wedge dx^{\mu_p}
+\]
+と定める．成分では $(d\omega)_{\nu\mu_1\cdots\mu_p}=(p+1)\partial_{[\nu}\omega_{\mu_1\cdots\mu_p]}$．
+\end{mydef}
+
+\begin{mythm}{外微分の性質}{appF-dprop}
+外微分は座標によらずに定まり，次の性質を持つ．逆にこれらの性質で $d$ は一意に特徴づけられる．
+\begin{enumerate}
+\item $d$ は $\R$-線形で，$f\in\Omega^0$ に対し $df$ は前節の微分に一致する．
+\item （Leibniz 則）$d(\alpha\wedge\beta)=d\alpha\wedge\beta+(-1)^p\alpha\wedge d\beta$（$\alpha\in\Omega^p$）．
+\item $d\circ d=0$．
+\item 滑らかな写像 $f\colon M\to N$ による引き戻し $f^*$ と可換：$d(f^*\omega)=f^*(d\omega)$．
+\end{enumerate}
+\end{mythm}
+\begin{proof}[(3) の証明]
+$d(df)=\frac{\partial^2f}{\partial x^\nu\partial x^\mu}dx^\nu\wedge dx^\mu=0$（2階偏微分は対称，$dx^\nu\wedge dx^\mu$ は反対称）．
+一般の場合は (2) と $d(dx^\mu)=0$ から従う．
+\end{proof}
+
+\begin{myex}{$\R^3$ のベクトル解析}{appF-vector}
+$\R^3$ では $0$ 形式 $\leftrightarrow$ 関数，1形式 $\leftrightarrow$ ベクトル場，2形式 $\leftrightarrow$ ベクトル場（Hodge 双対），3形式 $\leftrightarrow$ 関数 と対応し，
+$d$ はそれぞれ $\operatorname{grad}$，$\operatorname{rot}$，$\operatorname{div}$ に対応する．$d^2=0$ は $\operatorname{rot}\operatorname{grad}=0$，$\operatorname{div}\operatorname{rot}=0$ を表す．
+\end{myex}
+
+\begin{mydef}{閉形式・完全形式・de Rham コホモロジー}{appF-derham}
+$d\omega=0$ となる $\omega$ を\textbf{閉形式}，$\omega=d\eta$ と書ける $\omega$ を\textbf{完全形式}という．
+$d^2=0$ より完全形式は閉形式である．商ベクトル空間
+\[
+H^p_{dR}(M)=\frac{\{\omega\in\Omega^p(M)\mid d\omega=0\}}{\{d\eta\mid\eta\in\Omega^{p-1}(M)\}}
+\]
+を\textbf{de Rham コホモロジー}という．$b_p=\dim H^p_{dR}(M)$ を Betti 数という．
+\end{mydef}
+
+\begin{myex}{}{appF-derhamex}
+\begin{enumerate}
+\item （Poincaré の補題）$\R^n$（あるいは可縮な開集合）上では $p\geq1$ の閉形式は完全である．したがって局所的にはすべての閉形式は完全である．
+\item $\R^2\setminus\{0\}$ 上の $\omega=\frac{x\,dy-y\,dx}{x^2+y^2}$（$=d\theta$ と局所的に書ける）は閉だが完全でない：
+$\oint_{S^1}\omega=2\pi\ne0$．$H^1_{dR}(\R^2\setminus\{0\})\cong\R$．
+\item $H^p_{dR}(S^n)\cong\R$（$p=0,n$），それ以外は $0$．$H^\bullet_{dR}(T^n)\cong\Lambda^\bullet\R^n$．
+\item $H^{2p}_{dR}(\C\PP^n)\cong\R$（$0\leq p\leq n$），奇数次は $0$．生成元は Fubini--Study 形式 $\omega_{FS}$ の冪 $\omega_{FS}^p$ である（第15章）．
+\end{enumerate}
+\end{myex}
+
+\begin{mythm}{Stokes の定理}{appF-stokes}
+$M$ を境界 $\partial M$ を持つ向き付けられたコンパクトな $n$ 次元多様体，$\omega\in\Omega^{n-1}(M)$ とすると
+\[
+\int_Md\omega=\int_{\partial M}\omega .
+\]
+\end{mythm}
+
+特に $\partial M=\emptyset$ なら完全形式の積分は $0$ であり，閉形式の積分（周期）$\int_Z\omega$ は $\omega$ の de Rham 類のみで決まる．
+Chern 類の積分（インスタントン数，第14章・第15章）が整数値の位相不変量になるのはこのためである．
+
+\begin{note}
+複素多様体では $T^*M\otimes\C$ が $dz^i$ と $d\bar z^i$ で張られる部分に分かれ，
+微分形式は $(p,q)$ 形式に分解する（付録C）．外微分も $d=\partial+\bar\partial$ と分解し，
+正則関数は $\bar\partial f=0$ で特徴づけられる（付録D）．
+$\bar\partial$ に関するコホモロジー（Dolbeault コホモロジー $H^{p,q}$）の次元が Hodge 数 $h^{p,q}$ であり，
+Calabi--Yau 3-fold では $h^{1,1}$ が Kähler モジュライ，$h^{2,1}$ が複素構造モジュライの次元を与える（第15章，第16章）．
+\end{note}
+
+% ----------------------------------------------------------
+\section{接束と余接束}
+% ----------------------------------------------------------
+
+\begin{mydef}{接束}{appF-tangentbundle}
+$TM=\bigsqcup_{p\in M}T_pM$ を\textbf{接束}という．射影 $\pi\colon TM\to M$ は $T_pM$ を $p$ に送る．
+チャート $(U,x^\mu)$ 上で $(p,v^\mu\partial_\mu)\mapsto(x(p),v)\in\R^n\times\R^n$ をチャートとすることで，$TM$ は $2n$ 次元多様体になる．
+座標変換は $(x,v)\mapsto(y(x),\frac{\partial y}{\partial x}v)$ である．
+\end{mydef}
+
+同様に $T^*M=\bigsqcup T_p^*M$ を\textbf{余接束}，$\Lambda^pT^*M=\bigsqcup\Lambda^pT_p^*M$ を $p$ 次外積束という．
+ベクトル場は $\pi\circ X=\mathrm{id}_M$ を満たす写像 $X\colon M\to TM$（$TM$ の\textbf{切断}），
+$p$ 形式は $\Lambda^pT^*M$ の切断にほかならない．
+
+\begin{physbox}[相空間]
+余接束 $T^*Q$ は配位空間 $Q$ 上の解析力学の相空間であり，座標 $(q^i,p_i)$ を持つ．
+1形式 $\theta=p_i\,dq^i$ の外微分 $\omega=d\theta=dp_i\wedge dq^i$ がシンプレクティック形式である．
+接束 $TQ$ は Lagrange 形式の状態空間 $(q,\dot q)$ である．
+\end{physbox}
+
+% ----------------------------------------------------------
+\section{ベクトル束}
+% ----------------------------------------------------------
+
+接束の構成を抽象化したものがベクトル束である．ベクトル束は第14章のゲージ理論・第15章の Chern 類と canonical bundle の基本言語である．
+
+\begin{mydef}{ベクトル束}{appF-vb}
+多様体 $E,M$ と滑らかな全射 $\pi\colon E\to M$ が次を満たすとき，$E$ を $M$ 上の階数 $r$ の（実）\textbf{ベクトル束}という．
+\begin{enumerate}
+\item 各\textbf{ファイバー} $E_p=\pi^{-1}(p)$ は $r$ 次元ベクトル空間の構造を持つ．
+\item （局所自明性）各点の近傍 $U$ と微分同相 $\Phi_U\colon\pi^{-1}(U)\to U\times\R^r$ が存在し，
+$\Phi_U$ はファイバーを保ち（$\mathrm{pr}_1\circ\Phi_U=\pi$），各ファイバー上で線形同型 $E_p\to\{p\}\times\R^r$ である．
+\end{enumerate}
+$\R^r$ を $\C^r$ に代えれば\textbf{複素ベクトル束}となる．階数 $1$ のベクトル束を\textbf{直線束}という．
+\end{mydef}
+
+$\Phi_U$ を\textbf{局所自明化}という．局所的には $E$ は単なる直積 $U\times\R^r$ であるが，大域的にはねじれ得る．
+
+\begin{mydef}{変換関数}{appF-transition}
+2つの局所自明化 $\Phi_\alpha,\Phi_\beta$ について，$U_\alpha\cap U_\beta$ 上で
+\[
+\Phi_\alpha\circ\Phi_\beta^{-1}(p,v)=(p,\,g_{\alpha\beta}(p)v),\qquad g_{\alpha\beta}\colon U_\alpha\cap U_\beta\to\GL_r(\R)
+\]
+と書ける．$g_{\alpha\beta}$ を\textbf{変換関数}という．これは\textbf{コサイクル条件}
+\[
+g_{\alpha\alpha}=1,\qquad g_{\alpha\beta}g_{\beta\gamma}g_{\gamma\alpha}=1\quad(U_\alpha\cap U_\beta\cap U_\gamma\text{ 上})
+\]
+を満たす．
+\end{mydef}
+
+\begin{mythm}{変換関数からの再構成}{appF-reconstruct}
+開被覆 $\{U_\alpha\}$ とコサイクル条件を満たす滑らかな $g_{\alpha\beta}\colon U_\alpha\cap U_\beta\to\GL_r(\R)$ が与えられれば，
+$\bigsqcup_\alpha U_\alpha\times\R^r$ を $(p,v)_\beta\sim(p,g_{\alpha\beta}(p)v)_\alpha$ で割ることにより，
+変換関数が $g_{\alpha\beta}$ であるようなベクトル束が得られる（付録Eの貼り合わせ）．
+変換関数を $g'_{\alpha\beta}=h_\alpha g_{\alpha\beta}h_\beta^{-1}$（$h_\alpha\colon U_\alpha\to\GL_r$）に取り替えても同型なベクトル束が得られ，逆も成り立つ．
+\end{mythm}
+
+すなわちベクトル束の同型類は「$\GL_r$ 値のコサイクルの同値類」と一対一に対応する．
+$h_\alpha$ による取り替えは物理のゲージ変換に他ならない．
+変換関数を構造群 $G\subset\GL_r$（$U(r)$，$SU(r)$ など）に値を取るように選べるとき，$E$ は構造群 $G$ を持つという．
+同じコサイクル $g_{\alpha\beta}$ で $G$ 自身を貼り合わせたものが\textbf{主 $G$ 束}である（第14章）．
+
+\begin{mydef}{切断}{appF-section}
+滑らかな写像 $s\colon M\to E$ で $\pi\circ s=\mathrm{id}_M$ を満たすものを $E$ の\textbf{切断}といい，その全体を $\Gamma(M,E)$ と書く．
+開集合 $U$ 上の切断 $\Gamma(U,E)$ も同様に定める．
+局所自明化のもとで切断は $\R^r$ 値関数 $s_\alpha\colon U_\alpha\to\R^r$ の族で表され，
+\[
+s_\alpha=g_{\alpha\beta}s_\beta\qquad(U_\alpha\cap U_\beta\text{ 上})
+\]
+を満たす．逆にこの関係を満たす局所関数の族は大域切断を定める．
+\end{mydef}
+
+$U\mapsto\Gamma(U,E)$ は層（第11章）の典型例である．
+自明束 $M\times\R^r$ の切断は単なる $\R^r$ 値関数であり，切断はその「ねじれた」一般化である．
+
+\begin{mydef}{ベクトル束の射}{appF-vbmap}
+同じ底空間上のベクトル束 $E,F$ の間の滑らかな写像 $f\colon E\to F$ で，ファイバーを保ち（$\pi_F\circ f=\pi_E$）各ファイバー上で線形なものを\textbf{ベクトル束の射}という．
+\end{mydef}
+
+\begin{myex}{ベクトル束の構成}{appF-vbconst}
+付録Cの線形代数の構成はすべてファイバーごとに行え，変換関数も対応して変換する．
+\begin{enumerate}
+\item 双対束 $E^*$：変換関数 $(g_{\alpha\beta}^{T})^{-1}$．
+\item 直和 $E\oplus F$：$\begin{pmatrix}g_{\alpha\beta}&0\\0&h_{\alpha\beta}\end{pmatrix}$．テンソル積 $E\otimes F$：$g_{\alpha\beta}\otimes h_{\alpha\beta}$．
+\item 外積束 $\Lambda^pE$；特に行列式直線束 $\det E=\Lambda^rE$ の変換関数は $\det g_{\alpha\beta}$（付録C）．
+\item 準同型束 $\operatorname{Hom}(E,F)=E^*\otimes F$，$\End E=E^*\otimes E$．ゲージ場の曲率は $\Lambda^2T^*M\otimes\End E$ の切断である（第14章）．
+\item 引き戻し：$f\colon N\to M$ に対し $f^*E$（変換関数 $g_{\alpha\beta}\circ f$）．
+\end{enumerate}
+\end{myex}
+
+\begin{myex}{接束の変換関数と canonical bundle}{appF-tangenttrans}
+$TM$ の変換関数は Jacobi 行列 $g_{\alpha\beta}=\partial x_\alpha/\partial x_\beta$ である．
+複素多様体 $X$ の正則接束 $T^{1,0}X$ の変換関数は複素 Jacobi 行列 $\partial z_\alpha^i/\partial z_\beta^j$，
+canonical bundle $K_X=\Lambda^nT^{*1,0}X$ の変換関数は $\det(\partial z_\beta/\partial z_\alpha)$ である（第15章）．
+\end{myex}
+
+\begin{myex}{$\C\PP^1$ 上の直線束 $\OO(n)$}{appF-On}
+$\C\PP^1=U_0\cup U_1$，座標 $z=x_1/x_0$（$U_0$），$w=x_0/x_1=1/z$（$U_1$）とする．
+変換関数 $g_{01}(z)=z^n$（$U_0\cap U_1=\C^\times$ 上）で貼り合わせた複素直線束を $\OO(n)$ と書く．
+切断は $s_0(z)=z^ns_1(1/z)$ を満たす関数の組である．$s_0,s_1$ を正則関数（多項式）に限ると，
+$s_1(w)=\sum b_kw^k$ に対し $s_0(z)=\sum b_kz^{n-k}$ が $z$ の正則関数となるには $k\leq n$ が必要で，
+\[
+\dim\Gamma_{\text{hol}}(\C\PP^1,\OO(n))=n+1\qquad(n\geq0)
+\]
+となる．これは $x_0,x_1$ の $n$ 次同次多項式の空間と同一視される（第8章，第15章）．
+$\OO(-1)$ は\textbf{tautological 束}（各点 $[x]$ に直線 $\C x$ を対応させる束），$\OO(-2)=K_{\C\PP^1}$，$\OO(2)=T\C\PP^1$ である．
+\end{myex}
+
+\begin{note}
+ベクトル束 $E$ の自明性は，$r$ 個の至る所一次独立な大域切断（枠）が存在することと同値である．
+直線束が自明 $\iff$ 至る所消えない大域切断が存在する．
+canonical bundle $K_X$ が自明 $\iff$ 至る所消えない正則 $n$ 形式が存在する，という Calabi--Yau 条件はこの特別な場合である（第15章）．
+\end{note}
+
+% ----------------------------------------------------------
+\section{Riemann計量}
+% ----------------------------------------------------------
+
+\begin{mydef}{Riemann 計量}{appF-metric}
+各点 $p$ で $T_pM$ 上の正定値内積 $g_p$ を滑らかに与えたもの，すなわち $T^*M\otimes T^*M$ の対称で正定値な切断を\textbf{Riemann 計量}といい，
+$(M,g)$ を Riemann 多様体という．局所的に $g=g_{\mu\nu}(x)dx^\mu\otimes dx^\nu$（しばしば $ds^2=g_{\mu\nu}dx^\mu dx^\nu$ と書く）．
+正定値の代わりに符号 $(-,+,\dots,+)$ の非退化性を課したものを擬 Riemann（Lorentz）計量という．
+\end{mydef}
+
+1の分割により，任意の多様体は Riemann 計量を持つ．
+計量があれば $T_pM\cong T_p^*M$（添字の上げ下げ $v_\mu=g_{\mu\nu}v^\nu$），曲線の長さ $\int\sqrt{g(\dot c,\dot c)}\,dt$，
+体積形式 $\sqrt{\det g}\,dx^1\wedge\cdots\wedge dx^n$（向き付け可能なとき）が定まる．
+
+\begin{mydef}{Levi-Civita 接続}{appF-levicivita}
+Riemann 計量 $g$ に対し，捩れがなく計量と両立する接続（共変微分）$\nabla$ がただ一つ存在する．
+Christoffel 記号 $\nabla_{\partial_\mu}\partial_\nu=\Gamma^\lambda_{\mu\nu}\partial_\lambda$ は
+\[
+\Gamma^\lambda_{\mu\nu}=\tfrac12g^{\lambda\rho}(\partial_\mu g_{\rho\nu}+\partial_\nu g_{\rho\mu}-\partial_\rho g_{\mu\nu})
+\]
+で与えられる．
+\end{mydef}
+
+一般のベクトル束 $E$ 上の接続とは，$\nabla\colon\Gamma(E)\to\Gamma(T^*M\otimes E)$ で Leibniz 則 $\nabla(fs)=df\otimes s+f\nabla s$ を満たすものであり，
+局所自明化のもとで $\nabla=d+A$（$A$ は $\End E$ 値1形式，ゲージ場）と書ける．
+曲率 $F=dA+A\wedge A$ は $\End E$ 値2形式である（第14章）．
+Riemann 曲率テンソル $R^\rho{}_{\sigma\mu\nu}$ は Levi-Civita 接続の曲率であり，その縮約が Ricci テンソル $R_{\mu\nu}=R^\rho{}_{\mu\rho\nu}$ である．
+
+\begin{myex}{Fubini--Study 計量}{appF-FS}
+$\C\PP^n$ 上の非同次座標 $z^i$ に対し，$\omega_{FS}=i\,\partial\bar\partial\log(1+|z|^2)$ は座標変換で不変な閉 $(1,1)$ 形式であり，
+対応する計量 $g_{i\bar j}=\partial_i\partial_{\bar j}\log(1+|z|^2)$ は正定値である（$\omega=i\,g_{i\bar j}dz^i\wedge d\bar z^j$ という第15章の規約による）．これが Kähler 計量の基本例である（第15章）．
+\end{myex}
+
+\begin{myex}{Hermite 計量}{appF-hermitian}
+複素ベクトル束 $E$ のファイバーに Hermite 内積 $h$ を滑らかに与えたものを Hermite 計量という．
+局所枠で $h=(h_{a\bar b})$ と書き，$h$ を保つ変換関数を選べば構造群は $U(r)$ に簡約される．
+物質場の運動項 $h(\nabla s,\nabla s)$ やゲージ不変な内積はこの構造を用いる（第14章）．
+\end{myex}
+
+\begin{physbox}[一般相対論・弦理論との対応]
+一般相対論の時空は Lorentz 計量を持つ4次元多様体であり，Einstein 方程式は Ricci テンソルの方程式である．
+真空の Einstein 方程式 $R_{\mu\nu}=0$ を満たすコンパクトな内部空間で，さらに超対称性を保つものとして
+Ricci 平坦 Kähler 多様体，すなわち Calabi--Yau 多様体が現れる（第15章）．
+ゲージ場はベクトル束（主束）の接続，物質場はその切断であり，この対応は付録H.6 にまとめる．
+\end{physbox}

@@ -1,0 +1,1181 @@
+\chapter{スキーム論への導入}
+\label{ch:ch12}
+
+\begin{chapterlead}
+第4章で見たように，代数閉体 $k$ 上では，アフィン代数的集合と $k[x_1,\dots,x_n]$ の根基イデアルが一対一に対応し，点は極大イデアルに対応した．
+しかしこの対応は「根基イデアル」「代数閉体」「極大イデアル」という三つの制限の上に成り立っている．
+Grothendieck のスキーム論は，これらの制限をすべて取り払い，\emph{任意の可換環} $R$ を「ある空間 $\Spec R$ 上の関数環」とみなす．
+点は素イデアル，関数は $R$ の元，そして空間の構造は第11章の層（構造層）で記述される．
+こうして，べき零元による「無限小の厚み」，交点の重複度，代数閉でない体や整数環 $\Z$ 上の幾何がすべて同じ言葉で扱えるようになる．
+本章ではスキームの定義に至る道筋と基本例を，物理への応用を意識して解説する．
+\end{chapterlead}
+
+%=====================================================================
+\section{古典的代数幾何の限界}
+%=====================================================================
+
+\subsection{古典的代数的集合の問題}
+
+古典的な代数幾何では，イデアル $I\subset k[x_1,\dots,x_n]$ に対しその零点集合 $\Zero(I)\subset\A^n$ を考えた（第3章）．
+この対応 $I\mapsto\Zero(I)$ は単射ではない．最も簡単な例は
+\[
+  \Zero(x)=\Zero(x^2)=\{0\}\subset\A^1
+\]
+である．方程式 $x=0$ と $x^2=0$ は「解の集合」としては同じだが，方程式としては明らかに異なる：
+後者は「重解」をもつ．Nullstellensatz（第4章）によれば $\Zero(I)$ が覚えているのは根基 $\sqrt{I}$ だけであり，$(x)$ と $(x^2)$ の差は失われる．
+
+これは単なる言葉の問題ではない．次の三つの状況で，古典的な点集合は必要な情報を失う．
+
+\paragraph{(1) 交点の重複．}
+放物線 $C=\Zero(y-x^2)$ と直線 $L_t=\Zero(y-t)$ の交わりは，$t>0$（$k=\C$ なら $t\ne0$）では $(\pm\sqrt t,t)$ の 2 点だが，$t=0$ では原点 1 点になる．
+Bézout の定理（第9章）は交点を重複度込みで数えれば常に $2$ だと主張するが，「重複度」は点集合 $C\cap L_0=\{(0,0)\}$ のどこにも書かれていない．
+一方，交わりを定義するイデアルから作った環を見ると
+\[
+  k[x,y]/(y-x^2,\ y-t)\ \cong\ k[x]/(x^2-t),
+\]
+これは全ての $t$ について $k$ 上 2 次元である．$t=0$ でも $k[x]/(x^2)$ という 2 次元の環が残り，重複度 2 を記憶している．
+
+\paragraph{(2) 代数閉でない体．}
+$\R$ 上で $\Zero(x^2+y^2+1)=\emptyset=\Zero(1)$ である．しかし $\R[x,y]/(x^2+y^2+1)$ は零環ではなく，複素化すれば非自明な曲線（複素円錐曲線）を定める．
+実の点集合だけを見ると「空でない方程式系」と「矛盾した方程式系」の区別がつかない．
+
+\paragraph{(3) 体でない環の上．}
+整数係数の方程式 $x^2+y^2=3$ を考えると，$\Z$ 上だけでなく各素数 $p$ について $\F_p$ 上の解，$\Q$ 上の解，$\C$ 上の解が問題になる．
+これら全てを一つの幾何学的対象の「異なる体での点」として扱いたいが，古典論では各体ごとに別々の代数的集合を考えるしかない．
+
+\subsection{nilpotent元を持つ環}
+
+\begin{mydef}{べき零元・被約環}{ch12-nilpotent}
+可換環 $R$ の元 $a$ が\textbf{べき零}（nilpotent）であるとは，ある $n\ge1$ で $a^n=0$ となることをいう．
+べき零元全体 $\mathrm{nil}(R)=\sqrt{(0)}$ はイデアルをなし，\textbf{べき零根基}とよばれる．$\mathrm{nil}(R)=0$ のとき $R$ は\textbf{被約}（reduced）であるという．
+\end{mydef}
+
+古典的な座標環 $k[X]=k[x_1,\dots,x_n]/\Ideal(X)$ は常に被約である（$f^n$ が $X$ 上で消えれば $f$ も消える）．
+逆に $k[x]/(x^2)$ は被約でない：$\varepsilon:=\bar x$ は $\varepsilon\ne0$，$\varepsilon^2=0$ を満たす．
+
+べき零元を「関数」と思うとどうなるか．$k[\varepsilon]:=k[x]/(x^2)$ の元 $a+b\varepsilon$ を，唯一の点（原点）上の関数とみなすと，原点での「値」は $a$ であり，$\varepsilon$ の値は $0$ である．
+すなわち $\varepsilon$ は\emph{全ての点で値が $0$ なのに $0$ でない関数}である．
+これは古典的な「関数は値で決まる」という原則に反するが，次のように考えると自然である：
+$f\in k[x]$ を $k[x]/(x^2)$ に送ることは，$f$ の原点での 1 次までの Taylor 展開
+\[
+  f(x)\ \longmapsto\ f(0)+f'(0)\,\varepsilon
+\]
+を取ることである．$\varepsilon$ の係数は\emph{値}ではなく\emph{微分}を記録している．
+$k[x]/(x^{m+1})$ なら $m$ 次までの Taylor 展開，すなわち $m$ 次までのジェットを記録する．
+物理学者が日常的に用いる「$\epsilon^2=0$ として 1 次まで計算する」という操作は，この環で計算することにほかならない．
+
+\begin{myprop}{べき零根基}{ch12-nilradical}
+可換環 $R$ について $\mathrm{nil}(R)=\bigcap_{\p:\text{素イデアル}}\p$．
+\end{myprop}
+\begin{proof}
+$a^n=0$ なら任意の素イデアル $\p$ で $a^n\in\p$，よって $a\in\p$．
+逆に $a$ がべき零でないとすると，$S=\{1,a,a^2,\dots\}$ は $0$ を含まない積閉集合だから局所化 $R_a\ne0$ であり，$R_a$ の極大イデアル $\m$ の $R$ への引き戻し $\p$ は $a\notin\p$ なる素イデアルである．
+\end{proof}
+
+この命題は後で「関数 $a$ が全ての点で消える $\iff$ $a$ がべき零」と読み替えられる（12.2.2 小節）．
+
+\subsection{重複構造}
+
+$k[x]/(x^2)$ を「原点に，$x$ 方向の無限小の厚みをもった点」——\textbf{二重点}——と見る．
+二次元では同じ「二重点」にも向きの情報がある：
+\[
+  k[x,y]/(x^2,y)\qquad\text{と}\qquad k[x,y]/(x,y^2)
+\]
+はどちらも根基が $(x,y)$（零点集合は原点）で，$k$ 上 2 次元だが，前者では $x$ が非零のべき零元として残り $y=0$，後者はその逆である．
+すなわち前者は「$x$ 軸方向を向いた二重点」，後者は「$y$ 軸方向を向いた二重点」である．
+より一般に $(y-ax,\ x^2)$ は傾き $a$ の方向を向いた二重点を表し，二重点全体は原点での接方向の集合 $\PP^1$ によってパラメトライズされる．
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=0.9]
+  % family
+  \begin{scope}
+    \draw[-{Stealth}] (-2,0) -- (2,0) node[right] {$x$};
+    \draw[-{Stealth}] (0,-0.6) -- (0,2.4) node[above] {$y$};
+    \draw[thick,domain=-1.5:1.5,smooth] plot (\x,{\x*\x});
+    \draw[thick,blue!70!black] (-2,1) -- (2,1) node[right] {$y=t$};
+    \fill[blue!70!black] (-1,1) circle (2pt) (1,1) circle (2pt);
+    \draw[thick,red!70!black] (-2,0.02) -- (2,0.02);
+    \fill[red!70!black] (0,0) circle (2.2pt);
+    \draw[red!70!black,very thick,-{Stealth}] (0,0) -- (0.55,0);
+    \node[red!70!black,below] at (0.3,-0.1) {$t=0$};
+    \node at (0,-1.3) {$k[x]/(x^2-t)$：$t\to0$ で 2 点が合流};
+  \end{scope}
+  % double points
+  \begin{scope}[xshift=6.2cm]
+    \draw[-{Stealth}] (-1.3,0) -- (1.3,0) node[right] {$x$};
+    \draw[-{Stealth}] (0,-1.1) -- (0,1.3) node[above] {$y$};
+    \fill (0,0) circle (2pt);
+    \draw[very thick,-{Stealth}] (0,0) -- (0.8,0);
+    \node at (0,-1.6) {$(x^2,y)$};
+  \end{scope}
+  \begin{scope}[xshift=9.6cm]
+    \draw[-{Stealth}] (-1.3,0) -- (1.3,0) node[right] {$x$};
+    \draw[-{Stealth}] (0,-1.1) -- (0,1.3) node[above] {$y$};
+    \fill (0,0) circle (2pt);
+    \draw[very thick,-{Stealth}] (0,0) -- (0,0.8);
+    \node at (0,-1.6) {$(x,y^2)$};
+  \end{scope}
+\end{tikzpicture}
+\caption{左：放物線と水平線の交わり．$t\to0$ で 2 つの交点が合流し，極限では $x$ 方向を向いた二重点 $\Spec k[x]/(x^2)$ になる．右：向きの異なる二つの二重点．}
+\label{fig:ch12-double}
+\end{figure}
+
+図~\ref{fig:ch12-double} のように，二重点は「2 点が合流した極限」として現れ，どの方向から合流したかを記憶している．
+$k[x]/(x^2-t)$ は $t\ne0$ で $k\times k$（2 点上の関数環）と同型（$\mathrm{char}\,k\neq2$，$k$ 代数閉），$t=0$ で $k[x]/(x^2)$ であり，$k$ 上の次元は一定である．
+「次元が一定の族として極限を取る」と，極限は自然に非被約な対象になる．
+これはモジュライ空間や交差理論で重複構造が避けられない理由の原型である．
+
+\subsection{古典的な点集合では見えない情報}
+
+べき零元以外にも，古典的な点集合では見えない情報がある．
+
+\paragraph{部分多様体の「一般の点」．}
+既約な曲線 $C\subset\A^2$ 上の「一般の点」は，ある性質（例えば「$f$ が $C$ 上一般の点で消えない」）を語るときに頻繁に使われるが，古典論ではそれは「ある空でない開集合上の全ての点」という間接的な言い方でしか表現できない．
+スキーム論では，既約閉集合ごとに\textbf{生成点}（generic point）とよばれる点が存在し，「一般の点で成り立つ」ことを「生成点で成り立つ」と直接言える（12.2.3 小節）．
+
+\paragraph{有理点でない点．}
+$\R[x]$ の既約多項式 $x^2+1$ は実数の点を定めないが，素イデアル $(x^2+1)$ は「複素共役な二点 $\pm i$ の組」に対応する点として扱うべきである．
+$\R$ 上の幾何を考えるとき，こうした点を捨てると情報が失われる（12.2.6 小節）．
+
+\paragraph{算術的な情報．}
+$\Z$ の素イデアル $(p)$ は「素数 $p$ での還元」に対応する．$x^2+y^2=3$ が $\F_2$ 上で特異になる（偏微分 $2x,2y$ が全て消える）といった情報は，$\Z$ 上の「空間」を考えて初めて幾何学的に扱える．
+
+\subsection{スキームを導入する必要性}
+
+以上を踏まえると，次のような枠組みが望まれる．
+\begin{enumerate}
+  \item 任意の可換環 $R$（べき零元を含んでよい，体上でなくてもよい）に，「$R$ を関数環とする空間」$X=\Spec R$ を対応させる．
+  \item $X$ の点は，代数閉体上の極大イデアルに限らず，生成点や非有理点も含むように素イデアルとする．
+  \item $X$ 上の関数は「点ごとの値」で決まらない（べき零元）ので，関数を値の族としてでなく，\emph{構造層}の切断として抽象的に与える（第11章の環付き空間）．
+  \item アフィンなもの（$\Spec R$）を局所モデルとして貼り合わせることで，射影的なものや一般のスキームを作る．
+\end{enumerate}
+この方針に沿って以下の節で順にスキームを構成する．
+
+\exprob{prob:ch12-1-1}
+$k$ を標数 $0$ の代数閉体とする．$I_t=(y-x^2,\ y-tx)\subset k[x,y]$ について，$k[x,y]/I_t$ の $k$ 上の次元を求め，$t\ne0$ と $t=0$ の場合で $\Zero(I_t)$ を比較せよ．$t=0$ のとき $k[x,y]/I_0$ のべき零元を全て求めよ．
+
+%=====================================================================
+\section{Specの構成}
+%=====================================================================
+
+以下，環はすべて単位元をもつ可換環とする．
+
+\subsection{素イデアルの集合}
+
+なぜ点として極大イデアルでなく素イデアルを取るのか．最大の理由は\emph{関手性}である．
+
+環準同型 $\varphi\colon A\to B$ は，幾何学的には「$\Spec B$ から $\Spec A$ への写像」（関数の引き戻しの逆向き）に対応するはずである（第5章 5.6 節の反変性）．
+点の写像は「$B$ の点 $\q$ を $\varphi^{-1}(\q)$ に送る」で与えたいが：
+\begin{itemize}
+  \item $\q$ が素イデアルなら $\varphi^{-1}(\q)$ も素イデアルである（$ab\in\varphi^{-1}(\q)\Rightarrow\varphi(a)\varphi(b)\in\q$）．
+  \item $\q$ が極大イデアルでも $\varphi^{-1}(\q)$ は極大とは限らない．例：包含 $\Z\hookrightarrow\Q$ と $\Q$ の極大イデアル $(0)$ について，$\Z$ での引き戻し $(0)$ は極大でない．
+\end{itemize}
+つまり極大イデアルの集合は環準同型に関して関手的でない．
+有限生成 $k$ 代数どうしの $k$ 準同型に限れば極大イデアルの引き戻しは極大である（Nullstellensatz の帰結）が，一般の環では成り立たない．
+
+もう一つの理由は，素イデアルが\emph{既約な部分}に対応することである（第4章 4.6.2 小節）：
+極大イデアルが点に対応するのに対し，素イデアルは既約閉部分集合に対応する．
+素イデアルを点とすると，既約閉部分集合の一つ一つに一点ずつ「その部分集合全体を代表する点」（生成点）が加わることになる．
+
+\subsection{Spec R の定義}
+
+\begin{mydef}{素スペクトル}{ch12-spec}
+可換環 $R$ の素イデアル全体の集合を
+\[
+  \Spec R := \{\,\p\subset R \mid \p \text{ は素イデアル}\,\}
+\]
+と書き，$R$ の\textbf{素スペクトル}（prime spectrum）とよぶ．
+$\p\in\Spec R$ を点とみなすとき $[\p]$ とも書く．
+点 $\p$ の\textbf{剰余体}を $\kappa(\p):=\Frac(R/\p)=R_\p/\p R_\p$ と定め，$f\in R$ の $\p$ での\textbf{値}を，$f$ の $R\to R/\p\hookrightarrow\kappa(\p)$ による像 $f(\p)$ と定める．
+\end{mydef}
+
+値の定義から直ちに
+\[
+  f(\p)=0 \iff f\in\p
+\]
+であり，「$f$ が点 $\p$ で消える」とは「$f\in\p$」のことである．
+注目すべきは，値の属する体 $\kappa(\p)$ が点ごとに異なることである．
+
+\begin{myex}{整数を関数とみなす}{ch12-Z-values}
+$R=\Z$ とし，$f=15$ を $\Spec\Z$ 上の「関数」と見る．
+点 $(p)$ での値は $15 \bmod p\in\F_p$ である：$(2)$ で $1$，$(3)$ で $0$，$(5)$ で $0$，$(7)$ で $1$，….
+点 $(0)$ での値は $15\in\Q$．
+したがって $f=15$ は点 $(3)$ と $(5)$ で消える関数である．
+$f=12=2^2\cdot3$ は $(2)$ で「2 位の零点」をもつと考えられる．
+\end{myex}
+
+命題~\ref{prop:ch12-nilradical} は，「全ての点で値が $0$ の関数はべき零元である」と言い換えられる．
+被約でない環では，値が全て $0$ でも $0$ でない関数が存在し，関数は値で決まらない．
+
+\subsection{Specの点}
+
+\begin{myprop}{閉包と特殊化}{ch12-closure}
+$\Spec R$ の一点 $\p$ の閉包は $\overline{\{\p\}}=V(\p)=\{\q\mid\q\supset\p\}$ である（$V$ は次小節で定義する）．特に
+\begin{enumerate}
+  \item $\{\p\}$ が閉集合 $\iff$ $\p$ は極大イデアル．このとき $\p$ を\textbf{閉点}とよぶ．
+  \item $R$ が整域なら，$(0)$ の閉包は $\Spec R$ 全体である．$(0)$ を\textbf{生成点}とよぶ．
+\end{enumerate}
+\end{myprop}
+
+$\q\in\overline{\{\p\}}$ のとき，「$\p$ は $\q$ に\textbf{特殊化}する」「$\p$ は $\q$ の\textbf{一般化}である」という．
+古典的な直感では点の閉包は点そのものだが，$\Spec$ では非閉点が存在し，その閉包は既約閉集合全体に広がる．
+一般に，$\Spec R$ の既約閉集合 $Z$ はちょうど一つの生成点 $\eta_Z$（$\overline{\{\eta_Z\}}=Z$）をもつ（$Z=V(\p)$，$\eta_Z=\p$）．
+
+\begin{myex}{$k[x,y]$ の点}{ch12-points-kxy}
+$k$ を代数閉体とすると，$\Spec k[x,y]$ の点は次の三種類である．
+\begin{itemize}
+  \item 閉点 $(x-a,\ y-b)$（$(a,b)\in k^2$）：古典的な点．
+  \item $(f)$（$f$ は既約多項式）：既約曲線 $\Zero(f)$ の生成点．閉包は $(f)$ を含む全ての素イデアル，すなわち曲線上の閉点と曲線自身の生成点．
+  \item $(0)$：平面全体の生成点．
+\end{itemize}
+これで全てであることは，$k[x,y]$ の Krull 次元が $2$ であることと，高さ $1$ の素イデアルは単項であること（UFD）から従う（第7章）．
+\end{myex}
+
+\subsection{Zariski位相}
+
+\begin{mydef}{Zariski 位相}{ch12-zariski}
+部分集合 $S\subset R$ に対し
+\[
+  V(S) := \{\,\p\in\Spec R\mid \p\supset S\,\}
+\]
+と置く．$V(S)$ の形の集合を閉集合とする位相を $\Spec R$ の \textbf{Zariski 位相}とよぶ．
+$V(S)=V(I)$（$I$ は $S$ の生成するイデアル）$=V(\sqrt{I})$ である．
+\end{mydef}
+
+\begin{note}
+記号について：本書では古典的な零点集合（$k^n$ の点の集合）を太字の $\Zero(I)$ で，$\Spec R$ の閉集合（素イデアルの集合）を斜体の $V(I)$ で表して区別する．
+$k$ が代数閉体で $R=k[x_1,\dots,x_n]$ のとき，$V(I)$ の閉点全体は Nullstellensatz により $\Zero(I)$ と一対一に対応する．
+\end{note}
+
+\begin{myprop}{閉集合の公理}{ch12-zariski-axioms}
+\begin{enumerate}
+  \item $V(0)=\Spec R$，$V(1)=\emptyset$．
+  \item $\bigcap_\lambda V(I_\lambda) = V\big(\sum_\lambda I_\lambda\big)$．
+  \item $V(I)\cup V(J)=V(IJ)=V(I\cap J)$．
+  \item $V(I)\subset V(J)\iff \sqrt{I}\supset\sqrt{J}$．特に $V(I)=\emptyset\iff I=R$．
+\end{enumerate}
+\end{myprop}
+\begin{proof}
+1, 2 は定義から明らか．
+3：$IJ\subset I\cap J\subset I$ より $V(I)\cup V(J)\subset V(I\cap J)\subset V(IJ)$．逆に $\p\supset IJ$ で $\p\not\supset I$ なら $a\in I\setminus\p$ が取れ，任意の $b\in J$ について $ab\in\p$，$a\notin\p$ より $b\in\p$．よって $\p\supset J$．
+4：$\sqrt I=\bigcap_{\p\supset I}\p$（命題~\ref{prop:ch12-nilradical} を $R/I$ に適用）から従う．
+\end{proof}
+
+4 は Nullstellensatz の類似だが，\emph{代数閉体の仮定なしに}どんな環でも成り立つ．
+これは点として素イデアルを全て取った効果である．
+古典論で Nullstellensatz が深い定理だったのは，点を極大イデアル（さらに $k^n$ の点）に限っていたためである．
+
+Zariski 位相は第3章で見たように非常に粗い位相であり，さらに $\Spec R$ は一般に $T_0$ だが $T_1$ でない（非閉点がある）．
+
+\subsection{基本開集合}
+
+\begin{mydef}{基本開集合}{ch12-Df}
+$f\in R$ に対し
+\[
+  D(f) := \Spec R\setminus V(f) = \{\,\p\mid f\notin\p\,\}
+\]
+を\textbf{基本開集合}（distinguished open set）とよぶ．「$f$ が消えない点の集合」である．
+\end{mydef}
+
+\begin{myprop}{基本開集合の性質}{ch12-Df-prop}
+\begin{enumerate}
+  \item $\{D(f)\}_{f\in R}$ は Zariski 位相の開基をなす．
+  \item $D(f)\cap D(g)=D(fg)$．
+  \item $D(f)=\emptyset\iff f$ はべき零．$D(f)=\Spec R\iff f$ は単元．
+  \item $D(f)\subset D(g)\iff f\in\sqrt{(g)}$，すなわち $f^n=ag$ となる $n,a$ がある．
+  \item 局所化 $R\to R_f$ は同相写像 $\Spec R_f\xrightarrow{\sim}D(f)$ を誘導する．
+  \item $\Spec R$ は（そして各 $D(f)$ も）準コンパクトである：任意の開被覆は有限部分被覆をもつ．
+\end{enumerate}
+\end{myprop}
+\begin{proof}
+1：開集合 $\Spec R\setminus V(I)=\bigcup_{f\in I}D(f)$．
+2，3，4 は命題~\ref{prop:ch12-zariski-axioms} から．
+5：$R_f$ の素イデアルは $f\notin\p$ なる $R$ の素イデアル $\p$ と $\p\mapsto\p R_f$ で一対一に対応する（第6章）．
+6：$\Spec R=\bigcup_iD(f_i)$ とすると $V(\sum_i(f_i))=\bigcap_iV(f_i)=\emptyset$ より $\sum_i (f_i)=R$．よって $1=\sum_{\text{有限}}a_if_i$ と書け，そこに現れる有限個の $D(f_i)$ で覆える．
+\end{proof}
+
+5 は「$f$ が消えない部分では $1/f$ が関数として使える」ことを意味する．
+物理でいえば，$D(f)$ は「$f$ で割ることを許した」パッチである．
+6 の準コンパクト性は，$\Spec R$ が Hausdorff でないにもかかわらず「有限性」をもつことを示し，構造層の構成（12.3.3 小節）で本質的に使われる．
+
+\subsection{Specの具体例}
+
+\begin{myex}{$\Spec\Z$}{ch12-specZ}
+$\Z$ は PID だから，素イデアルは $(0)$ と $(p)$（$p$ 素数）である．
+閉点は $(2),(3),(5),\dots$ であり，$(0)$ は生成点で，その閉包は全体．
+閉集合は全体と有限個の閉点の集合，開集合は空集合と「有限個の素数を除いたもの」である．
+$(0)$ は全ての空でない開集合に含まれ，いわば「直線全体にぼんやり広がっている」．
+剰余体は $\kappa((p))=\F_p$，$\kappa((0))=\Q$ であり，点ごとに標数が異なる．
+\end{myex}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+  \draw[thick] (0,0) -- (10.5,0);
+  \foreach \x/\l in {1/2,2.2/3,3.4/5,4.6/7,5.8/11,7.0/13,8.2/17}{
+    \fill (\x,0) circle (2.2pt);
+    \node[below] at (\x,-0.12) {$(\l)$};
+  }
+  \node at (9.4,-0.4) {$\cdots$};
+  \draw[line width=6pt,gray!30,opacity=0.8] (0,0.6) -- (10.5,0.6);
+  \node[above] at (5.2,0.75) {生成点 $(0)$（剰余体 $\Q$）：全体に広がる};
+  \node[left] at (0,0) {$\Spec\Z$};
+\end{tikzpicture}
+\caption{$\Spec\Z$．閉点 $(p)$ と，全体に広がる生成点 $(0)$．}
+\label{fig:ch12-specZ}
+\end{figure}
+
+\begin{myex}{$\Spec k[x]$（アフィン直線）}{ch12-speckx}
+$k$ を代数閉体とすると $k[x]$ は PID で既約多項式は 1 次式だから，
+\[
+  \Spec k[x] = \{(x-a)\mid a\in k\}\cup\{(0)\}.
+\]
+閉点は $k$ の点 $a$ と一対一に対応し，それに生成点 $(0)$ が一つ加わる．
+閉集合は全体と閉点の有限集合であり，これは第3章の $\A^1$ の Zariski 位相に「全体に広がる一点」を加えたものである．
+生成点での剰余体は $\kappa((0))=k(x)$（有理関数体）で，$f\in k[x]$ の生成点での値は $f$ そのもの（$k(x)$ の元として）である．
+「$f$ が生成点で消えない」とは「$f\ne0$」，すなわち「$f$ が一般の点で消えない」ことである．
+\end{myex}
+
+\begin{myex}{$\Spec\R[x]$}{ch12-specRx}
+$\R[x]$ の既約モニック多項式は $x-a$（$a\in\R$）と $x^2+bx+c$（$b^2<4c$）である．後者は共役な複素根の組 $\{\alpha,\bar\alpha\}$ と対応する．
+したがって $\Spec\R[x]$ の閉点は $\C/(\text{複素共役})$，すなわち閉上半平面 $\{\mathrm{Im}\,z\ge0\}$ と一対一に対応し，これに生成点が加わる．
+剰余体は実の点で $\R$，非実の点で $\C$ である．
+$x^2+1$ は「$\R$ 上の点をもたない方程式」だが，$\Spec\R[x]$ の中では一つの閉点 $(x^2+1)$（剰余体 $\C$）として見える．
+\end{myex}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+  \begin{scope}
+  \draw[thick] (0,0) -- (6,0);
+  \foreach \x in {0.6,1.5,2.4,3.3,4.2,5.1}{\fill (\x,0) circle (2pt);}
+  \node[below] at (1.5,-0.1) {$(x-a)$};
+  \draw[line width=6pt,gray!30] (0,0.5) -- (6,0.5);
+  \node[above] at (3,0.6) {生成点 $(0)$，$\kappa=k(x)$};
+  \node at (3,-1.0) {$\Spec k[x]$};
+  \end{scope}
+  \begin{scope}[xshift=8.3cm]
+    \fill (0,0) circle (2.5pt);
+    \draw[very thick,-{Stealth}] (0,0) -- (0.9,0);
+    \node[above] at (0.45,0.05) {$\varepsilon$};
+    \node at (0.3,-1.0) {$\Spec k[x]/(x^2)$};
+    \node[font=\small,align=center] at (0.3,-1.6) {点は一つ，\\ 無限小の方向をもつ};
+  \end{scope}
+\end{tikzpicture}
+\caption{$\Spec k[x]$（閉点と生成点）と，二重点 $\Spec k[x]/(x^2)$．}
+\label{fig:ch12-speckx}
+\end{figure}
+
+\begin{myex}{二重点 $\Spec k[x]/(x^2)$}{ch12-double-point}
+$k[x]/(x^2)$ の素イデアルは $(x)/(x^2)$ のみ（任意の素イデアルはべき零元 $\bar{x}$ を含むので，$k[x]$ の $(x^2)$ を含む素イデアル $(x)$ に対応する）．
+したがって $\Spec k[x]/(x^2)$ は一点からなり，位相空間としては $\Spec k$ と区別がつかない．
+しかし関数環 $k[x]/(x^2)$ は $\varepsilon=\bar x$ という非零のべき零元をもち，この点が「$x$ 方向に 1 次の無限小の厚みをもつ」ことを記録している．
+同様に $\Spec k[x]/(x^n)$ も一点だが，その関数環は $n$ 次元であり，「$n$ 重点」とよばれる．
+両者の違いは位相空間ではなく構造層（次節）によって区別される．
+\end{myex}
+
+\begin{myex}{$\Spec\C[x,y]$：Mumford の宝の地図}{ch12-mumford}
+例~\ref{ex:ch12-points-kxy} の三種類の点を図示したのが図~\ref{fig:ch12-mumford} である．
+閉点は通常の平面 $\C^2$ の点であり，各既約曲線 $\Zero(f)$ にはその曲線全体に広がる生成点 $(f)$ が一つあり，平面全体に広がる生成点 $(0)$ がある．
+D.~Mumford は $\Spec\Z[x]$ をこのように描いた図（「宝の地図」）で有名であり，そこでは横軸が $\Spec\Z$，縦方向の各ファイバーが $\Spec\F_p[x]$ となる（12.5.3 小節）．
+\end{myex}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.05]
+  \fill[gray!12] (-3.2,-2.2) rectangle (3.2,2.2);
+  \node[gray!50!black,font=\small] at (2.2,1.95) {生成点 $(0)$};
+  % generic point of x-axis-ish line
+  \draw[line width=5pt,blue!25] (-3.0,-1.2) -- (3.0,0.6);
+  \draw[blue!70!black,thick] (-3.0,-1.2) -- (3.0,0.6);
+  \node[blue!60!black,font=\small] at (2.3,0.95) {$(y-ax-b)$};
+  % generic point of conic
+  \draw[line width=5pt,red!20,domain=-1.6:1.6,smooth,samples=40] plot (\x,{1.6-0.8*\x*\x});
+  \draw[red!70!black,thick,domain=-1.6:1.6,smooth,samples=40] plot (\x,{1.6-0.8*\x*\x});
+  \node[red!60!black,font=\small] at (-2.0,1.9) {$(y-1.6+0.8x^2)$};
+  % generic point of cusp curve
+  \draw[line width=5pt,green!20,domain=-1:1,smooth,samples=40] plot ({-2.6+1.5*\x*\x},{-1.0+0.8*\x*\x*\x});
+  \draw[green!50!black,thick,domain=-1:1,smooth,samples=40] plot ({-2.6+1.5*\x*\x},{-1.0+0.8*\x*\x*\x});
+  \node[green!40!black,font=\small] at (-0.4,-1.95) {$(f)$，$f$ 既約};
+  % closed points
+  \foreach \p in {(0.5,-0.15),(-1.3,0.25),(1.8,-1.4),(-2.7,0.9),(0.9,1.2),(2.6,-0.6)}{\fill \p circle (1.8pt);}
+  \fill[red!70!black] (1,0.8) circle (1.8pt);
+  \fill[blue!70!black] (1.0,0.0) circle (1.8pt);
+  \node[font=\small] at (2.3,-1.65) {閉点 $(x-a,y-b)$};
+  \fill (-2.6,-1.0) circle (2pt);
+\end{tikzpicture}
+\caption{$\Spec\C[x,y]$ の模式図（Mumford の「宝の地図」風）．黒い点は閉点，太くぼかした曲線はその曲線の生成点，背景の灰色は平面全体の生成点を表す．}
+\label{fig:ch12-mumford}
+\end{figure}
+
+\exprob{prob:ch12-2-1}
+$\Spec\Z[i]$ から $\Spec\Z$ への写像 $\q\mapsto\q\cap\Z$ について，$\Z$ の素イデアル $(2),(3),(5)$ の逆像をそれぞれ求めよ（$2=-i(1+i)^2$，$5=(2+i)(2-i)$ を用いよ）．
+これらを「分岐」「惰性」「分解」の観点から，$\Spec\C[z]\to\Spec\C[w]$，$w=z^2$ の逆像の様子と比較せよ．
+
+\exprob{prob:ch12-2-2}
+$R=k[x]/(x^2-x)$ について $\Spec R$ を求め，$R\cong k\times k$ を示せ．一般に $\Spec(A\times B)$ は $\Spec A$ と $\Spec B$ の非交和と同相であることを示せ．
+
+%=====================================================================
+\section{アフィンスキーム}
+%=====================================================================
+
+\subsection{アフィンスキームの定義}
+
+第11章で，多様体を「位相空間＋関数の層」（環付き空間）として捉えた．
+スキームでは，構造層の茎が局所環であることを要請し，射にもそれと整合する条件を課す．
+
+\begin{mydef}{局所環付き空間}{ch12-lrs}
+環付き空間 $(X,\OO_X)$ が\textbf{局所環付き空間}であるとは，全ての $p\in X$ で茎 $\OO_{X,p}$ が局所環であることをいう．その極大イデアルを $\m_p$，剰余体を $\kappa(p)=\OO_{X,p}/\m_p$ と書く．
+局所環付き空間の射 $(f,f^\#)\colon(X,\OO_X)\to(Y,\OO_Y)$ とは，環付き空間の射であって，各 $p\in X$ で誘導される茎の準同型
+\[
+  f^\#_p\colon\OO_{Y,f(p)}\longrightarrow\OO_{X,p}
+\]
+が\textbf{局所準同型}（$f^\#_p(\m_{f(p)})\subset\m_p$）であるものをいう．
+\end{mydef}
+
+局所準同型の条件は「$f(p)$ で消える関数を引き戻すと $p$ で消える」ことを意味し，関数が値をもつ場合には自動的に成り立つ（$g(f(p))=0\Rightarrow(g\circ f)(p)=0$）．
+スキームでは関数の値が抽象的なので，これを公理として要請する．
+
+\begin{mydef}{アフィンスキーム}{ch12-affine-scheme}
+可換環 $R$ に対し，位相空間 $\Spec R$ 上の環の層 $\OO_{\Spec R}$ で
+\[
+  \OO_{\Spec R}(D(f))\cong R_f,\qquad \OO_{\Spec R,\p}\cong R_\p
+\]
+を満たすもの（12.3.3 小節で構成する）が標準的に存在する．局所環付き空間 $(\Spec R,\OO_{\Spec R})$ を $R$ の\textbf{アフィンスキーム}とよび，単に $\Spec R$ と書く．
+局所環付き空間として $(\Spec R,\OO_{\Spec R})$ と同型なものもアフィンスキームとよぶ．
+\end{mydef}
+
+特に $f=1$ として $\Gamma(\Spec R,\OO_{\Spec R})=R$ であり，大域関数の環から元の環が復元される．
+
+\subsection{アフィンスキームと可換環}
+
+環準同型 $\varphi\colon A\to B$ から，アフィンスキームの射 $\Spec\varphi\colon\Spec B\to\Spec A$ が次のように作られる．
+\begin{itemize}
+  \item 点の写像：$\q\mapsto\varphi^{-1}(\q)$．連続である：$(\Spec\varphi)^{-1}(V(I))=V(\varphi(I)B)$，$(\Spec\varphi)^{-1}(D(f))=D(\varphi(f))$．
+  \item 層の射：$\OO_{\Spec A}(D(f))=A_f\to B_{\varphi(f)}=\OO_{\Spec B}(D(\varphi(f)))$，$a/f^n\mapsto\varphi(a)/\varphi(f)^n$．
+  \item 茎では $A_{\varphi^{-1}(\q)}\to B_\q$ となり，これは局所準同型である．
+\end{itemize}
+
+\begin{mythm}{アフィンスキームと可換環の反変同値}{ch12-anti-equiv}
+環 $A,B$ に対し，
+\[
+  \Hom_{\text{局所環付き空間}}(\Spec B,\Spec A)\ \xrightarrow{\ \sim\ }\ \Hom_{\text{環}}(A,B),\qquad (f,f^\#)\mapsto f^\#_{\Spec A}
+\]
+（大域切断を取る写像）は全単射であり，その逆は $\varphi\mapsto\Spec\varphi$ で与えられる．
+したがって $R\mapsto\Spec R$ は可換環の圏からアフィンスキームの圏への反変同値を与える．
+\end{mythm}
+\begin{proof}[証明の概略]
+$\varphi\mapsto\Spec\varphi\mapsto\varphi$ は構成から明らか．
+逆に $(f,f^\#)$ が与えられたとし，$\varphi=f^\#_{\Spec A}\colon A\to B$ と置く．
+点 $\q\in\Spec B$ に対し，茎の準同型 $f^\#_\q\colon A_{f(\q)}\to B_\q$ は大域切断の $\varphi$ と両立するので，次の図式が可換になる：
+\[
+\begin{tikzcd}
+  A \arrow[r,"\varphi"]\arrow[d] & B\arrow[d]\\
+  A_{f(\q)}\arrow[r,"f^\#_\q"'] & B_\q
+\end{tikzcd}
+\]
+$f^\#_\q$ は局所準同型だから $(f^\#_\q)^{-1}(\q B_\q)=f(\q)A_{f(\q)}$．これを $A$ に引き戻すと $\varphi^{-1}(\q)=f(\q)$．
+よって点の写像は $\Spec\varphi$ と一致し，茎の写像も $\varphi$ の局所化として決まるので $(f,f^\#)=\Spec\varphi$．
+\end{proof}
+
+局所性の条件がなければこの定理は成り立たない．
+例えば $A$ を離散付値環，$K=\Frac A$ とし，$\Spec A=\{s,\eta\}$（$s$ は閉点，$\eta$ は生成点）とする．
+一点 $\Spec K$ を閉点 $s$ に送る連続写像 $f$ を考え，$f^\#$ を $\Spec A$ 全体上では包含 $A\hookrightarrow K$，開集合 $\{\eta\}$ 上では（逆像が空なので）零写像と定めると，$(f,f^\#)$ は環付き空間の射になる．
+その大域切断は包含 $A\to K$ であり，これは $\Spec K$ を\emph{生成点} $\eta$ に送る射 $\Spec(A\hookrightarrow K)$ と同じ大域切断をもつ．
+$(f,f^\#)$ の $s$ での茎の写像 $A\to K$ は $\m_s$ を単元に送るので局所準同型でなく，局所環付き空間の射としては排除される．
+
+この定理は第10章 10.5 節で見た「アフィン多様体の圏 $\simeq$ 被約有限生成 $k$ 代数の圏の反対圏」を，\emph{全ての可換環}に拡張したものである．
+幾何学的な操作は環の操作に翻訳される：
+\begin{center}
+\begin{tabular}{ll}
+  \hline
+  幾何（アフィンスキーム） & 代数（可換環）\\
+  \hline
+  閉部分スキーム $\Spec R/I\hookrightarrow\Spec R$ & 全射 $R\to R/I$\\
+  基本開集合 $D(f)\cong\Spec R_f\hookrightarrow\Spec R$ & 局所化 $R\to R_f$\\
+  非交和 $\Spec A\sqcup\Spec B$ & 直積 $A\times B$\\
+  ファイバー積 $\Spec A\times_{\Spec C}\Spec B$ & テンソル積 $A\otimes_CB$\\
+  一点 $\Spec k$ & 体 $k$\\
+  \hline
+\end{tabular}
+\end{center}
+ファイバー積は「交わり」を与える．例えば $\Spec k[x,y]/(y-x^2)$ と $\Spec k[x,y]/(y)$ の $\A^2$ 上のファイバー積は
+\[
+  \Spec\big(k[x,y]/(y-x^2)\otimes_{k[x,y]}k[x,y]/(y)\big)=\Spec k[x,y]/(y-x^2,y)=\Spec k[x]/(x^2)
+\]
+であり，12.1.1 小節の重複した交点がそのまま「交わりのスキーム」として現れる．
+交点の重複度は環 $k[x]/(x^2)$ の $k$ 上の次元（長さ）$2$ である（第9章）．
+
+\subsection{構造層}
+
+構造層を具体的に構成しよう．アイデアは「$\Spec R$ 上の関数を，各点 $\p$ で局所環 $R_\p$ に値をとる（芽をとる）族で，局所的に分数 $a/f$ で書けるもの」とすることである．
+
+\begin{mydef}{構造層}{ch12-structure-sheaf}
+開集合 $U\subset\Spec R$ に対し，$\OO(U)$ を写像 $s\colon U\to\bigsqcup_{\p\in U}R_\p$ であって
+\begin{enumerate}
+  \item 各 $\p\in U$ で $s(\p)\in R_\p$，
+  \item 各 $\p\in U$ に近傍 $W\subset U$ と $a,f\in R$ があって，全ての $\q\in W$ で $f\notin\q$ かつ $s(\q)=a/f\in R_\q$
+\end{enumerate}
+を満たすもの全体とする．和と積は点ごとに定義し，制限は写像の制限とする．
+\end{mydef}
+
+条件 2 は局所的なので，$\OO$ は環の層である（第11章で連続関数・正則関数の前層が層であることを示したのと同じ論法）．
+
+\begin{mythm}{構造層の基本性質}{ch12-structure-sheaf-thm}
+\begin{enumerate}
+  \item 任意の $\p\in\Spec R$ で茎 $\OO_\p$ は $R_\p$ と同型．
+  \item 任意の $f\in R$ で $\OO(D(f))\cong R_f$．特に $\Gamma(\Spec R,\OO)\cong R$．
+\end{enumerate}
+\end{mythm}
+\begin{proof}
+1：$s_\p\mapsto s(\p)$ で $\OO_\p\to R_\p$ を定める．全射：$a/f\in R_\p$（$f\notin\p$）は $D(f)$ 上の切断 $\q\mapsto a/f$ の芽の像．
+単射：$s,t$ の $\p$ での値が一致するとし，$\p$ の近傍で $s=a/f$，$t=b/g$ とする．$a/f=b/g$ in $R_\p$ より $h\notin\p$ で $h(ag-bf)=0$．
+すると $D(fgh)$ 上の全ての $\q$ で $a/f=b/g$ in $R_\q$ となり，$s_\p=t_\p$．
+
+2：$\psi\colon R_f\to\OO(D(f))$，$a/f^n\mapsto(\q\mapsto a/f^n)$ と置く．
+
+\emph{単射性}．$\psi(a/f^n)=\psi(b/f^m)$ とすると，全ての $\q\in D(f)$ で $h_\q\notin\q$ があって $h_\q(af^m-bf^n)=0$．
+よって $c:=af^m-bf^n$ の零化イデアル $\mathrm{Ann}(c)$ はどの $\q\in D(f)$ にも含まれない，すなわち $V(\mathrm{Ann}(c))\subset V(f)$，命題~\ref{prop:ch12-zariski-axioms} の 4 より $f\in\sqrt{\mathrm{Ann}(c)}$．
+したがって $f^Nc=0$ となる $N$ があり，$R_f$ で $a/f^n=b/f^m$．
+
+\emph{全射性}．$s\in\OO(D(f))$ とする．定義より $D(f)$ は $s=a_i/g_i$ となる開集合 $W_i$ で覆われる．
+$W_i$ を基本開集合 $D(h_i)\subset W_i\cap D(g_i)$ の和で置き換え，$D(h_i)\subset D(g_i)$ より $h_i^m=cg_i$ と書けるので $a_i/g_i=ca_i/h_i^m$．$h_i^m$ を改めて $h_i$ と書けば（$D(h_i^m)=D(h_i)$），$D(h_i)$ 上 $s=a_i/h_i$ としてよい．
+$D(f)\cong\Spec R_f$ は準コンパクトなので，有限個 $i=1,\dots,r$ で $D(f)=\bigcup_iD(h_i)$．
+$D(h_ih_j)$ 上で $a_i/h_i=a_j/h_j$ だから，単射性の議論（$R_{h_ih_j}$ で等しい）により
+\[
+  (h_ih_j)^n(a_ih_j-a_jh_i)=0
+\]
+となる $n$ が取れる（有限個なので共通の $n$）．$h_i':=h_i^{n+1}$，$a_i':=a_ih_i^n$ と置き直すと $a_i'/h_i'=a_i/h_i$ かつ $a_i'h_j'=a_j'h_i'$ となる．以下 $'$ を省略する．
+$D(f)\subset\bigcup_iD(h_i)$ より $f\in\sqrt{(h_1,\dots,h_r)}$，すなわち $f^N=\sum_ib_ih_i$．$a:=\sum_ib_ia_i$ と置くと，各 $j$ について
+\[
+  ah_j=\sum_ib_ia_ih_j=\sum_ib_ih_ia_j=f^Na_j,
+\]
+よって $D(h_j)$ 上で $a/f^N=a_j/h_j=s$．したがって $s=\psi(a/f^N)$．
+\end{proof}
+
+全射性の証明における $f^N=\sum b_ih_i$ は，微分幾何の\emph{1 の分割}の代数的類似である：
+局所的な表示 $a_j/h_j$ を「重み」$b_i$ で足し合わせて大域的な表示を作っている．
+
+\begin{myex}{二重点の構造層}{ch12-double-sheaf}
+$X=\Spec k[\varepsilon]$（$\varepsilon^2=0$）は一点 $\p=(\varepsilon)$ からなり，$\OO_X(X)=\OO_{X,\p}=k[\varepsilon]$（$k[\varepsilon]$ はすでに局所環）．
+一方 $\Spec k$ も一点で $\OO=k$．位相空間は同じだが構造層が異なり，両者はスキームとして同型でない．
+\end{myex}
+
+\subsection{アフィンスキームの局所構造}
+
+点 $\p\in\Spec R$ の近傍の情報は茎 $\OO_\p=R_\p$ に集約されている．
+
+\paragraph{剰余体と値．}
+$R_\p$ の剰余体は $\kappa(\p)$ であり，関数 $s$ の点 $\p$ での値は $s_\p$ の剰余体での像である．
+閉点では $\kappa(\p)=R/\p$，生成点では $\kappa=\Frac(R)$（$R$ 整域のとき）．
+
+\paragraph{生成点の茎．}
+$R$ が整域のとき，生成点 $(0)$ の茎は $R_{(0)}=\Frac(R)$，すなわち関数体（第10章 10.4 節）である．
+「一般の点の近傍の関数」とは「どこか空でない開集合で定義された関数」のことであり，それが有理関数にほかならない．
+同様に $\Spec k[x,y]$ で既約曲線 $C=\Zero(f)$ の生成点 $(f)$ の茎 $k[x,y]_{(f)}$ は，「$C$ の一般の点の近くで定義された関数」の環であり，$f$ で何回割り切れるか（$C$ に沿った零点・極の位数）を測る離散付値環である．
+これは第15章以降で因子や直線束を扱う際の基礎になる．
+
+\paragraph{Zariski 接空間．}
+閉点 $\p$ での Zariski 接空間を，第7章と同様に
+\[
+  T_\p X := (\m/\m^2)^*,\qquad \m=\p R_\p
+\]
+で定義する（$\kappa(\p)$ 上の双対）．二重点 $X=\Spec k[\varepsilon]$ では $\m=(\varepsilon)$，$\m^2=0$ だから $T X=(k\varepsilon)^*$ は 1 次元である．
+\emph{一点しかないのに 1 次元の接空間をもつ}．これがべき零元が「無限小の方向」を表すことの正確な意味である．
+同様に $\Spec k[x,y]/(x^2,xy,y^2)$ は一点で接空間は 2 次元（全方向を向いた二重点），$\Spec k[x,y]/(x^2,y)$ は接空間 1 次元（$x$ 方向）である．
+
+\subsection{アフィンスキームの例}
+
+\begin{myex}{体のスペクトル}{ch12-spec-field}
+体 $K$ に対し $\Spec K$ は一点 $(0)$ で，$\OO=K$．$\Spec\C$ と $\Spec\R$ はどちらも一点だが同型でない．
+$\Spec\C\to\Spec\R$（包含 $\R\subset\C$ から）は一点を一点に送るが，複素共役 $\C\to\C$ は $\Spec\C$ の非自明な自己同型を与える．
+\end{myex}
+
+\begin{myex}{アフィン空間}{ch12-affine-space}
+環 $A$ 上の $n$ 次元アフィン空間を $\A^n_A:=\Spec A[x_1,\dots,x_n]$ と定める．
+$A=k$（代数閉体）なら閉点は $k^n$ の点と一対一に対応し，非閉点は既約部分多様体（の生成点）に対応する．
+$A=\Z$ なら $\A^n_\Z$ は「整数係数のアフィン空間」で，全ての $\F_p$ 上・$\Q$ 上のアフィン空間を同時に含む．
+\end{myex}
+
+\begin{myex}{局所化 $\Z_{(p)}$ と二点空間}{ch12-DVR}
+$\Z_{(p)}=\{a/b\in\Q\mid p\nmid b\}$ の素イデアルは $(0)$ と $p\Z_{(p)}$ の二つ．
+$\Spec\Z_{(p)}$ は閉点 $s$ と生成点 $\eta$ からなり，開集合は $\emptyset,\{\eta\},\{s,\eta\}$．
+これは「$\Spec\Z$ の点 $(p)$ の\emph{ごく近く}」を表す．
+同様に $\Spec\C[[t]]$（形式べき級数環）は「原点の無限小近傍」を表し，閉点と生成点（$\Spec\C((t))$）からなる．
+物理における「摂動展開」は，このような空間上で考えることと解釈できる（12.6 節）．
+\end{myex}
+
+\begin{myex}{閉部分スキーム}{ch12-closed-sub}
+$R$ のイデアル $I$ に対し，$\Spec R/I\to\Spec R$ は位相空間としては閉集合 $V(I)$ への同相写像であり，閉部分スキームとよばれる．
+$I$ と $\sqrt I$ は同じ閉集合を与えるが，異なる閉部分スキームを与える．
+例えば $\A^1_k$ の閉部分スキーム $\Spec k[x]/(x)$，$\Spec k[x]/(x^2)$，$\Spec k[x]/(x^3)$ は全て原点に台をもつが，すべて異なる．
+こうして古典論の「$\Zero(x)=\Zero(x^2)$」という情報の喪失は解消される．
+\end{myex}
+
+\exprob{prob:ch12-3-1}
+$A=\Z_{(p)}$（$p$ は素数），$K=\Frac A=\Q$ とする．
+環準同型 $K\to A$ が存在しないことを示し，定理~\ref{thm:ch12-anti-equiv} を用いて局所環付き空間の射 $\Spec A\to\Spec K$ が存在しないことを結論せよ．
+一方，射 $\Spec K\to\Spec A$ はちょうど一つであることを示し，その像の点を求めよ．
+
+\exprob{prob:ch12-3-2}
+$X=\Spec k[x,y]/(x^2,xy)$ とする．$X$ の位相空間を求め（ヒント：$\sqrt{(x^2,xy)}=(x)$），原点 $(x,y)$ と生成点 $(x)$ での茎を計算せよ．原点での Zariski 接空間の次元を求め，原点に「埋め込まれた点」があることを説明せよ．
+
+%=====================================================================
+\section{スキームの構成}
+%=====================================================================
+
+\subsection{アフィンスキームの貼り合わせ}
+
+射影多様体のように，一つの環のスペクトルとしては書けない空間を作るには，アフィンスキームを貼り合わせる．
+第11章 11.4.4 小節の層の貼り合わせと同じ考え方を，局所環付き空間に対して行う．
+
+\begin{myprop}{スキームの貼り合わせ}{ch12-gluing}
+スキーム $X_i$（$i\in I$），開集合 $U_{ij}\subset X_i$（$U_{ii}=X_i$），局所環付き空間の同型 $\varphi_{ij}\colon U_{ij}\xrightarrow{\sim}U_{ji}$ が与えられ，
+\begin{enumerate}
+  \item $\varphi_{ii}=\mathrm{id}$，
+  \item $\varphi_{ij}(U_{ij}\cap U_{ik})=U_{ji}\cap U_{jk}$ であり，$U_{ij}\cap U_{ik}$ 上で $\varphi_{ik}=\varphi_{jk}\circ\varphi_{ij}$（コサイクル条件）
+\end{enumerate}
+を満たすとする．このときスキーム $X$ と開埋め込み $\psi_i\colon X_i\hookrightarrow X$ で，$X=\bigcup_i\psi_i(X_i)$，$\psi_i(U_{ij})=\psi_i(X_i)\cap\psi_j(X_j)$，$U_{ij}$ 上 $\psi_i=\psi_j\circ\varphi_{ij}$ を満たすものが同型を除き一意に存在する．
+\end{myprop}
+
+構成は，位相空間として $\bigsqcup X_i$ を $x\sim\varphi_{ij}(x)$ で割り，構造層を第11章の層の貼り合わせで作ればよい．
+コサイクル条件は同値関係の推移律と層の貼り合わせ条件を保証する．
+
+\subsection{スキームの定義}
+
+\begin{mydef}{スキーム}{ch12-scheme}
+\textbf{スキーム}とは，局所環付き空間 $(X,\OO_X)$ であって，各点 $p\in X$ に開近傍 $U$ があり $(U,\OO_X|_U)$ がアフィンスキームと同型になるものをいう．
+スキームの\textbf{射}とは，局所環付き空間としての射である．
+\end{mydef}
+
+第11章 11.4.5 小節の言い方では，スキームとは「局所モデル $(\Spec R,\OO_{\Spec R})$ を貼り合わせた局所環付き空間」である．
+$C^\infty$ 多様体の局所モデルが一種類（$\R^n$ の開集合）であるのに対し，スキームの局所モデルは\emph{任意の可換環}であり，ここに圧倒的な一般性がある．
+
+\begin{myprop}{開部分スキーム}{ch12-open-sub}
+スキーム $X$ の開集合 $U$ に対し $(U,\OO_X|_U)$ はスキームである（\textbf{開部分スキーム}）．
+\end{myprop}
+\begin{proof}
+$p\in U$ のアフィン近傍 $\Spec R\cong V\subset X$ を取ると，$U\cap V$ は $\Spec R$ の開集合だから $p$ を含む基本開集合 $D(f)\subset U\cap V$ がある．命題~\ref{prop:ch12-Df-prop} 5 と定理~\ref{thm:ch12-structure-sheaf-thm} より $(D(f),\OO|_{D(f)})\cong\Spec R_f$ はアフィンである．
+\end{proof}
+
+アフィンスキームの開部分スキームはアフィンとは限らない．
+例えば $U=\A^2_k\setminus\{\text{原点}\}=D(x)\cup D(y)$ について，第11章の例と同じ計算（$k[x,y]_x\cap k[x,y]_y=k[x,y]$）により $\OO(U)=k[x,y]$．
+もし $U$ がアフィンなら $U\cong\Spec\OO(U)=\A^2_k$ となるが，原点の閉点が欠けているので矛盾．よって $U$ はアフィンでないスキームである．
+
+\subsection{スキームの基本例}
+
+\begin{myex}{射影直線 $\PP^1$}{ch12-P1}
+$k$ を環とし，$X_0=\Spec k[t]$，$X_1=\Spec k[s]$ と置く．
+$U_{01}=D(t)=\Spec k[t,t^{-1}]\subset X_0$，$U_{10}=D(s)=\Spec k[s,s^{-1}]\subset X_1$ とし，同型 $\varphi_{01}\colon U_{01}\xrightarrow{\sim}U_{10}$ を，環同型
+\[
+  k[s,s^{-1}]\xrightarrow{\ \sim\ }k[t,t^{-1}],\qquad s\mapsto t^{-1}
+\]
+に対応する射（定理~\ref{thm:ch12-anti-equiv}）として定める．この貼り合わせで得られるスキームを $\PP^1_k$ とよぶ．
+同次座標で言えば $t=z_1/z_0$，$s=z_0/z_1$ であり，第8章の $\PP^1$ のチャートと一致する．
+大域関数は，$X_0$ 上の $f(t)\in k[t]$ と $X_1$ 上の $g(s)\in k[s]$ で $f(t)=g(1/t)$ となる組だから，
+\[
+  \Gamma(\PP^1_k,\OO)=k[t]\cap k[t^{-1}]=k\qquad(k[t,t^{-1}]\text{ の中で}).
+\]
+$\Gamma=k$ なので $\PP^1_k$ はアフィンでない（アフィンなら $\Spec k$ = 一点になってしまう）．
+\end{myex}
+
+\begin{myex}{原点が二つある直線}{ch12-two-origins}
+$X_0=\Spec k[t]$，$X_1=\Spec k[s]$ を，同じ $D(t)\cong D(s)$ に沿って，今度は $t\mapsto s$ で貼り合わせる．
+得られるスキーム $X$ は「原点を除けば $\A^1$ と同じ」だが原点が二つ $0_0,0_1$ ある．
+$\Gamma(X,\OO)=k[t]\cap k[s]=k[t]$（$t=s$）であり，$X$ はアフィンでない．
+$X$ の二つの原点は，どんな開集合でも分離できない：$0_0$ と $0_1$ の任意の近傍は $\A^1\setminus\{0\}$ の空でない開集合を共有する．
+点列「$x_n=1/n\to0$」の極限が二つある状況であり，これは Hausdorff 性に代わるスキームの\textbf{分離性}（separatedness）が成り立たない例である．
+通常の代数多様体はこのような病的な貼り合わせを含まない（12.5.2 小節）．
+\end{myex}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+  \begin{scope}
+    \draw[thick] (-2.5,0.4) -- (2.5,0.4); \node[left] at (-2.5,0.4) {$X_0$};
+    \draw[thick] (-2.5,-0.4) -- (2.5,-0.4); \node[left] at (-2.5,-0.4) {$X_1$};
+    \fill (0,0.4) circle (2pt); \fill (0,-0.4) circle (2pt);
+    \foreach \a/\b in {0.5/2,1/1,2/0.5,-0.5/-2,-1/-1,-2/-0.5}{\draw[dashed,gray] (\a,0.35) -- (\b,-0.35);}
+    \node at (0,-1.1) {$\PP^1$：$s=1/t$（原点どうしは貼らない）};
+  \end{scope}
+  \begin{scope}[xshift=7cm]
+    \draw[thick] (-2.5,0) -- (-0.1,0);
+    \draw[thick] (0.1,0) -- (2.5,0);
+    \fill (0,0.25) circle (2pt) node[above] {$0_0$};
+    \fill (0,-0.25) circle (2pt) node[below] {$0_1$};
+    \node at (0,-1.1) {原点が二つある直線：$t\leftrightarrow s$};
+  \end{scope}
+\end{tikzpicture}
+\caption{二つの $\A^1$ の貼り合わせ方．左は $\PP^1$（$0$ と $\infty$ が両端に付く），右は原点が二つある直線．}
+\label{fig:ch12-gluing}
+\end{figure}
+
+\begin{myex}{射影空間}{ch12-Pn}
+同様に $\PP^n_k$ は $n+1$ 個のアフィン空間 $\Spec k[x_0/x_i,\dots,x_n/x_i]$ を，$x_j/x_i$ が可逆な部分で貼り合わせて得られる．
+より一般に，次数付き環 $S$ に対して $\Proj S$ が構成され，$\PP^n_k=\Proj k[x_0,\dots,x_n]$，射影多様体 $\Zero(I)\subset\PP^n$ には $\Proj k[x_0,\dots,x_n]/I$ が対応する（構成の詳細は省略する）．
+\end{myex}
+
+\subsection{射とスキームの同型}
+
+スキームの射 $f\colon X\to Y$ は局所環付き空間の射である．
+定理~\ref{thm:ch12-anti-equiv} の一般化として，任意のスキーム $X$ と環 $A$ に対し
+\begin{equation}\label{eq:ch12-hom-spec}
+  \Hom_{\mathrm{Sch}}(X,\Spec A)\ \cong\ \Hom_{\text{環}}(A,\Gamma(X,\OO_X))
+\end{equation}
+が成り立つ（$X$ をアフィン被覆して定理~\ref{thm:ch12-anti-equiv} を貼り合わせる）．
+同型とは逆射をもつ射のことであり，位相空間の同相と構造層の同型の組である．
+スキーム $S$ を固定し，射 $X\to S$ をもつスキームを \textbf{$S$ 上のスキーム}とよぶ．$S=\Spec k$ のとき $k$ スキームという．
+
+\paragraph{点の関手．}
+\eqref{eq:ch12-hom-spec} から，$k$ スキーム $X=\Spec k[x_1,\dots,x_n]/(f_1,\dots,f_m)$ と $k$ 代数 $A$ に対し
+\begin{align*}
+  X(A)&:=\Hom_{k}(\Spec A,X)=\Hom_{k\text{-alg}}\big(k[x]/(f),A\big)\\
+  &\cong\{a\in A^n\mid f_1(a)=\dots=f_m(a)=0\}
+\end{align*}
+となる．$A=k$（代数閉体）のとき，これは古典的な $\Zero(f_1,\dots,f_m)$ そのものである．
+$A$ を取り替えることで，「$\R$ 上の点」「$\F_p$ 上の点」などを統一的に扱える．
+これを\textbf{点の関手}（functor of points）とよぶ．
+
+\paragraph{接ベクトルは $k[\varepsilon]$ 値点である．}
+$A=k[\varepsilon]$（$\varepsilon^2=0$）を取ると，$a+\varepsilon v\in k[\varepsilon]^n$ が $X$ の点であるとは
+\[
+  f_i(a+\varepsilon v)=f_i(a)+\varepsilon\sum_j\frac{\partial f_i}{\partial x_j}(a)v_j=0
+  \iff f_i(a)=0,\ \ J(a)v=0
+\]
+（$J$ は Jacobi 行列）．すなわち
+\[
+  X(k[\varepsilon])=\{(a,v)\mid a\in X(k),\ v\in T_aX\}
+\]
+であり，$\Spec k[\varepsilon]\to X$ は\emph{点 $a$ とそこでの接ベクトル $v$ の組}にほかならない．
+接空間 $T_aX=\Ker J(a)$ は第7章の Zariski 接空間と一致する．
+この見方は，Jacobi 行列を使わない一般の場合（任意のスキーム，あるいはモジュライ空間）にも接空間を定義する方法を与える（12.6.1 小節）．
+
+\exprob{prob:ch12-4-1}
+$\PP^1_k$ の二つのアフィン片の貼り合わせで，$X_0$ 上の関数 $f(t)$ と $X_1$ 上の関数 $g(s)$ が $D(t)$ 上で $f(t)=t^n g(1/t)$ を満たす組（$n\ge0$）の全体が $k$ 上 $n+1$ 次元であることを示せ（これは第11章の $\OO(n)$ の大域切断である）．
+
+\exprob{prob:ch12-4-2}
+$X=\Spec k[x,y]/(y^2-x^3)$ の $k[\varepsilon]$ 値点で，$\varepsilon=0$ と置くと原点になるもの全体を求めよ．これを接空間の次元と曲線の次元の比較として解釈せよ（第7章の cusp）．
+
+%=====================================================================
+\section{古典的代数幾何との関係}
+%=====================================================================
+
+\subsection{古典的代数的集合からスキームへ}
+
+$k$ を代数閉体，$X=\Zero(I)\subset\A^n_k$ をアフィン代数的集合とし，$\Ideal(X)=\sqrt I$ とする．
+$X$ にはアフィンスキーム
+\[
+  X^{\mathrm{sch}}:=\Spec k[X]=\Spec k[x_1,\dots,x_n]/\Ideal(X)
+\]
+が対応する．Nullstellensatz（第4章）により，
+\begin{itemize}
+  \item $X$ の点 $a$ $\longleftrightarrow$ $X^{\mathrm{sch}}$ の閉点 $\m_a$．
+  \item $X$ の既約閉部分集合 $Z$ $\longleftrightarrow$ $X^{\mathrm{sch}}$ の点 $\Ideal(Z)/\Ideal(X)$（$Z$ の生成点）．
+\end{itemize}
+すなわち $X^{\mathrm{sch}}$ の点集合は「$X$ の既約閉部分集合全体」$t(X)$ であり，閉点だけ取れば元の $X$ に戻る．
+位相についても，$X$ の閉集合 $Z$ に対し $t(Z)\subset t(X)$ を閉集合とする位相が $X^{\mathrm{sch}}$ の Zariski 位相と一致する．
+さらに $X^{\mathrm{sch}}$ の開集合 $U$ 上の構造層の切断は，$U$ の閉点集合上の古典的な正則関数と一致する（第11章の基本開集合上の正則関数の定理と，本章の定理~\ref{thm:ch12-structure-sheaf-thm}）．
+
+逆に，スキーム側で $\Ideal(X)$ の代わりに $\sqrt{I}$ でない $I$ をそのまま使った $\Spec k[x]/I$ は，同じ点集合の上に非被約な構造を載せたものである．
+古典論は「被約化」$R\mapsto R/\mathrm{nil}(R)$ を常に施した理論と見ることができる：
+\[
+  (\Spec R)_{\mathrm{red}} := \Spec R/\mathrm{nil}(R)\hookrightarrow\Spec R
+\]
+は位相空間としては同相で，構造層からべき零元を除いたものである．
+
+\subsection{多様体とスキーム}
+
+\begin{mythm}{多様体とスキーム}{ch12-var-sch}
+$k$ を代数閉体とする．$X\mapsto X^{\mathrm{sch}}$（アフィン片ごとに上の構成を行い貼り合わせる）は，$k$ 上の代数多様体の圏から $k$ スキームの圏への忠実充満な関手を与える．
+その像は（多様体を準射影的なものに限れば）準射影的な整 $k$ スキームであり，抽象的な多様体まで含めれば\emph{$k$ 上有限型・分離的・整（被約かつ既約）}なスキームである．
+逆向きは，スキームの閉点全体に誘導位相と構造層の制限を与えることで得られる．
+\end{mythm}
+
+ここに現れる条件の意味は次のとおりである．
+\begin{itemize}
+  \item \textbf{有限型}：有限個の $\Spec k[x_1,\dots,x_n]/I$ で覆える．有限個の変数と方程式で書ける．
+  \item \textbf{分離的}：例~\ref{ex:ch12-two-origins} のような「原点が二つ」の病理がない．Hausdorff 性の代替．
+  \item \textbf{整}：各アフィン片の環が整域．被約（べき零元なし）かつ既約．
+\end{itemize}
+つまり古典的な多様体は，「良い」スキームの一クラスとして正確に埋め込まれる．
+特に，第5〜10章の結果はすべてスキーム論の言葉に翻訳でき，スキーム論は古典論を\emph{拡張}するものであって置き換えるものではない．
+
+閉点と生成点の役割をまとめておく．
+\begin{center}
+\begin{tabular}{lll}
+  \hline
+  スキームの点 & 古典論での対応物 & 剰余体（$X$ が $n$ 次元多様体のとき）\\
+  \hline
+  閉点 & 通常の点 & $k$\\
+  曲線の生成点 & 既約曲線 & $k$ 上の超越次数 $1$ の体\\
+  $X$ の生成点 & $X$ 全体（「一般の点」） & 関数体 $k(X)$（超越次数 $n$）\\
+  \hline
+\end{tabular}
+\end{center}
+
+\subsection{スキームが拡張する概念}
+
+スキーム論は古典論を少なくとも次の方向に拡張する．
+
+\paragraph{(1) 非被約構造．}
+$\Spec k[x]/(x^n)$ のような無限小の厚みをもつ対象．交わりの重複度，特異点の変形，族の極限（12.1.3 小節）を正確に扱う．
+
+\paragraph{(2) 任意の体・環の上の幾何．}
+$\Spec\R[x]$ のように代数閉でない体上の幾何を，閉点の剰余体の違いとして自然に扱う．
+$\Spec\Z$ 上のスキーム（算術スキーム）は数論を幾何学的に扱う舞台である．
+例えば $\A^1_\Z=\Spec\Z[x]$ は $\Spec\Z$ 上の「直線の族」で，点 $(p)$ 上のファイバーは $\Spec\F_p[x]$，生成点上のファイバーは $\Spec\Q[x]$ である．
+Mumford の宝の地図はこの二次元のスキームを描いたものである．
+
+\paragraph{(3) 相対的な視点と族．}
+射 $X\to S$ を「$S$ の点でパラメトライズされた族」とみなす．
+例えば $\Spec k[x,t]/(x^2-t)\to\Spec k[t]$ の各点 $t=c$ 上のファイバーは $\Spec k[x]/(x^2-c)$ で，$c\ne0$ で 2 点，$c=0$ で二重点となる（12.1.3 小節）．
+ファイバーを全て一つのスキームとして扱えるので，「族の極限」が自然に定義される．
+
+\paragraph{(4) 交わりと積．}
+ファイバー積 $X\times_SY$ により，交わり・積・逆像が統一的に定義される．
+二つの部分スキームの交わりは常にスキームとして意味をもち，その「大きさ」（長さ）が交点数を与える（第9章の重複度の内在的な定義）．
+
+\subsection{スキームの数学的意義}
+
+スキーム論は 1950〜60 年代に Grothendieck らにより整備され，代数幾何学の標準的な言語となった．
+その意義を代表的な成果とともに挙げると：
+\begin{itemize}
+  \item 幾何と数論の統一：有限体上の多様体の点の個数に関する Weil 予想の解決（Deligne）は，スキームとそのコホモロジー（エタールコホモロジー）の理論の上に成り立っている．
+  \item モジュライ理論：曲線のモジュライ，ベクトル束のモジュライ，Hilbert スキームなど，「幾何学的対象を分類する空間」がスキーム（あるいはその一般化）として構成された．
+  \item 変形理論：$k[\varepsilon]$ やより一般の Artin 局所環上の族を考えることで，対象の無限小変形と障害が代数的に扱えるようになった．
+\end{itemize}
+これらはいずれも，べき零元と一般の環の上の幾何学を許したことによって初めて可能になった．
+
+\exprob{prob:ch12-5-1}
+$X=\Zero(xy)\subset\A^2_k$（$k$ 代数閉）について，$X^{\mathrm{sch}}=\Spec k[x,y]/(xy)$ の点を全て分類せよ（閉点，二本の直線の生成点）．$X^{\mathrm{sch}}$ は既約か，被約か．
+
+%=====================================================================
+\section{スキーム論と物理}
+%=====================================================================
+
+本節では，物理においてスキーム論的な考え方がどこで必要になるかを，誇張を避けて述べる．
+物理の多くの計算は滑らかな多様体の上で完結しており，スキーム論が\emph{必須}になる場面は限られる．
+しかし以下の状況では，べき零元や非被約構造を無視すると正しい答えが得られない．
+
+\subsection{スキームの物理的必要性}
+
+\paragraph{(1) 真空のスキームと質量ゼロの場．}
+超対称な理論で，複素スカラー場 $\phi$ の超ポテンシャル $W(\phi)$ が与えられると，超対称真空は F 項条件 $\partial W/\partial\phi=0$ の解である．
+最も簡単な例として 1 変数の
+\[
+  W(x)=x^3
+\]
+を考える．古典的な真空の集合は $\Zero(3x^2)=\{0\}$ の一点である．しかし真空を「方程式 $W'=0$ で定まるスキーム」とみなすと
+\[
+  \Spec\C[x]/(W') = \Spec\C[x]/(x^2)
+\]
+という二重点になる．この二重点構造は次の二つの物理的情報を正しく記録している．
+\begin{itemize}
+  \item \textbf{質量ゼロのゆらぎ}：真空 $x=0$ での質量は $W''(0)=0$ であり，ゆらぎは 2 次では質量をもたない．
+  これは二重点の Zariski 接空間が 1 次元であることに対応する（12.3.4 小節）．
+  しかしこの平坦方向は 3 次の項で持ち上がり，真のモジュライ（連続な真空の族）にはならない．
+  \emph{接空間の次元（質量ゼロの場の数）と実際のモジュライの次元（$0$）のずれ}が，非被約構造として現れている．
+  \item \textbf{真空の数}：$W=x^3-3tx$ と変形すると $W'=3(x^2-t)$ で，$t\ne0$ では二つの孤立した質量をもつ真空 $x=\pm\sqrt t$ がある．
+  Landau--Ginzburg 模型の Witten 指数は Jacobi 環 $\C[x]/(W')$ の次元で与えられ，$W=x^3$ の場合は $2$ であることが知られている．
+  古典的な真空の「集合」は 1 点だが，Witten 指数を正しく数えるのは $\C[x]/(x^2)$ の次元 $2$ である．
+\end{itemize}
+これは 12.1.3 小節の「2 点が合流して二重点になる」現象そのものである．
+
+\paragraph{(2) 変形理論と $k[\varepsilon]$．}
+12.4.4 小節で見たように，スキーム $M$ の $k[\varepsilon]$ 値点はその接ベクトルである．
+物理で現れるモジュライ空間（真空のモジュライ，コンパクト化の複素構造のモジュライ，ゲージ場の配位のモジュライなど）では，$M$ を方程式で直接書き下せないことが多いが，
+「$k[\varepsilon]$ 上の族」すなわち\emph{1 次の無限小変形}は線形化された方程式を解けば求まる．
+例えば複素多様体 $X$ の複素構造の 1 次変形は $H^1(X,T_X)$ で与えられ，
+2 次以上への延長の障害は $H^2(X,T_X)$ に住む（第16章）．
+物理の言葉でいえば，1 次変形は「質量ゼロのモジュライ場の候補」であり，障害は「高次の相互作用（超ポテンシャル）によって持ち上がる平坦方向」に対応する．
+(1) の例はこの構造の最も簡単なモデルである．
+
+\paragraph{(3) モジュライ空間は一般にスキームであり，さらにスタックである．}
+上の考察から，モジュライ空間は一般に特異点や非被約構造をもち，滑らかな多様体ではない．
+例えば変形が障害をもつとき，モジュライ空間は「接空間より次元の低い」特異なスキームになる．
+さらに，分類する対象が自己同型をもつ場合（例えばゲージ群の非自明な安定化部分群をもつ配位），モジュライ空間はスキームでさえなく，\textbf{スタック}という一般化が必要になる．
+これはゲージ理論で「ゲージ群が自由に作用しない点で商空間が特異になる」現象の代数幾何的な取り扱いである．
+モジュライ空間については第16章で詳しく扱う．
+
+\subsection{幾何学的構造の拡張}
+
+\paragraph{D-brane と重複構造．}
+$N$ 枚の D-brane が重なると，その上のゲージ群は $U(N)$ に拡大し，横方向の位置はスカラー場 $X^i$ という\emph{$N\times N$ 行列}になる．
+超対称性をもつ典型的な設定では，二つの複素方向 $X,Y$ に対して F 項条件
+\[
+  [X,Y]=0
+\]
+が課され，真空は可換な行列の組を（複素化された）ゲージ群 $\GL(N,\C)$ の作用で割ったもの（適当な安定性条件の下で）として記述されることが多い．
+$X,Y$ が同時対角化可能なら，固有値の組 $(x_a,y_a)$（$a=1,\dots,N$）が $N$ 枚の brane の位置を与える．
+しかし可換な行列は同時対角化可能とは限らない．例えば
+\[
+  X=\begin{pmatrix}0&1\\0&0\end{pmatrix},\qquad Y=0
+\]
+は可換だが対角化できない．このとき $\C^2$ は $f(x,y)\mapsto f(X,Y)$ によって $\C[x,y]$ 加群となり，$x$ は非零のべき零として，$y$ は $0$ として作用する．
+ベクトル $e_2$ が巡回ベクトルであることから，この加群は $\C[x,y]/(x^2,y)$ と同型であり，
+「2 枚の brane が原点に，$x$ 方向の無限小のずれを伴って重なっている」状態は\emph{二重点 $\Spec\C[x,y]/(x^2,y)$} として記述される．
+
+巡回ベクトルを付加したこのような行列の組のモジュライは，$\C^2$ 上の長さ $N$ の 0 次元部分スキームのモジュライである Hilbert スキーム $\mathrm{Hilb}^N(\C^2)$（$\C[x,y]$ の余次元 $N$ のイデアル全体）と同型であることが知られている（中島啓）．
+$\mathrm{Hilb}^N(\C^2)$ は $2N$ 次元の滑らかな多様体で，$N$ 点の配置空間 $\mathrm{Sym}^N(\C^2)$ の特異点解消を与え，物理的には非可換 $\R^4$ 上の $U(1)$ インスタントンのモジュライとも関係する．
+ここで重要なのは，滑らかなモジュライ空間の点が\emph{非被約な}部分スキームに対応していることである．
+「点が重なった極限」を正しく扱うと，それは単なる重複した点の集合ではなくスキームになる．
+
+\paragraph{非可換性との関係．}
+上の議論は，可換な行列の組がちょうど $\C[x,y]$ 加群（$\Spec\C[x,y]$ 上の 0 次元の連接層）と同じものであることに基づいている．
+一般の（非可換な）行列の組まで許すと，対応する「空間」はもはや可換環のスペクトルでは記述できず，非可換幾何の領域に入る．
+スキーム論はこの意味で，「行列が可換である」範囲での D-brane の幾何を正確に扱う言葉を提供している．
+
+\subsection{弦理論における代数幾何の現代的言語}
+
+現代の弦理論・数理物理で用いられる代数幾何の言葉の多くは，スキーム論の上に構築されている．代表的なものを挙げる（詳細は第15〜17章）．
+\begin{itemize}
+  \item \textbf{Calabi--Yau 多様体とそのモジュライ}（第15・16章）：複素構造の変形は $H^1(X,T_X)$ で，その非障害性（Bogomolov--Tian--Todorov の定理）は変形理論の言葉で述べられる．
+  \item \textbf{B 型 D-brane と連接層}（第17章）：トポロジカル B 模型の D-brane は，部分多様体上のベクトル束を一般化した連接層，さらにはその導来圏の対象として記述されるという見方が標準的である．連接層は（非被約なものを含む）部分スキームの構造層を自然に含む．
+  \item \textbf{数え上げ不変量}：Gromov--Witten 不変量や Donaldson--Thomas 不変量は，曲線や層のモジュライ空間上の積分として定義される．モジュライ空間は一般に特異で期待次元と実際の次元が異なるため，障害理論を用いた仮想基本類の構成が必要になり，これはスキーム（スタック）論的な変形理論に基づく．Donaldson--Thomas 不変量の場合，数え上げられるのは Calabi--Yau 3 次元多様体内の（非被約なものを含む）部分スキームそのものである．
+  \item \textbf{F 理論}（第17章）：楕円ファイバー空間の Weierstrass 模型は，底空間上の相対的なスキームとして扱うのが自然であり，特異ファイバーの型がゲージ群を決める．
+\end{itemize}
+いずれの場合も，物理的に意味のある量（ゼロモードの数，D-brane の電荷，BPS 状態の数）が，層のコホモロジーや非被約構造を含むモジュライ空間の性質として表現される．
+本章の内容は，これらの話題に進むための最低限の語彙を与えるものである．
+
+\begin{physbox}[まとめ：物理学者にとってのスキーム]
+\begin{itemize}
+  \item 「$\epsilon^2=0$ として 1 次まで計算する」操作は $\Spec k[\varepsilon]$ への写像，すなわち接ベクトルを考えることである．
+  \item 方程式の解の「集合」でなく「方程式そのもの」（環）を記憶することで，重複度・質量ゼロの方向・合流の仕方が失われない．
+  \item モジュライ空間は一般に特異で非被約であり，自己同型があればスタックになる．物理的な平坦方向と真のモジュライの区別はこの構造に反映される．
+\end{itemize}
+\end{physbox}
+
+\exprob{prob:ch12-6-1}
+超ポテンシャル $W(x,y)=x^3+y^3$ について，Jacobi 環 $\C[x,y]/(\partial_xW,\partial_yW)$ の $\C$ 上の次元を求めよ．
+また $W_t=x^3+y^3-t(x+y)$（$t\ne0$）に変形したとき，F 項条件の解の個数が Jacobi 環の次元と一致することを確かめよ．
+
+\section*{問題の解答}
+\addcontentsline{toc}{section}{問題の解答}
+
+\exsol{prob:ch12-1-1}
+$y\equiv x^2$ を代入すると $y-tx\equiv x^2-tx$ なので，
+\[
+  k[x,y]/I_t\ \cong\ k[x]/(x^2-tx)=k[x]/\bigl(x(x-t)\bigr)
+\]
+（$y\mapsto x^2$）．$k[x]/(x^2-tx)$ は $1,\bar x$ を基底とするので，全ての $t$ について $\dim_k k[x,y]/I_t=2$ である．
+
+\textbf{零点集合．}$\Zero(I_t)$ は $y=x^2$ かつ $x^2=tx$，すなわち $x=0$ または $x=t$．
+\begin{itemize}
+  \item $t\neq0$：$\Zero(I_t)=\{(0,0),\ (t,t^2)\}$ の2点（放物線と原点を通る傾き $t$ の直線の2交点）．このとき中国剰余定理より $k[x]/(x(x-t))\cong k\times k$ で，2点上の関数環である．
+  \item $t=0$：$\Zero(I_0)=\{(0,0)\}$ の1点（直線 $y=0$ は原点で放物線に接する）．
+\end{itemize}
+点の個数は $2\to1$ と変わるが，環の次元は $2$ のままであり，$t\to0$ で2交点が合流した重複度が環に記録されている．
+
+\textbf{$t=0$ のときのべき零元．}$k[x,y]/I_0\cong k[x]/(x^2)=k[\varepsilon]$（$\varepsilon=\bar x$，このとき $\bar y=\varepsilon^2=0$）．
+$a+b\varepsilon$（$a,b\in k$）について $(a+b\varepsilon)^n=a^n+na^{n-1}b\varepsilon$ なので，べき零 $\iff a=0$．
+よってべき零元全体は
+\[
+  \mathrm{nil}\bigl(k[x,y]/I_0\bigr)=\{\,b\bar x\mid b\in k\,\}=k\bar x
+\]
+であり，$x$ 方向（接線 $y=0$ の方向）を向いた二重点を表している．
+
+\exsol{prob:ch12-2-1}
+$\pi:\Spec\Z[i]\to\Spec\Z$，$\q\mapsto\q\cap\Z$ は包含 $\Z\hookrightarrow\Z[i]$ に対応する写像である．
+$(p)$ の逆像は $p$ を含む $\Z[i]$ の素イデアル全体であり，$\Z[i]/(p)$ の素イデアルと対応する．$\Z[i]\cong\Z[x]/(x^2+1)$ より
+\[
+  \Z[i]/(p)\cong\F_p[x]/(x^2+1)
+\]
+である．
+
+\textbf{$(2)$：分岐．}$\F_2[x]/(x^2+1)=\F_2[x]/\bigl((x+1)^2\bigr)$ の素イデアルは $(x+1)$ のみ．対応して $\pi^{-1}((2))=\{(1+i)\}$ の1点．
+実際 $\Z[i]/(1+i)\cong\F_2$（$i\equiv-1$）なので $(1+i)$ は素イデアルで，$2=-i(1+i)^2$ より $2\Z[i]=(1+i)^2$．
+ファイバー $\Spec\F_2[x]/((x+1)^2)$ は1点だが非被約（二重点）であり，2点が合流している．
+
+\textbf{$(3)$：惰性．}$-1$ は $\F_3$ で平方でない（$0^2,1^2,2^2=0,1,1$）ので $x^2+1$ は $\F_3$ 上既約で，$\F_3[x]/(x^2+1)\cong\F_9$ は体．
+よって $(3)$ は $\Z[i]$ でも素イデアルで，$\pi^{-1}((3))=\{(3)\}$ の1点．ただし剰余体は $\F_9$ で，$\kappa((3))=\F_3$ の2次拡大である．ファイバーは被約な1点だが「剰余体の次数2」として2を担う．
+
+\textbf{$(5)$：分解．}$x^2+1\equiv(x-2)(x+2)\pmod 5$ なので $\F_5[x]/(x^2+1)\cong\F_5\times\F_5$（中国剰余定理）．
+対応して $\pi^{-1}((5))=\{(2+i),\ (2-i)\}$ の2点で，剰余体はともに $\F_5$．$5=(2+i)(2-i)$ であり，$(2-i)/(2+i)=(2-i)^2/5=(3-4i)/5\notin\Z[i]$ なので2つのイデアルは異なる．
+（なお生成点 $(0)$ の逆像は $(0)$ のみで，剰余体の拡大は $\Q(i)/\Q$，次数2である．）
+
+\textbf{$\Spec\C[z]\to\Spec\C[w]$，$w=z^2$ との比較．}閉点 $w=a$ のファイバーは $\Spec\C[z]/(z^2-a)$ である．
+\begin{itemize}
+  \item $a\neq0$：$\C[z]/(z^2-a)\cong\C\times\C$，2点 $z=\pm\sqrt a$（\textbf{分解}，$(5)$ に対応）．
+  \item $a=0$：$\C[z]/(z^2)$，二重点（\textbf{分岐}，$(2)$ に対応）．
+\end{itemize}
+$\C$ は代数閉なので閉点の剰余体はすべて $\C$ であり，\textbf{惰性}（$(3)$ のような剰余体の拡大）は起こらない．
+いずれの場合もファイバーの「大きさ」は一定で，各点の分岐指数 $e$ と剰余体の次数 $f$ について $\sum ef=2$（拡大次数）が成り立つ：
+\[
+  (2):\ e=2,f=1;\qquad (3):\ e=1,f=2;\qquad (5):\ 1\cdot1+1\cdot1=2;\qquad a=0:\ e=2;\qquad a\neq0:\ 1+1.
+\]
+$\Spec\Z[i]\to\Spec\Z$ は「2重被覆」であり，$(2)$ が唯一の分岐点（$w=0$ の類似）である．数論的な点では，代数閉でない剰余体のために第3の可能性（惰性）が加わる．
+
+\exsol{prob:ch12-2-2}
+\textbf{$\Spec R$．}$x^2-x=x(x-1)$．$R$ の素イデアルは $x(x-1)$ を含む $k[x]$ の素イデアルに対応する．$k[x]$ は PID なので，そのような素イデアルは $x(x-1)$ の既約因子で生成される $(x)$ と $(x-1)$ に限る（$(0)$ は $x(x-1)$ を含まない）．
+よって $\Spec R=\{(\bar x),\ (\overline{x-1})\}$ の2点で，どちらも極大イデアル（$R/(\bar x)\cong k$）なので閉点，位相は離散位相である．
+
+\textbf{$R\cong k\times k$．}$(x)+(x-1)=k[x]$（$1=x-(x-1)$）なので中国剰余定理により
+\[
+  R=k[x]/(x(x-1))\xrightarrow{\ \sim\ }k[x]/(x)\times k[x]/(x-1)=k\times k,\qquad f\mapsto(f(0),f(1)).
+\]
+逆写像は $(\alpha,\beta)\mapsto\alpha(1-\bar x)+\beta\bar x$．$\bar x$ は $\bar x^2=\bar x$ を満たす冪等元で，$(0,1)$ に対応する．
+
+\textbf{一般の場合．}$e=(1,0)$，$e'=(0,1)\in A\times B$ とすると $e+e'=1$，$ee'=0$，$e^2=e$，$e'^2=e'$．
+
+(i) \emph{素イデアルの決定}．$A\times B$ のイデアル $J$ は $J=eJ+e'J$ であり，$eJ=I\times0$，$e'J=0\times I'$（$I,I'$ はそれぞれ $A,B$ のイデアル）なので $J=I\times I'$ の形である．
+$(A\times B)/(I\times I')\cong A/I\times B/I'$ が整域であるのは，一方が零環で他方が整域のときに限る（両方が零でなければ $(1,0)(0,1)=0$ が零因子）．
+よって素イデアルは $\p\times B$（$\p\in\Spec A$）または $A\times\q$（$\q\in\Spec B$）のいずれかであり，これらは重複しない．
+
+(ii) \emph{位相}．射影 $\mathrm{pr}_A:A\times B\to A$ に対応する連続写像 $\iota_A:\Spec A\to\Spec(A\times B)$ は $\p\mapsto\mathrm{pr}_A^{-1}(\p)=\p\times B$ であり，その像は $e'$ を含む素イデアル全体 $V(e')$ である．同様に $\iota_B$ の像は $V(e)$．
+(i) より $\Spec(A\times B)=V(e')\sqcup V(e)$（交わらない和）で，両者は閉集合，したがって互いの補集合として開集合でもある．
+さらに $\iota_A$ は $V(e')$ への同相写像である：単射は明らかで，閉集合について $\iota_A(V(I))=\{\p\times B\mid\p\supset I\}=V(I\times B)\cap V(e')$ なので閉集合を閉集合に写す（全射閉連続単射は同相）．
+以上より
+\[
+  \Spec(A\times B)\ \cong\ \Spec A\sqcup\Spec B
+\]
+（非交和の位相）．とくに $R\cong k\times k$ に適用すると $\Spec R\cong\Spec k\sqcup\Spec k$ で，上の直接計算と一致する．
+これは本文の表の「非交和 $\leftrightarrow$ 直積」であり，冪等元 $e$ は「一方の成分で $1$，他方で $0$」という局所定数関数である．
+
+\exsol{prob:ch12-3-1}
+\textbf{$K\to A$ は存在しない．}環準同型 $\varphi:\Q\to\Z_{(p)}$ があったとすると，$\varphi(1)=1$ より $\varphi(p)=p$ であり，$\varphi(1/p)\cdot p=\varphi(1)=1$ なので $p$ は $\Z_{(p)}$ の単元になる．
+しかし $p\cdot(a/b)=1$（$p\nmid b$）とすると $pa=b$ となり $p\mid b$ に矛盾する．よって $\Hom_{\text{環}}(K,A)=\emptyset$．
+定理\ref{thm:ch12-anti-equiv}より
+\[
+  \Hom_{\text{局所環付き空間}}(\Spec A,\Spec K)\cong\Hom_{\text{環}}(K,A)=\emptyset
+\]
+なので，局所環付き空間の射 $\Spec A\to\Spec K$ は存在しない．
+（位相空間としての写像は2点から1点への定値写像として存在するが，構造層の射 $K=\OO_{\Spec K}(\Spec K)\to\OO_{\Spec A}(\Spec A)=A$ が存在しない．）
+
+\textbf{$\Spec K\to\Spec A$ はちょうど1つ．}定理\ref{thm:ch12-anti-equiv}より $\Hom(\Spec K,\Spec A)\cong\Hom_{\text{環}}(A,K)$．
+環準同型 $\psi:\Z_{(p)}\to\Q$ は $\Z$ 上で恒等写像（$\psi(1)=1$ から）であり，$p\nmid b$ なる $b$ について $\psi(b)=b$ は $\Q$ で可逆なので
+\[
+  \psi(a/b)=\psi(a)\psi(b)^{-1}=a/b.
+\]
+よって $\psi$ は包含写像 $\Z_{(p)}\hookrightarrow\Q$ に限り，射 $\Spec K\to\Spec A$ はただ1つである．
+
+\textbf{像の点．}$\Spec K$ の唯一の点 $(0)$ の像は $\psi^{-1}((0))=(0)\cap\Z_{(p)}=(0)$，すなわち\textbf{生成点} $\eta$ である．
+本文の例で見た「$\Spec K$ を閉点 $s$ に送る」環付き空間の射は，閉点での茎の写像が局所準同型でないため排除され，局所環付き空間の射としては生成点に送るものしか残らない．
+幾何学的には，$\Spec\Q$ は「$\Spec\Z_{(p)}$ の一般の点」であり，$p$ で割れる世界から $p$ を可逆にした世界への埋め込み（開埋め込み $\{\eta\}\hookrightarrow\Spec A$）である．
+
+\exsol{prob:ch12-3-2}
+$R=k[x,y]/(x^2,xy)$，$I=(x^2,xy)$ とし，$k$ は代数閉体とする．
+
+\textbf{位相空間．}素イデアル $\p\supset I$ は $x^2\in\p$ より $x\in\p$ を満たす．逆に $(x)\supset I$ である．したがって $I$ を含む素イデアルと $(x)$ を含む素イデアルは一致し，$\sqrt I=(x)$．
+よって $\Spec R\to\Spec R/\mathrm{nil}(R)=\Spec k[x,y]/(x)\cong\Spec k[y]$ は同相であり，$X$ の位相空間はアフィン直線（$y$ 軸）である：
+\[
+  \text{閉点 }(x,\ y-b)\ (b\in k),\qquad \text{生成点 }(x).
+\]
+
+\textbf{生成点 $(x)$ での茎．}$y\notin(x)$ なので $R_{(x)}$ では $y$ が単元であり，$xy=0$ から $x=xy\cdot y^{-1}=0$．よって
+\[
+  \OO_{X,(x)}=k[x,y]_{(x)}/(x^2,xy)=k[x,y]_{(x)}/(x)\cong k(y)
+\]
+であり，被約（体）である．同様に $b\neq0$ の閉点 $(x,y-b)$ でも $y$ が単元なので $\OO_{X,(x,y-b)}\cong k[y]_{(y-b)}$ で被約である．
+
+\textbf{原点 $(x,y)$ での茎．}$\OO_{X,0}=k[x,y]_{(x,y)}/(x^2,xy)$．ここで $\bar x\neq0$ である：もし $s\notin(x,y)$ で $sx\in(x^2,xy)=x(x,y)$ なら，$k[x,y]$ は整域なので $s\in(x,y)$ となり矛盾．
+一方 $\bar x^2=0$，$\bar x\bar y=0$ なので $\bar x$ は非零のべき零元で，極大イデアル $\m=(\bar x,\bar y)$ によって消される：$\m\bar x=0$．
+すなわち $\mathrm{nil}(\OO_{X,0})=(\bar x)\neq0$ であり，\emph{原点でだけ}べき零元が現れる．
+
+\textbf{Zariski 接空間．}$\m=(x,y)/I$，$\m^2=(x^2,xy,y^2)/I$ なので
+\[
+  \m/\m^2\cong(x,y)/(x^2,xy,y^2)=k\bar x\oplus k\bar y,
+\]
+よって $\dim T_0X=2$ である．一方 $X$ の次元は $1$（$y$ 軸）で，原点以外の閉点では接空間は1次元（$y$ 方向）である．
+
+\textbf{埋め込まれた点．}$I$ は
+\[
+  (x^2,xy)=(x)\cap(x^2,y)
+\]
+と準素分解される（$f=xg\in(x^2,y)$ なら $g\in(x,y)$ となるので $f\in x(x,y)=I$）．
+$(x)$ は直線 $y$ 軸，$(x^2,y)$ は原点に台をもつ $x$ 方向の二重点 $\Spec k[x,y]/(x^2,y)$ を表し，その根基 $(x,y)$ は $(x)$ を含む．すなわち二重点の台（原点）は直線の中に「埋め込まれて」いる．
+位相空間としては直線と区別できないが，構造層は原点で $x$ 方向に無限小の厚みをもつ．これが原点の\textbf{埋め込まれた点}であり，茎のべき零元 $\bar x$ と，余分な接方向 $\partial/\partial x$（$\dim T_0X=2$）として検出される．
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \draw[-{Stealth},gray] (-2,0) -- (2,0) node[right] {$x$};
+  \draw[very thick,blue!70!black] (0,-1.8) -- (0,1.8) node[above] {$V(x)$：$y$ 軸};
+  \fill[red!70!black] (0,0) circle (2.2pt);
+  \draw[red!70!black,very thick,-{Stealth}] (0,0) -- (0.8,0);
+  \node[red!70!black,below right,font=\small] at (0.1,-0.05) {埋め込まれた二重点 $(x^2,y)$};
+\end{tikzpicture}
+\end{center}
+
+\exsol{prob:ch12-4-1}
+$g(s)=\sum_{j\ge0}b_js^j\in k[s]$（有限和）とすると，$k[t,t^{-1}]$ の中で
+\[
+  t^ng(1/t)=\sum_{j\ge0}b_jt^{\,n-j}.
+\]
+これが $f(t)\in k[t]$ に等しいためには，負べきの係数が消えること，すなわち $j>n$ で $b_j=0$ が必要十分である（$k[t,t^{-1}]$ で $t$ のべきは一次独立）．
+このとき $f(t)=\sum_{j=0}^nb_jt^{n-j}$ は $g$ から一意に決まる．したがって条件を満たす組 $(f,g)$ の全体は
+\[
+  \{(f,g)\}\ \xrightarrow{\ \sim\ }\ \{g\in k[s]\mid\deg g\le n\},\qquad (f,g)\mapsto g
+\]
+と $k$ 線形同型であり，$k$ 上 $n+1$ 次元で，基底は $(t^{n-j},\ s^j)$（$j=0,\dots,n$）である．
+同次座標 $t=z_1/z_0$，$s=z_0/z_1$ で書くと，$n$ 次同次多項式 $F(z_0,z_1)$ に対し $f=F/z_0^n$，$g=F/z_1^n$ と置けば $f(t)=t^ng(1/t)$ が成り立ち，この組全体は $n$ 次同次多項式の空間 $\{F\}$（次元 $n+1$）と同一視される．
+例えば $F=z_0^{n-j}z_1^j$ には $f=t^j$，$g=s^{n-j}$ が対応する．
+これは例\ref{ex:ch12-P1}の $n=0$ の場合（$\Gamma(\PP^1_k,\OO)=k$）の一般化であり，第11章の直線束 $\OO(n)$（遷移関数 $z^n$）の大域切断の計算 $\dim\Gamma(\PP^1,\OO(n))=n+1$ をスキームの言葉で行ったものである．
+
+\exsol{prob:ch12-4-2}
+$k[\varepsilon]$ 値点は $(a+\varepsilon u,\ b+\varepsilon v)\in k[\varepsilon]^2$ で $y^2-x^3=0$ を満たすものである．$\varepsilon^2=0$ より
+\[
+  (b+\varepsilon v)^2-(a+\varepsilon u)^3=(b^2-a^3)+\varepsilon\,(2bv-3a^2u).
+\]
+$\varepsilon=0$ と置いて原点になるもの，すなわち $a=b=0$ のとき，これは $(\varepsilon v)^2-(\varepsilon u)^3=0$ となり，$u,v$ に関係なく成り立つ．したがって
+\[
+  \{\,X(k[\varepsilon])\text{ の点で原点の上にあるもの}\,\}=\{(\varepsilon u,\ \varepsilon v)\mid (u,v)\in k^2\}\cong k^2
+\]
+であり，原点での接空間 $T_0X$ は2次元（全方向）である．
+
+これに対し，原点以外の点 $(a,b)\in X$ では条件 $2bv-3a^2u=0$ は非自明な1次式（$\mathrm{char}\,k\neq2,3$ なら $(a,b)\neq(0,0)$ で $(-3a^2,2b)\neq0$）なので，接空間は1次元である．
+曲線 $X$ の次元は $1$ なので，
+\[
+  \dim T_0X=2>1=\dim X
+\]
+となり，原点は特異点である（第7章の尖点：Jacobi 行列 $(-3x^2,\ 2y)$ が原点で $0$ になる）．
+$k[\varepsilon]$ 値点は「1次の無限小の動き」であり，原点では $y^2-x^3$ が2次以上の項しかもたないため，1次の近似ではどの方向への動きも許される．
+実際に曲線に沿って動ける方向（接錐）は $y^2=0$，すなわち $x$ 方向のみであり，接空間の次元と実際の次元のずれが特異性を表している．
+
+\exsol{prob:ch12-5-1}
+$R=k[x,y]/(xy)$ の素イデアルは，$xy$ を含む $k[x,y]$ の素イデアルに対応する．例\ref{ex:ch12-points-kxy}より $k[x,y]$ の素イデアルは $(0)$，$(f)$（$f$ 既約），$(x-a,y-b)$ の三種類である．
+\begin{itemize}
+  \item $(0)$ は $xy$ を含まない．
+  \item $(f)\ni xy\iff f\mid xy\iff f\sim x$ または $f\sim y$（UFD）．よって $(x)$ と $(y)$．
+  \item $(x-a,y-b)\ni xy\iff ab=0$．
+\end{itemize}
+したがって $X^{\mathrm{sch}}$ の点は次のとおりである．
+\begin{itemize}
+  \item \textbf{閉点}：$(x,\ y-b)$（$b\in k$，$y$ 軸上の点 $(0,b)$）と $(x-a,\ y)$（$a\in k$，$x$ 軸上の点 $(a,0)$）．原点 $(x,y)$ は両方に共通に1回現れる．これらは古典的な $X=\Zero(xy)$ の点と一対一に対応する．
+  \item \textbf{生成点}：$(y)$（$x$ 軸 $\{y=0\}$ の生成点，閉包は $x$ 軸全体）と $(x)$（$y$ 軸の生成点）．
+\end{itemize}
+$R$ は整域でないので $(0)$ は素イデアルでなく，$X$ 全体の生成点は存在しない．
+
+\textbf{既約性．}$X^{\mathrm{sch}}=V(x)\cup V(y)$ であり，$V(x)\not\ni(y)$，$V(y)\not\ni(x)$ なので両者は真の閉集合である．よって \textbf{既約でない}（2つの既約成分 $V(x)$，$V(y)$ をもち，それぞれの生成点が $(x)$，$(y)$）．
+代数的には $\bar x\bar y=0$，$\bar x,\bar y\neq0$ で $R$ は整域でない．
+
+\textbf{被約性．}$f^n\in(xy)$ とすると，$x$ は素元なので $x\mid f^n$ から $x\mid f$，同様に $y\mid f$．$x,y$ は互いに素なので $xy\mid f$．よって $(xy)$ は根基イデアルで，$R$ は \textbf{被約である}．
+すなわち $X^{\mathrm{sch}}$ は被約だが既約でない（したがって整ではない）スキームであり，定理\ref{thm:ch12-var-sch}の意味の「多様体」ではなく，2本の直線という2つの多様体の和である．
+
+\exsol{prob:ch12-6-1}
+\textbf{Jacobi 環．}$\partial_xW=3x^2$，$\partial_yW=3y^2$ なので
+\[
+  \mathrm{Jac}(W)=\C[x,y]/(x^2,y^2)
+\]
+である．単項式 $x^iy^j$ のうち $x^2,y^2$ で割り切れないのは $1,\ x,\ y,\ xy$ のみで，これらが基底をなす（$\C[x]/(x^2)\otimes\C[y]/(y^2)$）．よって
+\[
+  \dim_\C\mathrm{Jac}(W)=4.
+\]
+古典的な真空（F 項条件の解）は原点1点だけだが，Jacobi 環は4次元であり，原点は「4重の真空」である．
+
+\textbf{変形 $W_t$．}$W_t=x^3+y^3-t(x+y)$ の F 項条件は
+\[
+  \partial_xW_t=3x^2-t=0,\qquad \partial_yW_t=3y^2-t=0
+\]
+で，$t\neq0$ なら $x=\pm\sqrt{t/3}$，$y=\pm\sqrt{t/3}$ が独立に取れるので，解は
+\[
+  (x,y)=\bigl(\pm\sqrt{t/3},\ \pm\sqrt{t/3}\bigr)\qquad(\text{複号任意})
+\]
+の \textbf{4個}（$t\neq0$ より互いに異なる）である．
+各解での Hesse 行列は $\mathrm{diag}(6x,6y)$ で行列式 $36xy=\pm12t\neq0$ なので，すべて非退化（質量をもつ孤立真空）であり，各点の Jacobi 環への寄与は1である．
+実際，中国剰余定理により
+\[
+  \C[x,y]/(3x^2-t,\ 3y^2-t)\cong\C[x]/(x^2-t/3)\otimes\C[y]/(y^2-t/3)\cong\C^2\otimes\C^2\cong\C^4
+\]
+（4点上の関数環）であり，$\dim=4$ は $t$ によらない．
+したがって F 項条件の解の個数 $4$ は $W$ の Jacobi 環の次元 $4$ と一致する．
+$t\to0$ で4つの真空が原点に合流し，その極限が非被約なスキーム $\Spec\C[x,y]/(x^2,y^2)$ になる．Witten 指数は変形で不変であり，$W=x^3+y^3$ の場合も $4$ である（1変数の $x^3$ の Jacobi 環の次元 $2$ の積 $2\times2$）．

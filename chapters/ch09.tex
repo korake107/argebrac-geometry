@@ -1,0 +1,1207 @@
+% ============================================================
+% 第9章 射影多様体・交差・Bézoutの定理
+% ============================================================
+\chapter{射影多様体・交差・B\'ezoutの定理}
+\label{ch:ch09}
+
+\begin{chapterlead}
+第8章で導入した射影空間 $\PP^n$ は，アフィン空間に「無限遠」を付け加えてコンパクトにした空間であった．
+本章ではその中の射影多様体について，次元・次数・交差という三つの基本量を調べる．
+射影空間の最大の利点は，「交わるはずのものが必ず交わる」ことである．
+平面上の2直線は平行なら交わらないが，$\PP^2$ では必ずちょうど1点で交わる．
+この現象を一般化したのが射影次元定理と B\'ezout の定理であり，
+「次数 $d$ の曲線と次数 $e$ の曲線は，重複度を込めてちょうど $de$ 点で交わる」という美しい主張に結実する．
+これは代数幾何における「数え上げ」の出発点であり，弦理論のコンパクト化に現れる交差数（湯川結合）の計算へと直接つながっている．
+\end{chapterlead}
+
+% ------------------------------------------------------------
+\section{射影多様体の基本構造}
+% ------------------------------------------------------------
+
+第8章では，同次イデアル $I\subset S=k[x_0,\dots,x_n]$ の零点集合として射影代数的集合 $\Zero(I)\subset\PP^n$ を定義し，その既約なものを射影多様体と呼んだ．
+本節では，アフィン多様体について第5章・第7章で調べた基本量（次元・既約性・包含関係）を射影多様体に移植する．
+道具は二つある：(i) アフィン錐（affine cone）を用いて $\A^{n+1}$ の問題に帰着する方法，(ii) 標準アフィン開集合 $U_i=\{x_i\neq 0\}\cong\A^n$ に制限して局所的に調べる方法である．
+
+\subsection{射影多様体の次元}
+
+射影代数的集合 $X\subset\PP^n$ のアフィン錐 $C(X)\subset\A^{n+1}$（第8章で定義した．$X=\Zero(I)\neq\emptyset$ ならば $C(X)=\Zero_{\A^{n+1}}(I)$）を用いる．
+$X$ の各点は $C(X)$ の原点を通る直線1本に対応するから，$C(X)$ は $X$ よりちょうど1次元「太い」はずである．
+
+\begin{mydef}{射影代数的集合の次元}{ch09-projdim}
+射影代数的集合 $X\subset\PP^n$ の\textbf{次元} $\dim X$ を，Zariski 位相空間としての次元（既約閉集合の真の増大列 $Z_0\subsetneq Z_1\subsetneq\cdots\subsetneq Z_r$ の長さ $r$ の上限）で定める．空集合の次元は $-1$ と約束する．
+\end{mydef}
+
+\begin{myprop}{次元の三通りの計算法}{ch09-dimcomp}
+$X\subset\PP^n$ を空でない射影多様体とする．
+\begin{enumerate}
+  \item $X\cap U_i\neq\emptyset$ となる任意の $i$ について $\dim X=\dim(X\cap U_i)$．
+  \item $\dim C(X)=\dim X+1$．
+  \item 同次座標環 $S(X)=S/\Ideal(X)$ の Krull 次元について $\dim S(X)=\dim X+1$．
+\end{enumerate}
+\end{myprop}
+
+\begin{proof}[証明の概略]
+(1) $X\cap U_i$ は $X$ の空でない開集合であり，$X$ は既約だから $X\cap U_i$ は $X$ で稠密である．
+既約閉集合の鎖 $Z_0\subsetneq\cdots\subsetneq Z_r$ を $X\cap U_i$ で取れば，その閉包は $X$ の鎖になり，逆に $X$ の鎖で $Z_0\cap U_i\neq\emptyset$ となるものは $U_i$ に制限しても真の包含が保たれる．
+アフィン多様体の次元が「任意の極大鎖の長さが一定」であること（第7章）を使えば両者が一致する．
+
+(2) $C(X)\setminus\{0\}$ の $\{x_i\neq0\}$ 部分は $(X\cap U_i)\times(\A^1\setminus\{0\})$ と同型である：点 $(a_0,\dots,a_n)$ に $([a],a_i)$ を対応させればよい．
+よって $\dim C(X)=\dim(X\cap U_i)+1=\dim X+1$．
+
+(3) $C(X)$ の座標環は $S(X)$ そのものであり，アフィン多様体の次元は座標環の Krull 次元に等しい（第7章）．
+\end{proof}
+
+\begin{myex}{次元の計算}{ch09-dimex}
+\begin{enumerate}
+  \item $\PP^n$ 自身：$C(\PP^n)=\A^{n+1}$ より $\dim\PP^n=n$．
+  \item 線形部分空間 $L=\Zero(x_{r+1},\dots,x_n)\cong\PP^r$：$C(L)\cong\A^{r+1}$ なので $\dim L=r$．
+  \item 平面円錐曲線 $Q=\Zero(xz-y^2)\subset\PP^2$：$C(Q)$ は $\A^3$ 内の2次錐面で次元2，ゆえに $\dim Q=1$（曲線）．実際，$z\neq0$ のチャートでは放物線 $y^2=x$ である．
+  \item ねじれ3次曲線 $T=\{[s^3:s^2t:st^2:t^3]\}\subset\PP^3$：$C(T)$ は $(s,t)\mapsto(s^3,s^2t,st^2,t^3)$ の像で2次元，よって $\dim T=1$．
+\end{enumerate}
+\end{myex}
+
+次元の直感は「独立なパラメータの数」である．
+$\PP^n$ の点は $n+1$ 個の同次座標で書かれるが，全体のスケール倍 $\lambda\in k^\times$ の自由度を割るので $n$ 個のパラメータになる．
+射影多様体も同じで，錐の次元から「スケールの1」を引いたものが次元である．
+
+\begin{physbox}[ゲージ自由度の除去]
+同次座標 $[x_0:\dots:x_n]$ はスケール変換 $x_i\mapsto\lambda x_i$ を「ゲージ冗長性」として持つ記述であり，$\PP^n=(\C^{n+1}\setminus\{0\})/\C^\times$ はゲージ固定後の物理的配位空間とみなせる．
+$\dim C(X)-1=\dim X$ は「場の数 $-$ ゲージ対称性の数」という物理でおなじみの自由度の数え方そのものである．
+2次元の $\mathcal N=(2,2)$ ゲージ線形シグマ模型（GLSM）では，$U(1)$ ゲージ群と D 項条件によって実際に $\PP^n$ や射影多様体が真空多様体として現れる．この点は第8章の物理的背景（\S\ref{sec:ch08-phys}）でも述べた．
+\end{physbox}
+
+\subsection{余次元}
+
+\begin{mydef}{余次元}{ch09-codim}
+$Y\subset X$ を射影多様体の閉部分多様体とするとき，$\codim_X Y=\dim X-\dim Y$ と定める．$X=\PP^n$ のときは単に $\codim Y=n-\dim Y$ と書く．
+\end{mydef}
+
+一般の位相空間では余次元を「$Y$ を含む既約閉集合の鎖の長さ」で定義するが，多様体ではこれが上の差に一致する（次元の加法性；第7章参照）．
+アフィン錐を取っても余次元は変わらない：$\codim_{\A^{n+1}}C(Y)=(n+1)-(\dim Y+1)=\codim_{\PP^n}Y$．
+
+余次元は「部分多様体を定めるのに必要な方程式の数の目安」である．実際，次の Krull の単項イデアル定理の射影版が成り立つ．
+
+\begin{myprop}{超曲面による切断}{ch09-hypercut}
+$X\subset\PP^n$ を $r$ 次元射影多様体，$F$ を定数でない同次多項式とする．
+$X\not\subset\Zero(F)$ ならば，$X\cap\Zero(F)$ の各既約成分はちょうど $r-1$ 次元である．
+さらに $r\ge1$ ならば $X\cap\Zero(F)\neq\emptyset$．
+\end{myprop}
+
+\begin{proof}[証明の概略]
+アフィン錐で考える．$C(X)\cap\Zero(F)$ は $C(X)$ 上の1つの関数の零点集合だから，その各既約成分は $r+1-1=r$ 次元である（アフィンの単項イデアル定理，第7章）．
+これらの成分は原点を含む錐であり，次元 $r\ge1$ なので原点以外の点を含む．それを $\PP^n$ に落とせば $X\cap\Zero(F)$ の $r-1$ 次元成分が得られる．
+\end{proof}
+
+アフィン空間では $\Zero(x)\cap\Zero(x-1)=\emptyset$ のように超曲面が交わらないことがあるが，射影空間では $r\ge1$ ならば決して空にならない．
+これが本章を通じて繰り返される「射影空間では交差が失われない」という原理の最初の現れである．
+
+\begin{myex}{完全交差}{ch09-ci}
+$\PP^n$ 内で $c$ 個の同次多項式 $F_1,\dots,F_c$ により定まる $X=\Zero(F_1,\dots,F_c)$ は，命題\ref{prop:ch09-hypercut}を繰り返し用いると，各成分の次元が $n-c$ 以上である．
+ちょうど $n-c$（すなわち余次元 $c$）で $\Ideal(X)=(F_1,\dots,F_c)$ となるとき，$X$ を\textbf{完全交差}と呼ぶ．
+例えば $\PP^4$ 内の5次超曲面（余次元1）や，$\PP^5$ 内の2つの3次超曲面の交わり（余次元2）はいずれも完全交差であり，ともに Calabi--Yau 3次元多様体の代表例である（第15章）．
+一方，ねじれ3次曲線 $T\subset\PP^3$ は余次元2だが，その同次イデアル $\Ideal(T)$ は2個の元では生成できず，3個の2次式
+\[
+  x_0x_2-x_1^2,\qquad x_1x_3-x_2^2,\qquad x_0x_3-x_1x_2
+\]
+で生成される（完全交差でない．例\ref{ex:ch08-twisted}も参照）．
+\end{myex}
+
+\subsection{射影多様体の既約性}
+
+\begin{myprop}{既約性の判定}{ch09-irred}
+射影代数的集合 $X\subset\PP^n$（$X\neq\emptyset$）について次は同値である．
+\begin{enumerate}
+  \item $X$ は既約である．
+  \item 同次消滅イデアル $\Ideal(X)\subset S$ は素イデアルである．
+  \item アフィン錐 $C(X)$ は既約である．
+\end{enumerate}
+\end{myprop}
+
+\begin{proof}
+(1)$\Leftrightarrow$(2) は第8章の命題\ref{prop:ch08-irr-prime}である．
+(2)$\Leftrightarrow$(3) はアフィンの場合の対応（第4章：既約 $\Leftrightarrow$ 消滅イデアルが素）を $C(X)$ に適用したものである（$\Ideal(C(X))=\Ideal(X)$）．
+\end{proof}
+
+具体例（$\Zero(xy)$ は可約，$\Zero(x^2+y^2-z^2)$ は既約，$\Zero(x^2+y^2)$ は $\C$ 上で2直線に分解する，など）は第8章の例\ref{ex:ch08-irr-ex}を参照．
+
+射影代数的集合も Noether 性により有限個の既約成分の和に一意的に分解する（第3章のアフィンの場合と同じ議論）．
+また $X$ が既約であれば，空でない各 $X\cap U_i$ も既約であり，その射影閉包は $X$ に戻る．
+逆に，アフィン多様体 $Y\subset\A^n$ の射影閉包 $\overline{Y}\subset\PP^n$ は既約で $\dim\overline{Y}=\dim Y$ である．
+
+\subsection{射影多様体の包含関係}
+
+アフィンの場合と同様に，同次根基イデアルと射影代数的集合の間には包含を逆転させる対応がある．
+ただし射影空間特有の例外として\textbf{無関係イデアル}（irrelevant ideal）$S_+=(x_0,\dots,x_n)$ がある：$\Zero(S_+)$ は $\A^{n+1}$ では原点だが，原点は $\PP^n$ の点ではないので $\PP^n$ では空集合となる．
+第8章の射影零点定理（定理\ref{thm:ch08-projnull}）により，$\Zero(I)=\emptyset\iff\sqrt I\supset S_+$ であり，$\Zero(I)\neq\emptyset$ ならば $\Ideal(\Zero(I))=\sqrt I$ である．
+したがって $X\mapsto\Ideal(X)$ は，空でない射影代数的集合と $S_+$ を含まない同次根基イデアルの間の包含逆転の全単射を与え，射影多様体は $S_+$ を含まない同次素イデアルに対応する．
+
+包含関係については次の基本的な事実が重要である．
+
+\begin{myprop}{次元と包含}{ch09-inclusion}
+$X\subset Y$ を射影多様体とする．$\dim X=\dim Y$ ならば $X=Y$．とくに $X\subsetneq Y$ なら $\dim X<\dim Y$．
+\end{myprop}
+
+\begin{proof}
+$X\subsetneq Y$ なら，$X$ で終わる既約閉集合の極大鎖に $Y$ を付け加えることで長さが1増えるので $\dim Y\ge\dim X+1$．
+\end{proof}
+
+例えば，次数2の既約曲線 $Q\subset\PP^2$ を含む既約閉集合は $Q$ 自身か $\PP^2$ 全体しかない．
+この単純な事実は，後で「2つの曲線が共通成分を持たなければ交わりは有限集合」という形で B\'ezout の定理の仮定に現れる．
+
+\exprob{prob:ch09-1}
+$\PP^3$ 内の2つの2次曲面 $Q_1=\Zero(x_0x_3-x_1x_2)$ と $Q_2=\Zero(x_0x_2-x_1^2)$ の共通部分 $Q_1\cap Q_2$ を既約成分に分解し，各成分の次元を求めよ．
+（ヒント：ねじれ3次曲線と1本の直線に分かれる．）
+
+\exprob{prob:ch09-2}
+$X\subset\PP^n$ が空でない射影多様体で $\dim X\ge1$ のとき，任意の超平面 $H$ について $X\cap H\neq\emptyset$ であることを示せ．
+また，アフィン空間ではこの主張が成り立たない例を挙げよ．
+
+% ------------------------------------------------------------
+\section{超曲面}
+% ------------------------------------------------------------
+
+\subsection{超曲面の定義}
+
+\begin{mydef}{射影超曲面}{ch09-hypersurface}
+定数でない同次多項式 $F\in k[x_0,\dots,x_n]_d$ の零点集合 $\Zero(F)\subset\PP^n$ を\textbf{（射影）超曲面}という．
+$F$ を既約因子の積 $F=F_1^{m_1}\cdots F_s^{m_s}$ に分解したとき，$\Zero(F)=\Zero(F_1)\cup\dots\cup\Zero(F_s)$ が既約分解である．
+$F$ が既約のとき $\Zero(F)$ は既約超曲面で，$\Ideal(\Zero(F))=(F)$ となる．
+\end{mydef}
+
+$n=2$ なら平面曲線，$n=3$ なら曲面である．命題\ref{prop:ch09-hypercut}（$X=\PP^n$ の場合）から，超曲面の各既約成分はちょうど $n-1$ 次元である．
+逆に，$\PP^n$ の余次元1の既約部分多様体は必ず既約超曲面である：$S$ は UFD なので，高さ1の同次素イデアルは単項 $(F)$ で生成されるからである．
+
+重複度 $m_i\ge2$ の因子は零点集合からは見えない．すなわち零点集合だけを見ると「方程式としての情報」が失われている．
+例えば $\Zero(x^2)$ と $\Zero(x)$ は集合としては同じ直線だが，前者は「2重の直線」と考えるのが自然である．
+こうした重複構造を正しく扱うのがスキーム論であり，第12章で詳しく扱う．
+本章ではこれを\textbf{因子} $\sum m_i\,\Zero(F_i)$ として形式的に記録する（9.5節）．
+
+\subsection{次数}
+
+\begin{mydef}{超曲面の次数}{ch09-degree-hyp}
+既約超曲面 $\Zero(F)$ の\textbf{次数}を $\deg F$ と定める．
+より一般に，$F=\prod F_i^{m_i}$ に対して因子 $\sum m_i\Zero(F_i)$ の次数を $\deg F=\sum m_i\deg F_i$ とする．
+\end{mydef}
+
+次数の幾何学的意味は「一般の直線との交点の数」である．
+直線 $L$ を $t\mapsto[a+tb]$（$a,b\in k^{n+1}$）とパラメータ表示すると，$F(sa+tb)$ は $(s,t)$ について $d$ 次の2変数同次式である．
+これが恒等的に $0$ でなければ（$L\not\subset\Zero(F)$），代数閉体上で $d$ 個の1次式の積に分解する：
+\[
+  F(sa+tb)=c\prod_{j=1}^{d}(\beta_j s-\alpha_j t).
+\]
+各根 $[\alpha_j:\beta_j]\in\PP^1$ が交点 $L\cap\Zero(F)$ に対応し，重根は接触を表す．
+したがって\emph{重複度を込めれば}直線と次数 $d$ の超曲面はちょうど $d$ 点で交わる．これは B\'ezout の定理の最も簡単な場合である．
+
+\paragraph{Hilbert 多項式による次数．}
+一般の射影多様体（超曲面でないもの）の次数は，Hilbert 多項式で定義するのが標準的である．
+$X\subset\PP^n$ に対し，同次座標環 $S(X)=S/\Ideal(X)$ の $m$ 次部分の次元
+\[
+  h_X(m)=\dim_k S(X)_m
+\]
+を Hilbert 関数という．これは「$X$ 上の $m$ 次の同次多項式関数の個数」である．
+
+\begin{mythm}{Hilbert 多項式}{ch09-hilbpoly}
+$X\subset\PP^n$ を $r$ 次元射影代数的集合とする．十分大きな $m$ に対して $h_X(m)$ はある多項式 $P_X(m)\in\Q[m]$ に一致し，その次数は $r$ で，
+\[
+  P_X(m)=\frac{d}{r!}m^r+(\text{低次の項})
+\]
+の形となる．ここで $d$ は正の整数であり，これを $X$ の\textbf{次数} $\deg X$ と定める．
+\end{mythm}
+
+証明は次数付き加群の短完全列と次元に関する帰納法による（ここでは省略する）．
+大事なのは定義の整合性で，超曲面ではこれが上の次数と一致する．
+
+\begin{myex}{超曲面の Hilbert 多項式}{ch09-hilbhyp}
+$X=\Zero(F)\subset\PP^n$，$\deg F=d$ とする．$S(X)=S/(F)$ であり，$F$ 倍写像による完全列
+\[
+  0\to S_{m-d}\xrightarrow{\ \cdot F\ }S_m\to S(X)_m\to0
+\]
+から，$\dim S_m=\binom{m+n}{n}$ を用いて
+\[
+  h_X(m)=\binom{m+n}{n}-\binom{m-d+n}{n}=\frac{d}{(n-1)!}m^{n-1}+\cdots.
+\]
+よって $\deg X=d$ であり，定義\ref{def:ch09-degree-hyp}と一致する．
+とくに平面曲線（$n=2$）では
+\[
+  P_X(m)=dm-\frac{d(d-3)}{2}=dm+1-\frac{(d-1)(d-2)}{2}
+\]
+となり，定数項 $1-g$ から滑らかな平面曲線の種数 $g=\frac{(d-1)(d-2)}{2}$ が読み取れる（第13章の Riemann 面の種数と一致する）．
+\end{myex}
+
+\begin{myex}{非超曲面の次数}{ch09-hilbother}
+\begin{enumerate}
+  \item 線形部分空間 $\PP^r\subset\PP^n$：$S(X)=k[x_0,\dots,x_r]$ より $h(m)=\binom{m+r}{r}=\frac{m^r}{r!}+\cdots$，次数1．
+  \item ねじれ3次曲線 $T$：$S(T)_m$ は $s,t$ の $3m$ 次単項式全体と同一視でき，$h(m)=3m+1$．次数3．実際，一般の平面 $a_0x_0+\dots+a_3x_3=0$ との交点は $a_0s^3+a_1s^2t+a_2st^2+a_3t^3=0$ の3根に対応する．
+\end{enumerate}
+\end{myex}
+
+次数の幾何学的意味は，一般に「$r$ 次元多様体 $X\subset\PP^n$ と一般の余次元 $r$ の線形部分空間との交点の数」である．
+これが Bézout の定理の高次元版（9.4.5小節）へとつながる．
+
+\subsection{超曲面の例}
+
+\begin{myex}{低次の超曲面}{ch09-hypex}
+\begin{enumerate}
+  \item \textbf{超平面}（$d=1$）：$a_0x_0+\dots+a_nx_n=0$．$\PP^{n-1}$ と同型．超平面全体は双対射影空間 $(\PP^n)^\vee$ をなす．
+  \item \textbf{2次超曲面}（$d=2$）：$F=x^{\mathsf T}Ax$（$A$ は対称行列，$\mathrm{char}\,k\neq2$）．$k=\C$ では $\rank A$ のみで分類され，$\rank A=n+1$ のとき滑らか．
+  $\PP^3$ 内の滑らかな2次曲面 $\Zero(x_0x_3-x_1x_2)$ は Segre 埋め込み
+  \[
+    \PP^1\times\PP^1\to\PP^3,\quad([s_0:s_1],[t_0:t_1])\mapsto[s_0t_0:s_0t_1:s_1t_0:s_1t_1]
+  \]
+  の像であり，2方向の直線族（ルーリング）を持つ．
+  \item \textbf{3次曲面}（$d=3$）：滑らかな3次曲面はちょうど27本の直線を含む（Cayley--Salmon の定理）．Fermat 3次曲面 $x_0^3+x_1^3+x_2^3+x_3^3=0$ はその典型例である．
+  \item \textbf{4次曲面}（$d=4$, $n=3$）：滑らかな4次曲面は K3 曲面であり，2次元の Calabi--Yau 多様体である．
+  \item \textbf{5次3次元超曲面}（$d=5$, $n=4$）：$x_0^5+\dots+x_4^5=0$ などの滑らかな5次超曲面は Calabi--Yau 3次元多様体であり，弦理論のコンパクト化で最も有名な例である（第15章）．
+\end{enumerate}
+\end{myex}
+
+最後の2例に共通するのは $d=n+1$ という関係である．これは「標準束が自明」であるための条件であり，第15章で詳しく扱う．
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=0.9]
+  % conic
+  \draw[thick,blue] (-2.2,0) ellipse (1.4 and 0.9);
+  \node[blue] at (-2.2,-1.3) {$d=2$: 円錐曲線};
+  % cubic y^2 = x^3 - x
+  \begin{scope}[xshift=3.2cm]
+    \draw[thick,red,domain=-0.999:0,samples=80] plot ({\x},{sqrt(\x*\x*\x-\x)});
+    \draw[thick,red,domain=-0.999:0,samples=80] plot ({\x},{-sqrt(\x*\x*\x-\x)});
+    \draw[thick,red,domain=1.001:1.75,samples=60] plot ({\x},{sqrt(\x*\x*\x-\x)});
+    \draw[thick,red,domain=1.001:1.75,samples=60] plot ({\x},{-sqrt(\x*\x*\x-\x)});
+    \node[red] at (0.4,-2.1) {$d=3$: $y^2=x^3-x$};
+  \end{scope}
+  \draw[->,gray] (-4.2,0)--(5.4,0);
+\end{tikzpicture}
+\caption{実平面に描いた超曲面（平面曲線）の例．3次曲線 $y^2=x^3-x$ の実部分は2つの連結成分を持つが，$\C$ 上では1つのトーラス（種数1）である．}
+\label{fig:ch09-hypex}
+\end{figure}
+
+\subsection{高次元超曲面}
+
+$\PP^n$ 内の $d$ 次超曲面全体は，係数を同次座標と見ることで射影空間
+\[
+  \PP\bigl(k[x_0,\dots,x_n]_d\bigr)\cong\PP^{N},\qquad N=\binom{n+d}{d}-1
+\]
+によってパラメータ付けられる（スカラー倍は同じ超曲面を与えるので射影化する）．
+例えば平面3次曲線は $N=\binom{5}{2}-1=9$ 次元，$\PP^4$ 内の5次超曲面は $N=\binom{9}{4}-1=125$ 次元の族をなす．
+
+\paragraph{滑らかさの判定．}
+$X=\Zero(F)$ の点 $p$ が特異点であるのは，すべての偏微分 $\partial F/\partial x_i$ が $p$ で消えるときである．
+実際，チャート $U_0$ で $f=F(1,x_1,\dots,x_n)$ に Jacobian 判定法（第7章）を適用し，Euler の恒等式
+\[
+  \sum_{i=0}^n x_i\frac{\partial F}{\partial x_i}=d\cdot F
+\]
+を使えば，$\mathrm{char}\,k\nmid d$ のとき「$F(p)=0$ かつ $\partial_iF(p)=0\ (i\ge1)$」と「$\partial_iF(p)=0\ (i\ge0)$」が同値であることがわかる．
+すなわち
+\[
+  \Sing\Zero(F)=\Zero\Bigl(\frac{\partial F}{\partial x_0},\dots,\frac{\partial F}{\partial x_n}\Bigr).
+\]
+
+\begin{myex}{Fermat 超曲面とその変形}{ch09-fermat}
+$F=x_0^d+\dots+x_n^d$ では $\partial_iF=dx_i^{d-1}$ が同時に消えるのは $x=0$ のみなので，$\mathrm{char}\,k\nmid d$ なら $\Zero(F)$ は滑らかである．
+一方，Dwork 族
+\[
+  F_\psi=x_0^5+x_1^5+x_2^5+x_3^5+x_4^5-5\psi\,x_0x_1x_2x_3x_4
+\]
+では，$\psi^5=1$ のとき特異点が現れる（例えば $\psi=1$ では $[1:1:1:1:1]$ が特異点）．
+実際 $\partial_iF_\psi=5(x_i^4-\psi\prod_{j\neq i}x_j)$ であり，$x_i=1$ をすべて代入すると $5(1-\psi)$ となる．
+この「特異点を持つパラメータ値」は，ミラー対称性において円錐点（conifold 点）と呼ばれる重要な点である．
+\end{myex}
+
+「一般の」$d$ 次超曲面は滑らかである：特異な超曲面全体は $\PP^N$ の中の超曲面（判別式超曲面）をなし，その補集合は空でない開集合だからである．
+
+\subsection{超曲面と代数方程式}
+
+アフィンの方程式 $f(x_1,\dots,x_n)=0$（$\deg f=d$）は，\textbf{同次化}
+\[
+  F(x_0,x_1,\dots,x_n)=x_0^{d}\,f\!\left(\frac{x_1}{x_0},\dots,\frac{x_n}{x_0}\right)
+\]
+によって射影超曲面 $\Zero(F)$ を定める．$\Zero(F)\cap U_0=\Zero(f)$ であり，$\Zero(F)$ は $\Zero(f)$ の射影閉包である．
+新しく付け加わった点 $\Zero(F)\cap\{x_0=0\}$ は「無限遠点」であり，$f$ の最高次斉次部分 $f_d$ の零点 $\Zero(f_d)\subset\PP^{n-1}$ に一致する．
+
+\begin{myex}{2次曲線の無限遠点}{ch09-conicinfty}
+平面 2次曲線（$x,y$ アフィン座標，$z$ を同次化の変数とする）について：
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{llll}
+\hline
+アフィン方程式 & 同次化 & 無限遠点 $z=0$ & 個数 \\
+\hline
+楕円 $x^2+2y^2=1$ & $x^2+2y^2-z^2$ & $x^2+2y^2=0$ & 2（虚） \\
+双曲線 $xy=1$ & $xy-z^2$ & $[1:0:0],[0:1:0]$ & 2（実） \\
+放物線 $y=x^2$ & $yz-x^2$ & $[0:1:0]$ & 1（重複度2） \\
+\hline
+\end{tabular}
+\end{center}
+射影平面では3者はすべて同じ非退化円錐曲線であり，違いは「無限遠直線 $z=0$ とどう交わるか」だけである．
+放物線は無限遠直線に\emph{接している}．いずれも重複度込みで交点数は $2=\deg$ である．
+\end{myex}
+
+\begin{physbox}[境界条件としての無限遠点]
+物理では解の「無限遠での振る舞い」が問題になることが多い．
+代数方程式の解の個数を数えるとき，アフィン空間だけで数えると解が無限遠に「逃げて」個数が変化する．
+例えば $xy=\varepsilon$ と $x=0$ は $\varepsilon\neq0$ で交わらないが，射影平面で見ると無限遠点 $[0:1:0]$ で交わっている．
+パラメータを動かしても保存される量（交点数）を得るには，コンパクト化（射影化）が不可欠である．
+これは，場の理論の真空の数（Witten 指数など）が「無限遠に逃げる真空」がないときにのみ不変量となる事情と並行している．
+\end{physbox}
+
+\exprob{prob:ch09-3}
+$\PP^2$ 内の3次曲線 $C:\ y^2z=x^3+axz^2+bz^3$ が滑らかであるための必要十分条件が $4a^3+27b^2\neq0$ であることを，$\Sing C=\Zero(\partial_xF,\partial_yF,\partial_zF)$ を用いて示せ（$\mathrm{char}\,k\neq2,3$）．
+また $C$ の無限遠点を求めよ．
+
+% ------------------------------------------------------------
+\section{多様体の交差}
+% ------------------------------------------------------------
+
+\subsection{交差の定義}
+
+\begin{mydef}{交差}{ch09-intersection}
+射影代数的集合 $X=\Zero(I)$, $Y=\Zero(J)\subset\PP^n$ の\textbf{交差}（集合論的交差）は
+\[
+  X\cap Y=\Zero(I)\cap\Zero(J)=\Zero(I+J)
+\]
+である．とくに $X\cap Y$ は再び射影代数的集合である．
+\end{mydef}
+
+集合としての交差は簡単だが，イデアル $I+J$ は一般に根基イデアルではなく，そこに「接し方」の情報が含まれている．
+例えば $X=\Zero(y)$（$x$ 軸），$Y=\Zero(y-x^2)$（放物線）なら $I+J=(y,x^2)$ であり，交差は原点1点だが，$k[x,y]/(y,x^2)\cong k[x]/(x^2)$ は2次元である．
+この「2」が交わりの重複度であり，9.3.5小節で定式化する．
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  \begin{scope}
+    \draw[->,gray] (-1.8,0)--(1.8,0);
+    \draw[thick,blue,domain=-1.3:1.3,samples=50] plot (\x,{\x*\x});
+    \draw[thick,red] (-1.8,0.6)--(1.8,0.6);
+    \fill (-0.775,0.6) circle (1.6pt) (0.775,0.6) circle (1.6pt);
+    \node at (0,-0.6) {$y=c\ (c>0)$: 2点};
+  \end{scope}
+  \begin{scope}[xshift=4.5cm]
+    \draw[->,gray] (-1.8,0)--(1.8,0);
+    \draw[thick,blue,domain=-1.3:1.3,samples=50] plot (\x,{\x*\x});
+    \draw[thick,red] (-1.8,0)--(1.8,0);
+    \fill (0,0) circle (2pt);
+    \node at (0,-0.6) {$y=0$: 1点（重複度2）};
+  \end{scope}
+  \begin{scope}[xshift=9cm]
+    \draw[->,gray] (-1.8,0)--(1.8,0);
+    \draw[thick,blue,domain=-1.3:1.3,samples=50] plot (\x,{\x*\x});
+    \draw[thick,red] (-1.8,-0.5)--(1.8,-0.5);
+    \node at (0,-0.9) {$y=c\ (c<0)$: 虚の2点};
+  \end{scope}
+\end{tikzpicture}
+\caption{放物線 $y=x^2$ と直線 $y=c$ の交差．$c\to0$ で2交点が合流して接点となり，$c<0$ では複素共役な2点 $x=\pm\sqrt{c}$ になる．$\C$ 上では重複度込みで常に2点である．}
+\label{fig:ch09-tangent}
+\end{figure}
+
+\subsection{交差の次元}
+
+アフィン空間での基本定理（第7章で扱った単項イデアル定理の帰結）を思い出そう：
+$X,Y\subset\A^n$ を多様体とすると，$X\cap Y$ の任意の既約成分 $Z$ について $\dim Z\ge\dim X+\dim Y-n$．
+これは $X\cap Y\cong(X\times Y)\cap\Delta$（$\Delta\subset\A^n\times\A^n$ は対角線）と見て，$\Delta$ が $n$ 個の方程式 $x_i-y_i=0$ で切り出されることから従う．
+射影空間ではさらに「空でない」ことまで言える．
+
+\begin{mythm}{射影次元定理}{ch09-projdimthm}
+$X,Y\subset\PP^n$ を射影多様体とし，$\dim X=r$, $\dim Y=s$ とする．
+このとき $X\cap Y$ の任意の既約成分は次元 $\ge r+s-n$ を持つ．
+さらに $r+s\ge n$ ならば $X\cap Y\neq\emptyset$ である．
+\end{mythm}
+
+\begin{proof}
+アフィン錐 $C(X),C(Y)\subset\A^{n+1}$ はそれぞれ次元 $r+1$, $s+1$ であり，ともに原点を含む．
+アフィンの次元定理より，$C(X)\cap C(Y)$ の原点を含む既約成分 $W$ は
+\[
+  \dim W\ge(r+1)+(s+1)-(n+1)=r+s-n+1
+\]
+を満たす．$r+s\ge n$ なら $\dim W\ge1$ なので，$W$ は原点以外の点を含み，それが $X\cap Y$ の点を与える．
+成分の次元の評価は，$C(X\cap Y)=C(X)\cap C(Y)$ の各成分が錐であり，その次元が対応する $X\cap Y$ の成分の次元 $+1$ であることから従う．
+\end{proof}
+
+\begin{myex}{射影次元定理の例}{ch09-projdimex}
+\begin{enumerate}
+  \item $\PP^2$ の2曲線（$r=s=1$, $n=2$）：$r+s-n=0$ なので必ず交わる．平行線も無限遠点で交わる．
+  \item $\PP^3$ の2平面（$r=s=2$）：少なくとも直線で交わる．
+  \item $\PP^3$ の曲線と曲面（$r=1,s=2$）：必ず交わる．
+  \item $\PP^3$ の2直線（$r=s=1$）：$r+s-n=-1<0$ なので交わらないこともある（ねじれの位置）．
+\end{enumerate}
+\end{myex}
+
+\begin{note}
+アフィン空間で $r+s\ge n$ でも交わらない例（平行な2直線）があるのは，交わりが無限遠に逃げているからである．
+射影次元定理はその逃げ場を塞いだことの帰結である．
+\end{note}
+
+\subsection{一般位置}
+
+「一般の」2つの部分多様体は，期待される次元でもっとも素直に交わる．これを2段階で定式化する．
+
+\begin{mydef}{固有交差・横断交差}{ch09-generalpos}
+$X,Y\subset\PP^n$ を射影多様体とする．
+\begin{enumerate}
+  \item $X\cap Y$ のすべての既約成分が次元 $\dim X+\dim Y-n$ を持つとき（$<0$ なら $X\cap Y=\emptyset$ のとき），$X$ と $Y$ は\textbf{固有に交わる}（proper intersection）という．
+  \item 点 $p\in X\cap Y$ で $X,Y$ がともに滑らかで，接空間について
+  \[
+    T_pX+T_pY=T_p\PP^n
+  \]
+  が成り立つとき，$X$ と $Y$ は $p$ で\textbf{横断的に交わる}（transversal）という．
+  すべての交点で横断的なとき，$X,Y$ は\textbf{一般位置にある}という．
+\end{enumerate}
+\end{mydef}
+
+横断的な点では $\dim T_p(X\cap Y)=\dim T_pX+\dim T_pY-n$ となり，交わりはその点の近傍で滑らかで期待次元を持つ．
+2曲線 $C,D\subset\PP^2$ の場合，横断的であるとは「交点で両者が滑らかで接線が異なる」ことである．
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  \begin{scope}
+    \draw[thick,blue] (-1.3,-0.9)--(1.3,0.9);
+    \draw[thick,red] (-1.3,0.9)--(1.3,-0.9);
+    \fill (0,0) circle (2pt);
+    \node at (0,-1.4) {横断的（$I_p=1$）};
+  \end{scope}
+  \begin{scope}[xshift=4cm]
+    \draw[thick,blue,domain=-1.2:1.2,samples=50] plot (\x,{0.7*\x*\x});
+    \draw[thick,red] (-1.4,0)--(1.4,0);
+    \fill (0,0) circle (2pt);
+    \node at (0,-1.4) {接する（$I_p=2$）};
+  \end{scope}
+  \begin{scope}[xshift=8cm]
+    \draw[thick,blue,domain=-1:1,samples=60] plot ({\x*\x},{\x*\x*\x});
+    \draw[thick,red] (-0.6,0)--(1.4,0);
+    \fill (0,0) circle (2pt);
+    \node at (0.4,-1.4) {尖点を通る（$I_p=3$）};
+  \end{scope}
+\end{tikzpicture}
+\caption{2曲線の交わり方と交点の重複度．左：異なる接線で交わる．中：$y=x^2$ と $y=0$．右：尖点 $y^2=x^3$ と $y=0$（$k[x,y]/(y,\,y^2-x^3)\cong k[x]/(x^3)$ より重複度3）．}
+\label{fig:ch09-transversal}
+\end{figure}
+
+「一般の」という言葉は，パラメータ空間の空でない Zariski 開集合上で成り立つ，という意味で用いる．
+次の定理は射影空間における「一般位置への移動」を保証する．
+
+\begin{mythm}{Kleiman 型の一般位置定理（$\mathrm{char}\,k=0$）}{ch09-kleiman}
+$X,Y\subset\PP^n$ を滑らかな射影多様体とする．射影変換群 $\PGL_{n+1}(k)$ の空でない Zariski 開集合に属する $g$ について，$X$ と $gY$ は一般位置にあり，とくに固有に交わる．
+\end{mythm}
+
+これは $\PGL_{n+1}$ が $\PP^n$ に推移的に作用することから，Sard の定理の代数版（一般ファイバーの滑らかさ）を用いて示される．
+物理的には「一般のパラメータでは縮退が解ける」という直感の厳密な表現である．
+
+\subsection{交差の有限性}
+
+\begin{myprop}{0次元の交差は有限}{ch09-finite}
+$X,Y\subset\PP^n$ が固有に交わり $\dim X+\dim Y=n$ ならば，$X\cap Y$ は空でない有限集合である．
+\end{myprop}
+
+\begin{proof}
+射影次元定理より空でない．固有交差の仮定よりすべての既約成分は0次元すなわち1点であり，Noether 性より既約成分は有限個である．
+\end{proof}
+
+とくに $\PP^2$ 内の2曲線 $C=\Zero(F)$, $D=\Zero(G)$ について：
+
+\begin{mycor}{平面曲線の交差}{ch09-planefinite}
+$F,G$ が共通因子を持たなければ $C\cap D$ は空でない有限集合である．
+\end{mycor}
+
+\begin{proof}
+$C\cap D$ が1次元の成分 $E$ を含めば，命題\ref{prop:ch09-inclusion}より $E$ は $C$ の既約成分かつ $D$ の既約成分であり，$F,G$ はともに $E$ の定義多項式で割り切れる．
+\end{proof}
+
+アフィンの場合，有限性は「座標環 $k[x,y]/(f,g)$ が有限次元」と言い換えられる．
+実際，$k[x,y]/(f,g)$ は中国剰余定理によって各交点での局所環の直積に分解する：
+\begin{equation}\label{eq:ch09-crt}
+  k[x,y]/(f,g)\;\cong\;\prod_{p\in\Zero(f,g)}\OO_{\A^2,p}/(f,g).
+\end{equation}
+左辺の次元は交点の総数を重複度込みで数えたものであり，右辺の各因子の次元がその点での重複度である．
+
+\subsection{交差の重複度}
+
+第6章で定義した局所環 $\OO_{X,p}$（$p$ の近傍で定義された有理関数のなす環）を使って，交点の重複度を定義する．
+
+\begin{mydef}{交点の重複度（平面曲線）}{ch09-intmult}
+$C=\Zero(F)$, $D=\Zero(G)\subset\PP^2$ を共通成分を持たない曲線，$p\in\PP^2$ とする．
+$p$ を含むアフィンチャート（例えば $U_2=\{z\neq0\}$）で $f=F(x,y,1)$, $g=G(x,y,1)$ とおき，
+\[
+  I_p(C,D)\;=\;\dim_k\,\OO_{\PP^2,p}/(f,g)
+\]
+を $p$ における $C$ と $D$ の\textbf{交点の重複度}（局所交差数）という．
+\end{mydef}
+
+$\OO_{\PP^2,p}/(f,g)$ は Artin 局所環であり，その $k$ 上の次元は環の長さに等しい．
+定義はチャートの取り方によらない：別のチャートでは $f,g$ が単元倍（$z^{-\deg F}$ 倍など）されるだけだからである．
+
+\begin{myex}{直線と円錐曲線}{ch09-lineconic}
+$C=\Zero(yz-x^2)$（放物線），$D_c=\Zero(y-cz)$ とする．$U_2$ で $f=y-x^2$, $g=y-c$．
+\begin{itemize}
+  \item $c\neq0$：$(f,g)=(y-c,\,x^2-c)=(y-c,(x-\sqrt c)(x+\sqrt c))$．2点 $(\pm\sqrt c,c)$ でそれぞれ $\OO_p/(f,g)\cong k$ なので $I_p=1$．
+  \item $c=0$：原点で $\OO_{p}/(y-x^2,\,y)\cong k[x]_{(x)}/(x^2)$ で，基底 $\{1,x\}$ より $I_p=2$．
+\end{itemize}
+いずれも交点の重複度の和は $2=1\cdot2$ である．
+一方，「縦の直線」$D'=\Zero(x)$ は $U_2$ で原点 $(0,0)$ に $I=1$ で交わり，さらに無限遠点 $[0:1:0]$ でも交わる．$U_1=\{y\neq0\}$ で $f=z-x^2$, $g=x$ とすると $\OO_p/(z-x^2,x)\cong k$ で $I=1$．やはり合計2である．
+\end{myex}
+
+\begin{note}
+一般次元の部分多様体 $X,Y\subset\PP^n$ が孤立点 $p$ で固有に交わるとき，$\dim_k\OO_{\PP^n,p}/(\Ideal(X)+\Ideal(Y))$ が正しい重複度を与えるのは，$X,Y$ が $p$ で Cohen--Macaulay（例えば滑らか）な場合であり，一般にはこれは正しくない．
+一般には Serre の Tor 公式
+$I_p(X,Y)=\sum_{i\ge0}(-1)^i\,\mathrm{length}\,\mathrm{Tor}_i^{\OO_{\PP^n,p}}(\OO_{X,p},\OO_{Y,p})$
+が正しい定義である．平面曲線ではつねに Cohen--Macaulay なので上の定義で十分である．
+\end{note}
+
+\exprob{prob:ch09-4}
+$\A^2$ 上で次の交点の重複度 $I_{(0,0)}$ を計算せよ．
+(a) $y-x^3$ と $y$，\quad
+(b) $y^2-x^3$ と $y-x$，\quad
+(c) $y^2-x^2(x+1)$（結節点）と $y$，\quad
+(d) $y^2-x^3$ と $x^2-y^3$．
+
+% ------------------------------------------------------------
+\section{B\'ezoutの定理}
+% ------------------------------------------------------------
+
+\subsection{B\'ezoutの定理の主張}
+
+\begin{mythm}{B\'ezout の定理}{ch09-bezout}
+$k$ を代数閉体とし，$C,D\subset\PP^2$ をそれぞれ次数 $d,e$ の共通成分を持たない平面曲線とする．このとき
+\[
+  \sum_{p\in C\cap D}I_p(C,D)=d\cdot e.
+\]
+とくに $C$ と $D$ は少なくとも1点，高々 $de$ 点で交わる．
+\end{mythm}
+
+この定理の3つの仮定はいずれも本質的である．
+\begin{itemize}
+  \item \textbf{代数閉体}：$\R$ 上では $x^2+y^2=z^2$ と $x=2z$ は（実の）交点を持たない．
+  \item \textbf{射影空間}：$\A^2$ では平行線のように交点が無限遠に逃げる．
+  \item \textbf{重複度}：接するときに交点が合流する（図\ref{fig:ch09-tangent}）．
+\end{itemize}
+3つの「補正」をすべて入れたときにはじめて，交点の数はパラメータによらない不変量 $de$ になる．
+
+\subsection{射影平面における曲線の交点}
+
+証明に入る前に，交点が射影平面全体にどう分布するかを見ておく．アフィンチャート $U_2=\{z\neq0\}$ での交点（「有限の交点」）と，無限遠直線 $z=0$ 上の交点がある．
+無限遠の交点は，$F,G$ の最高次斉次部分 $f_d,g_e$ の共通零点に対応する．
+
+\begin{myex}{平行線}{ch09-parallel}
+$y=x$ と $y=x+1$ の同次化 $y-x=0$，$y-x-z=0$ は $z=0$, $y=x$ すなわち $[1:1:0]$ で交わる．
+平行線は「同じ方向の無限遠点」を共有する．方向 $(1,1)$ が無限遠点 $[1:1:0]$ である．
+\end{myex}
+
+\begin{myex}{有限交点の消失}{ch09-escape}
+$f=xy-1$（双曲線）と $g=x$ はアフィン平面では交わらない．
+同次化 $F=xy-z^2$, $G=x$ では $x=0\Rightarrow z=0$ となり，交点は $[0:1:0]$ のみ．
+$U_1=\{y\neq0\}$ で $x-z^2$ と $x$ を考えると $\OO_p/(x-z^2,x)\cong k[z]_{(z)}/(z^2)$ で $I_p=2$．
+双曲線は漸近線 $x=0$ に無限遠で接しており，合計 $2=2\cdot1$ となる．
+\end{myex}
+
+\subsection{交点の重複度}
+
+B\'ezout の定理の証明と計算で用いる，局所交差数 $I_p$ の基本性質をまとめる（Fulton の公理系）．
+$F,G,H$ は同次多項式で，$p$ を含むアフィンチャートで考える．
+
+\begin{myprop}{交点の重複度の性質}{ch09-multprop}
+\begin{enumerate}
+  \item $F,G$ が $p$ を通る共通成分を持てば $I_p=\infty$，持たなければ $I_p(F,G)$ は非負整数．
+  \item $I_p(F,G)=0$ $\iff$ $p\notin\Zero(F)\cap\Zero(G)$．
+  \item 射影変換 $T$ について $I_{T(p)}(F\circ T^{-1},G\circ T^{-1})=I_p(F,G)$．
+  \item（対称性）$I_p(F,G)=I_p(G,F)$．
+  \item（下界）$I_p(F,G)\ge m_p(F)\,m_p(G)$．等号 $\iff$ $F,G$ が $p$ で共通の接線を持たない．
+  ここで $m_p(F)$ は $p$ における $F$ の重複度（$p$ を原点としたときの最低次項の次数）．
+  \item（加法性）$I_p(F,GH)=I_p(F,G)+I_p(F,H)$．
+  \item（変形不変性）任意の多項式 $A$ について $I_p(F,G+AF)=I_p(F,G)$．
+\end{enumerate}
+\end{myprop}
+
+(4),(7) は定義から明らか（イデアル $(f,g)=(f,g+af)$）．(6) は完全列
+\[
+  0\to\OO_p/(f,h)\xrightarrow{\ \cdot g\ }\OO_p/(f,gh)\to\OO_p/(f,g)\to0
+\]
+（$f,g$ が共通成分を持たないことから左の写像は単射）から従う．
+特に $m_p(F)=1$ かつ $m_p(G)=1$（両方滑らか）のとき，$I_p=1$ $\iff$ 接線が異なる $\iff$ 横断的，である．
+
+これらの性質を使うと，$I_p$ は Euclid の互除法のように計算できる．
+
+\begin{myex}{2つの尖点曲線の交わり}{ch09-twocusps}
+$f=y^2-x^3$, $g=x^2-y^3$ の原点での交点の重複度を求める．
+$m_0(f)=m_0(g)=2$ であり，接錐はそれぞれ $y^2$, $x^2$ で共通接線を持たないから，(5) より $I_0(f,g)=2\cdot2=4$．
+この2曲線は $\PP^2$ で $3\cdot3=9$ 点で交わるから，原点以外に重複度込みで5個の交点がある．
+実際，$y^2=x^3$, $x^2=y^3$ から $x^4=y^6=x^9$ で，$x\neq0$ なら $x^5=1$ となり，$x=\zeta$（$\zeta^5=1$）に対し $y=y^3/y^2=\zeta^2/\zeta^3=\zeta^4$ と一意に決まる．これで5点．無限遠では $F=y^2z-x^3$, $G=x^2z-y^3$ が $z=0$ で $x=y=0$ となり交わらない．合計 $4+5=9$．
+\end{myex}
+
+\subsection{B\'ezoutの定理の具体例}
+
+\begin{myex}{2つの円と円形点}{ch09-circles}
+円 $(x-a)^2+(y-b)^2=r^2$ の同次化は
+\[
+  x^2+y^2-2axz-2byz+(a^2+b^2-r^2)z^2=0
+\]
+であり，$z=0$ とすると $a,b,r$ によらず $x^2+y^2=0$，すなわち2点
+\[
+  I=[1:i:0],\qquad J=[1:-i:0]
+\]
+を通る．この2点を\textbf{円形点}（circular points）という．\emph{すべての円は円形点を通る}．
+
+B\'ezout によれば2円は $2\cdot2=4$ 点で交わるはずだが，実平面では高々2点しか交わらない．差の2点は円形点 $I,J$ である．
+例えば同心円 $x^2+y^2=z^2$ と $x^2+y^2=4z^2$ は有限の交点を持たないが，差をとると $3z^2=0$ となり，$I,J$ でそれぞれ重複度2で交わる：
+チャート $x=1$ で $\OO_I/(1+y^2-z^2,\,3z^2)=\OO_I/((y-i)(y+i)-z^2,\,z^2)$．$y+i$ は $I$ で単元なので，これは $\OO_I/(y-i,\,z^2)\cong k[z]/(z^2)$ で，$I_I=2$．同様に $I_J=2$．合計4．
+\end{myex}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=0.9]
+  \draw[thick,blue] (0,0) circle (1.2);
+  \draw[thick,red] (1.3,0.2) circle (1.0);
+  \path[name path=c1] (0,0) circle (1.2);
+  \path[name path=c2] (1.3,0.2) circle (1.0);
+  \fill[name intersections={of=c1 and c2}] (intersection-1) circle (2pt) (intersection-2) circle (2pt);
+  \draw[dashed,gray] (-2,-1.9)--(5.5,-1.9) node[right,black] {無限遠直線 $z=0$};
+  \fill[orange] (0.8,-1.9) circle (2.5pt) node[below] {$I=[1:i:0]$};
+  \fill[orange] (3.2,-1.9) circle (2.5pt) node[below] {$J=[1:-i:0]$};
+  \draw[->,orange,dotted,thick] (-0.6,-1.05) .. controls (0,-1.6) .. (0.75,-1.8);
+  \draw[->,orange,dotted,thick] (1.9,-0.6) .. controls (2.6,-1.3) .. (3.15,-1.8);
+  \node at (0.6,1.8) {実の交点2個 $+$ 円形点2個 $=4=2\cdot2$};
+\end{tikzpicture}
+\caption{2つの円の交点（模式図）．すべての円は無限遠直線上の虚の2点 $I,J$ を通るため，B\'ezout の数 4 のうち 2 は常に円形点で消費される．}
+\label{fig:ch09-circles}
+\end{figure}
+
+\begin{myex}{3次曲線の変曲点は9個}{ch09-flex}
+滑らかな平面3次曲線 $C=\Zero(F)$ の点 $p$ が変曲点であるのは，接線との交点の重複度が3以上のときである．
+これは Hesse 行列式 $H(F)=\det\bigl(\partial^2F/\partial x_i\partial x_j\bigr)$ について $H(F)(p)=0$ と同値であることが知られている（$\mathrm{char}\,k=0$）．
+$H(F)$ は次数 $3(3-2)=3$ の同次多項式なので，B\'ezout により $C\cap\Zero(H(F))$ は重複度込みで $3\cdot3=9$ 点．
+滑らかな3次曲線ではこれらの交点はすべて横断的であり，ちょうど9個の変曲点がある．
+例えば Fermat 3次曲線 $x^3+y^3+z^3=0$ では $H=216\,xyz$ であり，変曲点は $xyz=0$ との交点
+$[0:1:-\omega^j],\ [1:0:-\omega^j],\ [1:-\omega^j:0]$（$\omega=e^{2\pi i/3}$, $j=0,1,2$）の9個である．
+\end{myex}
+
+\begin{myex}{2つの円錐曲線}{ch09-twoconics}
+$C_1:\ x^2+y^2=2z^2$, $C_2:\ xy=z^2$ の交点を求める．
+$z=0$ なら $x^2+y^2=0$ かつ $xy=0$ から $x=y=0$ となり不適．$z=1$ として $x^2+y^2=2$, $xy=1$ から $(x-y)^2=0$, $(x+y)^2=4$．
+よって $x=y=\pm1$ の2点．各点で $(x-y)^2$ の形から重複度は2であり（2曲線は $(1,1)$ と $(-1,-1)$ で接している），合計 $2+2=4=2\cdot2$．
+\end{myex}
+
+\subsection{定理の幾何学的解釈}
+
+\paragraph{終結式による証明の概略．}
+B\'ezout の定理の古典的証明は，2変数を1変数に落とす\textbf{終結式}（resultant）を用いる．
+1変数多項式
+$f(z)=a_0z^d+a_1z^{d-1}+\dots+a_d$，$g(z)=b_0z^e+\dots+b_e$
+の終結式 $\Res_z(f,g)$ は，$(d+e)\times(d+e)$ の Sylvester 行列の行列式であり，次の性質を持つ：
+$a_0b_0\neq0$ のとき，$\Res_z(f,g)=0\iff f,g$ が共通根を持つ．さらに，根を $\alpha_i,\beta_j$ とすれば
+$\Res_z(f,g)=a_0^eb_0^d\prod_{i,j}(\alpha_i-\beta_j)$．
+
+\begin{proof}[B\'ezout の定理の証明の概略]
+\textbf{Step 1（座標の選択）}．$C\cap D$ は有限集合なので，射影変換によって点 $O=[0:0:1]$ が $C\cup D$ 上になく，かつ $C\cap D$ のどの2点を結ぶ直線上にもないようにできる．
+すると $F,G$ を $z$ について展開したとき
+\[
+  F=a_0z^d+a_1(x,y)z^{d-1}+\dots+a_d(x,y),\qquad G=b_0z^e+\dots+b_e(x,y)
+\]
+で $a_0=F(O)\neq0$, $b_0=G(O)\neq0$，また $a_i,b_j$ は次数 $i,j$ の同次多項式である．
+
+\textbf{Step 2（次数の計算）}．$R(x,y)=\Res_z(F,G)$ は $x,y$ の多項式であり，Sylvester 行列の各成分の次数を数えると $R$ は\emph{次数 $de$ の同次多項式}になる（$(x,y)\mapsto(\lambda x,\lambda y)$ とすると根 $z$ も $\lambda$ 倍され，$R=a_0^eb_0^d\prod(\alpha_i-\beta_j)$ は $\lambda^{de}$ 倍される）．
+$F,G$ が共通因子を持たないので $R\not\equiv0$．
+
+\textbf{Step 3（交点との対応）}．$R(x_0,y_0)=0$ $\iff$ $F(x_0,y_0,z)$, $G(x_0,y_0,z)$ が共通根 $z_0$ を持つ $\iff$ $O$ と $[x_0:y_0:0]$ を結ぶ直線上に交点 $[x_0:y_0:z_0]$ がある．
+Step 1 の座標の選び方より，各直線上の交点は高々1つ．したがって $R$ の1次因子 $(y_0x-x_0y)$ と交点 $p$ は1対1に対応する．
+
+\textbf{Step 4（重複度の一致）}．$R$ における1次因子 $(y_0x-x_0y)$ の重複度が $I_p(C,D)$ に等しいことを示す．
+これは中国剰余定理 \eqref{eq:ch09-crt} を用いて $\dim_k k[x,y,z]/(F,G,\ell)$ 型の量を比較することで示される（詳細は省略）．
+以上から $\sum_pI_p(C,D)=\deg R=de$．
+\end{proof}
+
+\begin{myex}{終結式の計算}{ch09-resex}
+$F=yz-x^2$（放物線），$G=y-cz$（直線）．$z$ について $F=yz-x^2$（$z$ の1次），$G=-cz+y$（$z$ の1次）．
+Sylvester 行列は $\begin{pmatrix}y&-x^2\\-c&y\end{pmatrix}$ で $R=y^2-cx^2$．
+これは次数 $2=2\cdot1$ の同次式で，$c\neq0$ なら異なる2つの1次因子 $y\mp\sqrt c\,x$，$c=0$ なら重複因子 $y^2$ を持ち，例\ref{ex:ch09-lineconic}と一致する．
+（この例では $O=[0:0:1]$ が $C$ 上にあり，$c=0$ では交点そのものなので Step 1 の条件は満たされていないが，それでも結果的に正しい値が得られている．）
+\end{myex}
+
+\paragraph{連続性による解釈．}
+$\C$ 上で考えると，$d$ 次曲線全体 $\PP^{N_d}$ と $e$ 次曲線全体 $\PP^{N_e}$ の積は連結であり，共通成分を持つ組は閉部分集合である．
+交点は（重複度込みで）パラメータに連続的に依存し，有限遠から無限遠へ，2点から接点へと移り変わっても総数は変わらない．
+特別な組 $C=$「$d$ 本の直線」，$D=$「$e$ 本の直線」（すべて一般位置）を取れば，交点は明らかに $de$ 個の横断的な点である．
+こうして交点数はトポロジカルな不変量として「最も簡単な場合」で計算できる．
+これは「変形不変性を使って計算しやすい点に移動する」という，物理でも数学でも最も強力な計算原理の一例である．
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=0.85]
+  \foreach \a in {-20,0,25} \draw[thick,blue,rotate=\a] (-2.2,0.5)--(2.2,0.5);
+  \foreach \b in {70,110} \draw[thick,red,rotate=\b] (-2.2,0.3)--(2.2,0.3);
+  \node[blue] at (3.2,1) {$d=3$ 本};
+  \node[red] at (-2.8,1.8) {$e=2$ 本};
+  \node at (0,-2.5) {交点 $3\times2=6$ 個（すべて横断的）};
+\end{tikzpicture}
+\caption{退化した曲線 $C=$「3直線」と $D=$「2直線」．交点は $de=6$ 個．一般の $C,D$ は変形によりこの配置とつながるので，交点数（重複度込み）も $6$ である．}
+\label{fig:ch09-lines}
+\end{figure}
+
+\paragraph{高次元版．}
+B\'ezout の定理は高次元に一般化される：$X,Y\subset\PP^n$ が固有に交わるとき
+\[
+  \sum_{Z}i(X,Y;Z)\deg Z=\deg X\cdot\deg Y
+\]
+（$Z$ は $X\cap Y$ の既約成分，$i(X,Y;Z)$ は交差重複度）．
+とくに $n$ 個の超曲面 $H_1,\dots,H_n\subset\PP^n$（次数 $d_1,\dots,d_n$）が有限個の点で交わるとき，重複度込みの交点数は $d_1d_2\cdots d_n$ である．
+また完全交差 $\Zero(F_1,\dots,F_c)$ の次数は $\prod\deg F_i$ である．
+
+\exprob{prob:ch09-5}
+$C=\Zero(y^2z-x^3)$（尖点3次曲線）と $D=\Zero(y^2z-x^3-xz^2)$ の交点をすべて求め，各交点の重複度を計算して B\'ezout の定理を確かめよ．
+
+\exprob{prob:ch09-6}
+$\PP^2$ 内の2つの円錐曲線が5点を共有するならば，両者は共通成分を持つことを示せ．
+これを用いて，一般の位置にある（どの3点も同一直線上にない）5点を通る円錐曲線がただ1つ存在することを示せ．
+
+% ------------------------------------------------------------
+\section{交差理論への導入}
+% ------------------------------------------------------------
+
+\subsection{交差数}
+
+局所的な重複度を足し合わせたものを大域的な\textbf{交差数}と呼ぶ．
+平面曲線の場合，これを因子に対して双線形に拡張しておくと便利である．
+
+\begin{mydef}{因子と交差数（$\PP^2$）}{ch09-divisor}
+$\PP^2$ 上の\textbf{因子}とは，既約曲線 $C_i$ の整数係数の形式和 $D=\sum n_iC_i$ である．因子全体は自由アーベル群 $\Div(\PP^2)$ をなす．
+次数を $\deg D=\sum n_i\deg C_i$ で定める．
+共通成分を持たない因子 $D=\sum n_iC_i$, $E=\sum m_jC'_j$ に対し，その\textbf{交差数}を
+\[
+  D\cdot E=\sum_{i,j}n_im_j\sum_{p\in C_i\cap C'_j}I_p(C_i,C'_j)
+\]
+で定める．
+\end{mydef}
+
+同次多項式 $F=\prod F_i^{n_i}$ には因子 $\mathrm{div}(F)=\sum n_i\Zero(F_i)$ が対応する．
+交差数の加法性（命題\ref{prop:ch09-multprop}(6)）から $\mathrm{div}(F)\cdot\mathrm{div}(G)=\sum_pI_p(F,G)$ であり，B\'ezout の定理は
+\[
+  D\cdot E=\deg D\cdot\deg E
+\]
+と簡潔に書ける．
+
+\subsection{交差数の基本性質}
+
+\begin{myprop}{交差数の基本性質}{ch09-intprop}
+共通成分を持たない因子 $D,D',E$ について：
+\begin{enumerate}
+  \item（対称性）$D\cdot E=E\cdot D$．
+  \item（双線形性）$(D+D')\cdot E=D\cdot E+D'\cdot E$．
+  \item（正値性）$D,E$ が有効（係数がすべて非負）なら $D\cdot E\ge0$ で，$D\cap E\neq\emptyset$ なら $D\cdot E>0$．
+  \item（線形同値不変性）$D\sim D'$（すなわち $D-D'=\mathrm{div}(F/G)$，$\deg F=\deg G$）ならば $D\cdot E=D'\cdot E$．
+\end{enumerate}
+\end{myprop}
+
+(4) が重要である．$\PP^2$ では $\deg D=\deg D'$ と $D\sim D'$ が同値なので，交差数は線形同値類のみで決まる．
+すなわち $\Pic(\PP^2)=\Div(\PP^2)/\!\sim\ \cong\Z$（次数で同一視，生成元は直線の類 $H$）上の双線形形式
+\[
+  \Pic(\PP^2)\times\Pic(\PP^2)\to\Z,\qquad (aH)\cdot(bH)=ab
+\]
+が得られる．
+この「動かしてよい」という性質を使うと，共通成分を持つ場合にも交差数を定義できる．
+
+\begin{myex}{自己交差数}{ch09-selfint}
+直線 $L$ の自己交差数 $L\cdot L$ は，$L$ を線形同値な別の直線 $L'$ に動かして $L\cdot L'=1$ と定める．
+同様に $d$ 次曲線 $C$ について $C\cdot C=d^2$．
+$C\cdot C>0$ は「$C$ を動かすと元の $C$ と必ず交わる」ことを意味する．
+一方，第10章で扱う blow-up の例外曲線 $E$ では $E\cdot E=-1$ となる．負の自己交差数は「動かせない」曲線の特徴であり，曲面の分類で中心的な役割を果たす．
+\end{myex}
+
+\subsection{交差理論の初歩}
+
+以上の構成は一般の滑らかな射影多様体 $X$ に拡張される．
+$X$ の余次元 $i$ の部分多様体の形式和を（有理同値で割って）$A^i(X)$ とおくと，交差積
+\[
+  A^i(X)\times A^j(X)\to A^{i+j}(X)
+\]
+によって $A^\bullet(X)=\bigoplus_iA^i(X)$ は可換環になる（\textbf{Chow 環}）．
+交差積は「一般位置に動かして集合論的交差を重複度込みで取る」ことで定義され，B\'ezout の定理はその帰結として得られる．
+
+\begin{myex}{$\PP^n$ の Chow 環}{ch09-chowPn}
+$H$ を超平面の類とすると
+\[
+  A^\bullet(\PP^n)\cong\Z[H]/(H^{n+1}).
+\]
+$H^i$ は余次元 $i$ の線形部分空間の類であり，$n+1$ 個の一般の超平面は交わらないので $H^{n+1}=0$，また $H^n=[\text{点}]$．
+$d$ 次超曲面の類は $dH$ であり，次数 $d_1,\dots,d_n$ の超曲面の交差は $(d_1H)\cdots(d_nH)=d_1\cdots d_n\,H^n$，すなわち $d_1\cdots d_n$ 点．
+これが高次元 B\'ezout の定理の「環論的証明」である．
+\end{myex}
+
+複素数体上では，$A^i(X)$ から特異コホモロジー $H^{2i}(X,\Z)$ への写像（サイクル写像）があり，交差積はカップ積に，交差数は積分
+\[
+  D_1\cdot D_2\cdots D_n=\int_X\eta_{D_1}\wedge\eta_{D_2}\wedge\dots\wedge\eta_{D_n}
+\]
+に対応する（$\eta_D$ は $D$ の Poincar\'e 双対形式）．
+これにより，代数的な数え上げと微分形式の積分が同じ量を計算していることになる．
+
+\subsection{交差理論と幾何学的計算}
+
+交差理論は「数え上げ問題を環の計算に変える」機械である．いくつか典型的な計算を挙げる．
+
+\begin{myex}{空間曲線の次数}{ch09-spacecurve}
+$\PP^3$ の2次曲面 $Q$ と3次曲面 $K$ が固有に交わるとき，曲線 $Q\cap K$ の類は $2H\cdot3H=6H^2$ であり，次数6の空間曲線である．
+一般の平面 $H$ との交点数は $6H^3=6$．
+\end{myex}
+
+\begin{myex}{部分多様体上での制限}{ch09-restriction}
+$X\subset\PP^n$ を次数 $d$ の $r$ 次元多様体とし，$h=H|_X$ を超平面類の制限とする．すると
+\[
+  \int_Xh^r=\deg X=d.
+\]
+例えば $\PP^4$ の5次超曲面 $X_5$ では $h^3=5$，$\PP^5$ の2つの3次超曲面の交差 $X_{3,3}$ では $h^3=3\cdot3=9$．
+一般に $\PP^{n}$ 内の完全交差 $X_{d_1,\dots,d_c}$ では $\int_X h^{n-c}=d_1\cdots d_c$ である．
+\end{myex}
+
+\begin{myex}{$\PP^1\times\PP^1$ の交差形式}{ch09-p1p1}
+$Q=\PP^1\times\PP^1$ では，2つのルーリングの直線の類 $F_1=[\{pt\}\times\PP^1]$, $F_2=[\PP^1\times\{pt\}]$ が $\Pic Q\cong\Z^2$ を生成し，
+\[
+  F_1^2=0,\quad F_2^2=0,\quad F_1\cdot F_2=1.
+\]
+（同じルーリングの2直線は交わらず，異なるルーリングの直線はちょうど1点で交わる．）
+双次数 $(a,b)$ の曲線 $C\sim aF_1+bF_2$ と $(a',b')$ の曲線の交差数は $ab'+a'b$ である．
+例えば $Q\subset\PP^3$ の平面切断 $h=F_1+F_2$ について $h^2=2=\deg Q$ であり，例\ref{ex:ch09-restriction}と整合する．
+\end{myex}
+
+\exprob{prob:ch09-7}
+$\PP^1\times\PP^1$ 上で双次数 $(2,3)$ の曲線と双次数 $(1,1)$ の曲線は，一般に何点で交わるか．
+また Segre 埋め込みで $\PP^3$ に埋め込んだとき，双次数 $(a,b)$ の曲線の $\PP^3$ での次数を求めよ．
+
+% ------------------------------------------------------------
+\section{物理への接続}
+% ------------------------------------------------------------
+
+\subsection{多項式条件の同時解}
+
+物理の多くの問題は「何個の解があるか」を問う．古典的な数え上げ幾何の典型例を，B\'ezout の定理と交差数の視点から見てみよう．
+
+\begin{myex}{5点を通る円錐曲線}{ch09-5points}
+円錐曲線全体は $\PP^5$（係数 $a,b,c,d,e,f$ の比）である．
+点 $p$ を通るという条件は係数について\emph{1次}の条件，すなわち $\PP^5$ の超平面 $H_p$ である．
+5つの一般の点を通る円錐曲線は $H_{p_1}\cap\dots\cap H_{p_5}$ で，$\PP^5$ の5つの超平面の交差だから $1^5=1$ 個．
+これが「5点で円錐曲線が決まる」ことの交差理論的説明である．
+\end{myex}
+
+\begin{myex}{3次曲線上の9点（Cayley--Bacharach）}{ch09-9points}
+平面3次曲線全体は $\PP^9$ であり，一般の8点を通る3次曲線は $\PP^9$ 内の直線（ペンシル）$\{\lambda F+\mu G\}$ をなす．
+B\'ezout より $F$ と $G$ は $3\cdot3=9$ 点で交わり，そのうち8点は与えた点である．
+ペンシルのすべての曲線 $\lambda F+\mu G$ は，$F=G=0$ となる\emph{9番目の点}も自動的に通る．
+すなわち「2つの3次曲線の9交点のうち8点を通る3次曲線は残りの1点も通る」（Cayley--Bacharach の定理）．
+これは楕円曲線上の群法則の結合律の証明に使われる．
+\end{myex}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=0.8]
+  \foreach \y in {-1.2,0,1.2} \draw[thick,blue] (-2.3,\y)--(2.3,\y);
+  \foreach \x in {-1.2,0,1.2} \draw[thick,red] (\x,-2.1)--(\x,2.1);
+  \foreach \x in {-1.2,0,1.2} \foreach \y in {-1.2,0,1.2} \fill (\x,\y) circle (2.2pt);
+  \draw[orange,very thick] (1.2,1.2) circle (5pt);
+  \node[blue] at (3.3,0) {$F=0$};
+  \node[red] at (0,2.5) {$G=0$};
+  \node[orange] at (2.4,1.9) {9番目の点};
+\end{tikzpicture}
+\caption{2つの（退化した）3次曲線 $F$=「3本の横線」，$G$=「3本の縦線」の9交点．8点を通る3次曲線はすべて残りの1点も通る．}
+\label{fig:ch09-9points}
+\end{figure}
+
+\begin{myex}{4本の直線に交わる直線}{ch09-4lines}
+$\PP^3$ 内の一般の位置にある4本の直線 $L_1,\dots,L_4$ のすべてと交わる直線は何本あるか．
+$L_1,L_2,L_3$ と交わる直線全体は，$L_1,L_2,L_3$ を含む唯一の2次曲面 $Q\cong\PP^1\times\PP^1$ の一方のルーリングをなす（$L_i$ は他方のルーリングに属する）．
+$L_4$ は $Q$ と B\'ezout により $2\cdot1=2$ 点で交わり，各交点を通る第一ルーリングの直線がちょうど1本ずつある．
+よって答えは\textbf{2本}である．
+これは Schubert 計算の最初の例であり，Grassmann 多様体 $G(2,4)$ のコホモロジー環で $\sigma_1^4=2$ と表される．
+\end{myex}
+
+\begin{physbox}[連立方程式の解の数と真空の数]
+超対称場の理論の真空は，しばしば超ポテンシャル $W(\phi)$ の臨界点 $\partial W/\partial\phi_i=0$ として与えられる．
+$n$ 変数で $\partial_iW$ がすべて次数 $d-1$ の多項式なら，（無限遠に解がない一般の場合）B\'ezout により孤立真空の数は $(d-1)^n$ である．
+例えば $W=\sum_i\phi_i^{d}/d$（Landau--Ginzburg 模型の $A_{d-1}$ 型）では臨界点は原点1つだが重複度が $(d-1)^n$ であり，これは Jacobi 環 $\C[\phi]/(\partial W)$ の次元（Milnor 数）に等しい．
+摂動 $W\to W+\varepsilon\,(\text{低次項})$ を加えると，この重複した真空が $(d-1)^n$ 個の非縮退真空に分裂する．これは図\ref{fig:ch09-tangent}の接点の分裂と同じ現象である．
+\end{physbox}
+
+\subsection{幾何学的制約と自由度}
+
+数え上げの基本原理は次の\textbf{次元勘定}である：
+\begin{center}
+（解の空間の期待次元）$=$（パラメータ空間の次元）$-$（独立な条件の数）．
+\end{center}
+期待次元が0のとき解は有限個になり，その個数は交差数で与えられる．
+
+\begin{myex}{曲線を決める点の数}{ch09-dimcount}
+$d$ 次平面曲線の空間は $\PP^{N}$, $N=\binom{d+2}{2}-1=\frac{d(d+3)}{2}$ 次元．各点条件は1次の条件なので，一般の $N$ 点を通る $d$ 次曲線はただ1つ．
+$d=1$: 2点で直線，$d=2$: 5点で円錐曲線，$d=3$: 9点で3次曲線．
+ただし例\ref{ex:ch09-9points}が示すように，点が「一般の位置」にないと条件は独立でなくなる（9点がすでに2つの3次曲線の交点なら9点目は独立な条件にならない）．
+\end{myex}
+
+物理では，次元勘定は
+\[
+  (\text{物理的自由度})=(\text{場の成分数})-(\text{拘束条件の数})-(\text{ゲージ自由度})
+\]
+という形で現れる．Dirac の拘束系の理論で第一類拘束がゲージ自由度を生み自由度を2つずつ減らすのは，射影化（$\C^{n+1}\setminus\{0\}\to\PP^n$）で次元が1つ減ることの類似と見ることができる．
+
+\begin{physbox}[期待次元と超過交差]
+次元勘定が「期待次元」を与えるのに対し，実際の解空間がそれより大きくなることがある（\textbf{超過交差}，excess intersection）．
+例えば $\PP^2$ で同じ直線 $L$ を2回交差させると，期待次元0に対して実際は1次元の $L$ 全体が「交点」になる．
+この場合も交差数は $L\cdot L=1$ と有限の値に定まるが，それを集合から直接読み取ることはできない．
+弦理論でも，インスタントン（正則曲線）のモジュライ空間が期待次元より大きいとき，余分な方向の「障害束」の Euler 類を用いて仮想的な数え上げを行う（仮想基本類）．これは第16章・第17章で扱うモジュライ空間の話題の基礎である．
+\end{physbox}
+
+\subsection{コンパクト化空間の交差}
+
+弦理論では，10次元時空を $\R^{3,1}\times X$（$X$ は6次元コンパクト空間）とし，$X$ として Calabi--Yau 3次元多様体を取る．
+4次元の有効理論の結合定数の多くは，$X$ の部分多様体の交差数として計算される．
+
+\begin{myex}{5次超曲面の三重交差数}{ch09-yukawa}
+$X=X_5\subset\PP^4$ を滑らかな5次超曲面とし，$H$ を超平面類の制限とする．
+$H$ の代表として $X\cap\{a\cdot x=0\}$（$X$ 内の曲面）を取ると，3つの一般の超平面切断の交点数は
+\[
+  \kappa=H\cdot H\cdot H=\int_XH^3=5
+\]
+である．実際，$\PP^4$ の3つの超平面の交差は直線 $\PP^1$ であり，それと5次超曲面は B\'ezout により5点で交わる．
+\end{myex}
+
+Type IIA 弦理論を $X$ 上にコンパクト化すると，$h^{1,1}(X)$ 個の Kähler モジュライ $t^a$（因子類 $J_a\in H^2(X)$ の係数）に対応するベクトル多重項が現れ，その結合（プレポテンシャルの3次の項）は
+\[
+  \mathcal F=-\frac16\kappa_{abc}t^at^bt^c+\cdots,\qquad \kappa_{abc}=\int_XJ_a\wedge J_b\wedge J_c=D_a\cdot D_b\cdot D_c
+\]
+で与えられる．この\textbf{三重交差数} $\kappa_{abc}$ は，大体積極限での\textbf{湯川結合}の古典的部分にあたる．
+「$\cdots$」の部分には，世界面インスタントン（$X$ 内の有理曲線）の寄与が入り，その係数の計算がミラー対称性の主要な成果の一つであった（第15章・第17章で詳しく扱う）．
+
+\begin{physbox}[交差数としての結合定数]
+$\kappa_{abc}$ は整数であり，連続的な変形（複素構造の変化）で変わらない位相的な量である．
+物理的には，「3つの因子（ブレーンが巻きつく4次元サイクル）が1点で交わるところに局在した相互作用」と解釈できる．
+Type IIB 側や heterotic 側でも，湯川結合は $\int_X\Omega\wedge\cdots$ や $\int_X(\text{3つのゼロモード})$ の形の積分となり，代数幾何的には交差あるいはコホモロジー類の積として計算される．
+B\'ezout の定理は，その最も素朴な一例を与えている．
+\end{physbox}
+
+\subsection{代数的構成による物理的空間}
+
+物理に現れるコンパクト空間の多くは，射影空間（あるいはその一般化であるトーリック多様体）の中の多項式方程式で構成される．
+本章の結果は，そうした空間の基本的な量を計算する手段を与える．
+
+\begin{myex}{5次超曲面のパラメータ数え上げ}{ch09-quinticmoduli}
+$\PP^4$ の5次同次多項式の空間は $\binom{9}{4}=126$ 次元である．
+全体のスカラー倍（1次元）と $\PP^4$ の座標変換 $\PGL_5$（$25-1=24$ 次元）で同じ超曲面を与えるものを同一視すると，
+\[
+  126-1-24=101
+\]
+個の独立なパラメータが残る．これは5次超曲面の複素構造変形の数 $h^{2,1}(X_5)=101$ と一致する（第15章・第16章）．
+一方 $h^{1,1}(X_5)=1$ で，これは超平面類 $H$ に対応し，その三重交差数が例\ref{ex:ch09-yukawa}の $\kappa=5$ である．
+\end{myex}
+
+\begin{myex}{Calabi--Yau 完全交差}{ch09-cicy}
+$\PP^n$ 内の完全交差 $X_{d_1,\dots,d_c}$ が Calabi--Yau になる条件は $\sum d_i=n+1$ である（第15章）．
+3次元の例は5種類ある：
+\[
+  X_5\subset\PP^4,\quad X_{3,3},\ X_{2,4}\subset\PP^5,\quad X_{2,2,3}\subset\PP^6,\quad X_{2,2,2,2}\subset\PP^7.
+\]
+それぞれの三重交差数 $\int H^3$ は，例\ref{ex:ch09-restriction}により $5,\ 9,\ 8,\ 12,\ 16$ である．
+\end{myex}
+
+このように「射影空間の中で多項式を書き，その次数から交差数を読む」という手続きは，弦理論の模型構築で日常的に使われている．
+第10章以降では，空間の間の写像（射・有理写像）と，局所的なデータを貼り合わせる層の言葉を整備し，より精密な不変量を扱えるようにする．
+
+\exprob{prob:ch09-8}
+$\PP^1\times\PP^1\times\PP^1$ を考え，$J_1,J_2,J_3$ をそれぞれの因子 $\PP^1$ の点の引き戻しの類とする．
+$J_a^2=0$, $J_1J_2J_3=1$ を用いて，$D=aJ_1+bJ_2+cJ_3$ の自己三重交差数 $D^3$ を計算せよ．
+
+\exprob{prob:ch09-9}
+$\PP^5$ 内の完全交差 $X_{2,4}$（2次と4次の超曲面の交差）について，その次数を求めよ．
+また，$\PP^5$ の2次および4次同次多項式の係数の個数から出発し，例\ref{ex:ch09-quinticmoduli}と同様の素朴なパラメータ勘定を試みよ（2次式 $Q$ を固定したとき，4次式 $P$ が $P+Q\cdot(\text{2次式})$ と同じ多様体を与えることに注意せよ）．
+
+\section*{問題の解答}
+\addcontentsline{toc}{section}{問題の解答}
+
+\exsol{prob:ch09-1}
+\textbf{点の決定．}$[x]\in Q_1\cap Q_2$ とする．
+
+(i) $x_0\neq0$ のとき，$x_0=1$ と正規化して $t=x_1$ とおくと，$Q_2$ から $x_2=x_1^2=t^2$，$Q_1$ から $x_3=x_1x_2=t^3$．よって点は $[1:t:t^2:t^3]$．
+
+(ii) $x_0=0$ のとき，$Q_2$ から $x_1^2=0$ すなわち $x_1=0$ で，このとき $Q_1$ の式 $x_0x_3-x_1x_2$ は自動的に $0$．よって点は $[0:0:x_2:x_3]$ の全体，すなわち直線 $L=\Zero(x_0,x_1)$．
+
+したがって
+\[
+  Q_1\cap Q_2=\{[1:t:t^2:t^3]\mid t\in k\}\cup L .
+\]
+ねじれ3次曲線 $T=\{[s^3:s^2t:st^2:t^3]\}$ は $s\neq0$ の部分が $\{[1:t:t^2:t^3]\}$，$s=0$ の部分が $[0:0:0:1]\in L$ である．また $T\subset Q_1\cap Q_2$ は $s^3\cdot t^3-s^2t\cdot st^2=0$，$s^3\cdot st^2-(s^2t)^2=0$ から確かめられる．以上より
+\[
+  Q_1\cap Q_2=T\cup L,\qquad T\cap L=\{[0:0:0:1]\}.
+\]
+
+\textbf{既約成分と次元．}$T$ は既約な $\PP^1$ の像（例\ref{ex:ch09-dimex}(4)）で $\dim T=1$，$L\cong\PP^1$ は既約で $\dim L=1$．
+$T\not\subset L$（$[1:0:0:0]\in T\setminus L$），$L\not\subset T$（$[0:0:1:0]\in L\setminus T$）なので，既約分解は $Q_1\cap Q_2=T\cup L$ で，各成分はともに1次元である．
+
+これは命題\ref{prop:ch09-hypercut}（2次曲面 $Q_2$ を $Q_1$ で切ると各成分は $2-1=1$ 次元）と整合する．
+また次数を見ると $\deg T+\deg L=3+1=4=2\cdot2$ であり，高次元の B\'ezout の定理（完全交差の次数は $\prod\deg F_i$）とも整合する．
+$T$ を定めるには $Q_1,Q_2$ に加えて第3の2次式 $x_1x_3-x_2^2$ が必要で，これが余分な直線 $L$ を取り除く（例\ref{ex:ch09-ci}）．
+
+\exsol{prob:ch09-2}
+$H=\Zero(\ell)$，$\ell=a_0x_0+\dots+a_nx_n\neq0$ とし，$r=\dim X\ge1$ とする．
+$X\subset H$ なら $X\cap H=X\neq\emptyset$．$X\not\subset H$ なら，命題\ref{prop:ch09-hypercut}を $F=\ell$ に適用して，$X\cap H$ は $r\ge1$ より空でなく，各既約成分は $r-1$ 次元である．
+（射影次元定理\ref{thm:ch09-projdimthm}を $Y=H$（$\dim H=n-1$）に適用しても，$r+(n-1)\ge n$ から $X\cap H\neq\emptyset$ が従う．）
+
+アフィン錐で直接見ると次のとおりである．$C(X)\subset\A^{n+1}$ は原点を含む $r+1\ge2$ 次元の既約錐で，$C(X)\cap\Zero(\ell)$ は原点を含むので空でなく，アフィンの単項イデアル定理より各成分は $r\ge1$ 次元である．
+したがって原点以外の点 $a$ を含み，$[a]\in X\cap H$ となる．要点は「錐の切断は原点を必ず含む」ので交わりが空にならないことである．
+
+\textbf{アフィン空間での反例．}$\A^2$ で $X=\Zero(x)$（$y$ 軸，1次元の多様体）と「超平面」$H=\Zero(x-1)$ は交わらない．
+また双曲線 $X=\Zero(xy-1)$ と $H=\Zero(x)$ も交わらない．いずれも射影閉包では交点が無限遠に現れる：前者は $[0:1:0]$ で，後者も $[0:1:0]$ で交わる（例\ref{ex:ch09-escape}）．
+
+\exsol{prob:ch09-3}
+$F=y^2z-x^3-axz^2-bz^3$ とすると
+\[
+  F_x=-3x^2-az^2,\qquad F_y=2yz,\qquad F_z=y^2-2axz-3bz^2.
+\]
+Euler の恒等式 $xF_x+yF_y+zF_z=3F$ と $\mathrm{char}\,k\neq3$ より，$F_x,F_y,F_z$ の共通零点は自動的に $F=0$ を満たす．よって $\Sing C=\Zero(F_x,F_y,F_z)$ を求めればよい．
+
+\textbf{無限遠（$z=0$）}：$F_x=-3x^2=0$ より $x=0$，$F_z=y^2=0$ より $y=0$ となり $[0:0:0]$ は点でない．よって無限遠に特異点はない．
+
+\textbf{有限部分（$z=1$）}：$F_y=2y=0$ より $y=0$（$\mathrm{char}\,k\neq2$）．$p(x)=x^3+ax+b$ とおくと，$y=0$，$z=1$ で
+\[
+  F_x=-p'(x)=-(3x^2+a),\qquad F_z=-(2ax+3b)=-\bigl(3p(x)-xp'(x)\bigr).
+\]
+したがって $[x_0:0:1]$ が特異点 $\iff$ $p'(x_0)=0$ かつ $3p(x_0)-x_0p'(x_0)=0$ $\iff$ $p(x_0)=p'(x_0)=0$ $\iff$ $x_0$ が $p$ の重根．
+
+\textbf{判別式との関係．}$p$ が重根 $x_0$ をもつとする：$3x_0^2+a=0$，$2ax_0+3b=0$．
+$a=0$ なら $b=0$ で $4a^3+27b^2=0$．$a\neq0$ なら $x_0=-\frac{3b}{2a}$ を第1式に代入して $\frac{27b^2}{4a^2}=-a$，すなわち $4a^3+27b^2=0$．
+逆に $4a^3+27b^2=0$ とする．$a=0$ なら $b=0$ で $p=x^3$ は重根 $0$ をもつ．$a\neq0$ なら $x_0=-\frac{3b}{2a}$ とおくと $2ax_0+3b=0$ であり，$3x_0^2=\frac{27b^2}{4a^2}=\frac{-4a^3}{4a^2}=-a$ より $3x_0^2+a=0$．よって $x_0$ は重根である．
+
+以上より
+\[
+  C\text{ が滑らか}\iff\Sing C=\emptyset\iff p\text{ が重根をもたない}\iff4a^3+27b^2\neq0 .
+\]
+（$4a^3+27b^2=0$ のとき，特異点は $[-\tfrac{3b}{2a}:0:1]$（$a\neq0$，node）または $[0:0:1]$（$a=b=0$，cusp $y^2=x^3$）のただ1点である．）
+
+\textbf{無限遠点．}$z=0$ とおくと $F=-x^3=0$ より $x=0$．よって無限遠点は $O=[0:1:0]$ の1点のみ．
+上で見たように $O$ は特異点ではない（$F_z(O)=1\neq0$）．$O$ での接線は $F_x(O)x+F_y(O)y+F_z(O)z=z=0$，すなわち無限遠直線であり，無限遠直線と $C$ は $O$ で重複度3で交わる（$O$ は変曲点）．
+楕円曲線の群法則ではこの $O$ を単位元に取る．
+
+\exsol{prob:ch09-4}
+いずれも原点の局所環 $\OO=\OO_{\A^2,0}=k[x,y]_{(x,y)}$ で $\dim_k\OO/(f,g)$ を計算する．$(x,y)$ に含まれない多項式は $\OO$ の単元であることを用いる．
+
+(a) $\OO/(y-x^3,\,y)=\OO/(y,\,x^3)\cong k[x]_{(x)}/(x^3)$．基底 $\{1,x,x^2\}$ より $I_0=3$．
+（直線 $y=0$ は $y=x^3$ の変曲点での接線であり，$3$ 点が合流している．）
+
+(b) $(y^2-x^3,\,y-x)=(y-x,\,x^2-x^3)=(y-x,\,x^2(1-x))$ で，$1-x$ は $\OO$ の単元なので $=(y-x,\,x^2)$．よって $\OO/(f,g)\cong k[x]_{(x)}/(x^2)$，$I_0=2$．
+（命題\ref{prop:ch09-multprop}(5)：$m_0(f)=2$，$m_0(g)=1$ で，直線 $y=x$ は cusp の接線 $y=0$ と異なるので $I_0=2\cdot1=2$ と一致する．）
+
+(c) $(y^2-x^2(x+1),\,y)=(y,\,x^2(x+1))=(y,\,x^2)$（$x+1$ は単元）．よって $I_0=\dim k[x]_{(x)}/(x^2)=2$．
+（$m_0(f)=2$，$m_0(g)=1$ だが，直線 $y=0$ は node の接線 $y=\pm x$ のどちらでもないので $I_0=2\cdot1=2$．）
+
+(d) $f=y^2-x^3$，$g=x^2-y^3$ とし，$J=(f,g)\OO$ とおく．$J$ において $x^2\equiv y^3$，$y^2\equiv x^3$ なので
+\[
+  x^2\equiv y^3=y\cdot y^2\equiv yx^3,\qquad\text{すなわち}\qquad x^2(1-xy)\in J .
+\]
+$1-xy$ は単元なので $x^2\in J$．同様に $y^2(1-xy)\in J$ より $y^2\in J$．
+逆に $f=y^2-x\cdot x^2$，$g=x^2-y\cdot y^2$ は $(x^2,y^2)$ に属するので $J=(x^2,y^2)\OO$．
+$k[x,y]/(x^2,y^2)$ は極大イデアル $(x,y)$ のみをもつ局所環なので局所化しても変わらず，
+\[
+  \OO/(f,g)\cong k[x,y]/(x^2,y^2)=\langle1,x,y,xy\rangle_k,\qquad I_0=4 .
+\]
+これは $m_0(f)m_0(g)=2\cdot2=4$ で，接錐 $y^2=0$ と $x^2=0$ が共通の接線をもたないことと整合する（例\ref{ex:ch09-twocusps}）．
+
+\exsol{prob:ch09-5}
+$F=y^2z-x^3$，$G=y^2z-x^3-xz^2$ とする．$F$ は既約で（$z$ について1次で，係数 $y^2$ と $x^3$ が互いに素だから），$G$ は $F$ の定数倍でないので，$C,D$ は共通成分をもたない．
+
+\textbf{交点}：$F=G=0$ から $F-G=xz^2=0$，すなわち $x=0$ または $z=0$．
+\begin{itemize}
+  \item $x=0$：$F=y^2z=0$ より $y=0$ または $z=0$．点は $P=[0:0:1]$，$Q=[0:1:0]$．
+  \item $z=0$：$F=-x^3=0$ より $x=0$．点は $Q=[0:1:0]$．
+\end{itemize}
+よって交点は $P=[0:0:1]$（$C$ の尖点）と $Q=[0:1:0]$（無限遠点）の2点である．
+
+\textbf{$P$ での重複度}：$U_z$ で $f=y^2-x^3$，$g=y^2-x^3-x$．命題\ref{prop:ch09-multprop}(7) により $g$ を $g-f=-x$ に置き換えてよく，
+\[
+  I_P=\dim\OO_P/(y^2-x^3,\,x)=\dim\OO_P/(x,\,y^2)=\dim k[y]_{(y)}/(y^2)=2 .
+\]
+（$D$ は $P$ で滑らかで接線 $x=0$ をもち，これは $C$ の尖点の接線 $y=0$ と異なるので，$I_P=m_P(C)m_P(D)=2\cdot1=2$ とも分かる．）
+
+\textbf{$Q$ での重複度}：$U_y$ で座標 $(x,z)$ を使うと $f=z-x^3$，$g=z-x^3-xz^2$．同様に $g$ を $g-f=-xz^2$ に置き換えて
+\[
+  I_Q=\dim\OO_Q/(z-x^3,\,xz^2).
+\]
+$\OO_Q/(z-x^3,\ \cdot\ )$ では $z=x^3$ と代入できるので $xz^2\equiv x\cdot x^6=x^7$ となり，
+\[
+  I_Q=\dim k[x]_{(x)}/(x^7)=7 .
+\]
+（加法性(6)を使っても $I_Q(f,xz^2)=I_Q(f,x)+2I_Q(f,z)=1+2\cdot3=7$．ここで $\OO/(z-x^3,x)\cong k$，$\OO/(z-x^3,z)\cong k[x]/(x^3)$．）
+
+\textbf{B\'ezout の確認}：
+\[
+  I_P+I_Q=2+7=9=3\cdot3 .
+\]
+2つの3次曲線は無限遠点 $Q$ で互いに（無限遠直線 $z=0$ を共通の変曲接線として）強く接しており，交点の大部分がそこに集中している．
+
+\exsol{prob:ch09-6}
+\textbf{前半．}2つの円錐曲線 $C_1=\Zero(F_1)$，$C_2=\Zero(F_2)$（$\deg F_i=2$）が相異なる5点 $p_1,\dots,p_5$ を共有し，共通成分をもたないと仮定する．
+B\'ezout の定理より $\sum_{p\in C_1\cap C_2}I_p(C_1,C_2)=2\cdot2=4$．一方，各 $p_i$ は交点なので $I_{p_i}\ge1$（命題\ref{prop:ch09-multprop}(2)）であり，
+\[
+  4=\sum_pI_p\ \ge\ \sum_{i=1}^5I_{p_i}\ \ge\ 5
+\]
+となり矛盾．よって $C_1,C_2$ は共通成分をもつ．
+
+\textbf{後半．}5点 $p_1,\dots,p_5$ はどの3点も同一直線上にないとする．
+
+\emph{存在}：円錐曲線 $F=ax^2+by^2+cz^2+dxy+exz+fyz$ が $p_i$ を通るという条件は係数 $(a,\dots,f)$ についての1次方程式である．
+6個の未知数に対する5本の斉次1次方程式には非自明解があるので，5点を通る円錐曲線が存在する．
+
+\emph{既約性}：5点を通る円錐曲線 $C=\Zero(F)$ は既約である．実際 $F$ が可約なら $F=L_1L_2$（$L_i$ は1次式，$L_1=L_2$ も許す）で，$C$ は2直線（または1直線）の和になる．
+5点はこの2直線上に分配されるので，鳩の巣原理によりどちらかの直線が3点以上を含み，仮定に反する．
+
+\emph{一意性}：$C_1=\Zero(F_1)$，$C_2=\Zero(F_2)$ をともに5点を通る円錐曲線とする．前半より共通成分をもち，$F_1$ は既約なので，その共通既約因子は $F_1$ 自身（の定数倍）である．
+すなわち $F_1\mid F_2$ で，次数が等しいから $F_2=\lambda F_1$（$\lambda\in k^*$）．よって $C_1=C_2$（方程式として同じ）であり，5点を通る円錐曲線はただ1つである．
+
+線形代数の言葉では，5本の1次方程式の係数行列の階数がちょうど5であり，解空間が1次元（$\PP^5$ の中の1点）であることを示したことになる（例\ref{ex:ch09-5points}）．
+仮定の役割にも注意しておく．$p_1,p_2,p_3$ が直線 $L$ 上にあると，5点を通る円錐曲線 $C$ は $L$ と3点を共有するので，B'ezout（$2\cdot1=2<3$）より $L$ を成分にもち，$C=L\cup M$（$M$ は $p_4,p_5$ を通る直線）と可約になる．さらに $p_1,\dots,p_4$ が同一直線 $L$ 上にあれば，$L$ と $p_5$ を通る任意の直線の和がすべて5点を通り，一意性が崩れる．
+
+\exsol{prob:ch09-7}
+例\ref{ex:ch09-p1p1}の記号で，双次数 $(a,b)$ の曲線の類は $aF_1+bF_2$ であり，$F_1^2=F_2^2=0$，$F_1F_2=1$ より
+\[
+  (aF_1+bF_2)\cdot(a'F_1+b'F_2)=ab'+a'b .
+\]
+\textbf{交点数}：$(2,3)$ と $(1,1)$ では
+\[
+  (2F_1+3F_2)\cdot(F_1+F_2)=2\cdot1+1\cdot3=5 .
+\]
+よって一般には（すべて横断的に）5点で交わる．
+
+\textbf{$\PP^3$ での次数}：Segre 埋め込み $\sigma:\PP^1\times\PP^1\to Q\subset\PP^3$ では，$\PP^3$ の超平面 $\sum c_{ij}z_{ij}=0$ の引き戻しは $\sum c_{ij}x_iy_j=0$，すなわち双次数 $(1,1)$ の曲線であり，超平面類の制限は $h=F_1+F_2$ である．
+空間曲線 $C\subset\PP^3$ の次数は一般の平面との交点数だから，
+\[
+  \deg C=C\cdot h=(aF_1+bF_2)\cdot(F_1+F_2)=a+b .
+\]
+例えば $(1,0)$，$(0,1)$ の曲線はルーリングの直線（次数1），$(1,1)$ は平面切断の円錐曲線（次数2），$(1,2)$ はねじれ3次曲線（次数3）である．
+前半の答え $5$ は，$(1,1)$ 曲線が平面切断であることから，$(2,3)$ 曲線の $\PP^3$ での次数 $2+3=5$ にほかならない．
+
+\exsol{prob:ch09-8}
+交差積は可換で多重線形なので，$D^3=(aJ_1+bJ_2+cJ_3)^3$ を多項定理で展開すると
+\[
+  D^3=\sum_{i+j+l=3}\frac{3!}{i!\,j!\,l!}\,a^ib^jc^l\,J_1^iJ_2^jJ_3^l .
+\]
+$J_a^2=0$ より，どれかの指数が2以上の項はすべて消え，残るのは $i=j=l=1$ の項だけである．その係数は $3!/(1!1!1!)=6$ なので
+\[
+  D^3=6abc\,J_1J_2J_3=6abc .
+\]
+（三重交差数で書けば $\kappa_{123}=1$ でその他の $\kappa_{abc}$（添字が重複するもの）は $0$ であり，$\kappa_{abc}t^at^bt^c$ のうち $\kappa_{123}$ が $3!=6$ 通りの並べ方で現れる，と見てもよい．）
+幾何的には，$J_1$ の代表として $\{p\}\times\PP^1\times\PP^1$ などを取ると，3つの異なる因子の代表はちょうど1点 $(p,q,r)$ で横断的に交わり，同じ $J_a$ の2つの代表（異なる点 $p\neq p'$ の引き戻し）は交わらないことが $J_1J_2J_3=1$，$J_a^2=0$ の意味である．
+
+\exsol{prob:ch09-9}
+\textbf{次数}：$X_{2,4}=\Zero(Q,P)\subset\PP^5$（$\deg Q=2$，$\deg P=4$）は完全交差なので，高次元の B\'ezout の定理（例\ref{ex:ch09-restriction}）より
+\[
+  \deg X_{2,4}=\int_{X}h^3=2\cdot4=8
+\]
+（例\ref{ex:ch09-cicy}の値 $8$ と一致）．$\dim X=3$ なので，$X$ は $\PP^5$ の一般の3つの超平面の交わり（一般の $\PP^2$）とちょうど8点で交わる．
+
+\textbf{パラメータ勘定}：$\PP^5$ の $d$ 次同次多項式の空間の次元は $\binom{d+5}{5}$ だから
+\[
+  \dim S_2=\binom{7}{5}=21,\qquad \dim S_4=\binom{9}{5}=126 .
+\]
+\begin{itemize}
+  \item 2次式 $Q$：$21$ 個の係数からスケール倍の $1$ を引いて $20$．
+  \item 4次式 $P$：$Q$ を固定すると，$P$ と $P+Q\cdot R$（$R\in S_2$）は同じ多様体 $\Zero(Q,P)$（同じイデアル $(Q,P)$）を与える．$Q\neq0$ による掛け算 $S_2\to S_4$，$R\mapsto QR$ は単射（$S$ は整域）なので，この冗長性は $21$ 次元．さらに $P$ のスケール倍の $1$ を引いて $126-21-1=104$．
+  \item 座標変換 $\PGL_6$：$\dim\PGL_6=36-1=35$．
+\end{itemize}
+以上より
+\[
+  20+104-35=89
+\]
+個の独立なパラメータが残る．これは $X_{2,4}$ の複素構造変形の数 $h^{2,1}(X_{2,4})=89$ と一致する（第15章・第16章）．
+例\ref{ex:ch09-quinticmoduli}の5次超曲面（$126-1-24=101$）と比べて，2次式と4次式の組を考える分だけ「$Q$ の倍数によるゲージ冗長性」を余分に差し引く必要があるのが新しい点である．

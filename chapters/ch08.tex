@@ -1,0 +1,1082 @@
+% ==========================================================
+% 第8章 射影空間と射影幾何
+% ==========================================================
+\chapter{射影空間と射影幾何}
+\label{ch:ch08}
+
+\begin{chapterlead}
+アフィン空間 $\A^n$ は代数幾何の出発点であったが，大域的な性質を調べるには「無限遠」が欠けているという欠点がある．
+平面の2直線は平行なら交わらず，双曲線は漸近線の方向へ逃げていく．
+射影空間 $\PP^n$ はアフィン空間に無限遠点を付け加えて「閉じた」空間にしたものであり，
+そこでは平行線も無限遠で交わり，交点の個数の勘定（第9章の Bézout の定理）が例外なく成り立つ．
+本章では，$\PP^n$ を「原点を通る直線の集合」として定義し，同次座標とアフィンチャートによる局所座標を導入する．
+次に同次多項式を用いて射影代数的集合・射影多様体を定義し，2次曲線，Segre埋め込み，Veronese埋め込み，ねじれ3次曲線などの基本例を調べる．
+最後に，量子力学の状態空間 $\C\PP^{N-1}$ や Riemann 球面など，物理に現れる射影的構造を概観する．
+\end{chapterlead}
+
+本章でも $k$ は（特に断らない限り）代数閉体とする．複素数体 $k=\C$ の場合を常に念頭に置くとよい．
+
+% ==========================================================
+\section{射影空間の構成}
+% ==========================================================
+
+\subsection{射影空間の動機}
+
+アフィン平面 $\A^2$ の2直線
+\[
+  L_1:\ y=x,\qquad L_2:\ y=x+1
+\]
+は交わらない．一方，平行でない2直線はちょうど1点で交わる．「2直線は1点で交わる」という命題に例外があるのは，幾何学として美しくない．
+同様に，直線 $y=c$ と放物線 $y=x^2$ は $c>0$ なら（実数で）2点，$c=0$ なら1点（重複度2）で交わり，複素数で考えれば常に重複込みで2点で交わる．
+ところが直線 $x=c$ と放物線 $y=x^2$ は1点でしか交わらない．「もう1つの交点」はどこへ行ったのか．
+
+答えは「\textbf{無限遠}」である．絵画の遠近法では，平行な線路は地平線上の消失点で交わるように描かれる．
+これは，目（原点）から見た「方向」として点を捉え直すことに対応している．
+平面上の点 $(x,y)$ を，3次元空間の平面 $z=1$ 上の点 $(x,y,1)$ とみなし，さらにそれを原点と結ぶ直線で置き換える．
+平面 $z=1$ の上で遠くへ行く点に対応する直線は，$z=0$ 平面内の直線（水平な方向）に近づく．
+この「水平な直線」を新たな点として付け加えたものが射影平面である．
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  % plane z=1
+  \fill[blue!8] (-1.5,1.6)--(3.5,1.6)--(4.5,2.6)--(-0.5,2.6)--cycle;
+  \draw[blue!50!black] (-1.5,1.6)--(3.5,1.6)--(4.5,2.6)--(-0.5,2.6)--cycle;
+  \node[blue!50!black] at (4.6,2.2) {$z=1$};
+  % plane z=0
+  \draw[gray,dashed] (-1.5,0)--(3.5,0)--(4.5,1.0)--(-0.5,1.0)--cycle;
+  \node[gray] at (4.6,0.5) {$z=0$};
+  \coordinate (O) at (0.8,0.4);
+  \fill (O) circle(1.5pt) node[below]{$0$};
+  % lines through origin
+  \coordinate (P1) at (1.4,2.1);
+  \coordinate (P2) at (2.6,2.1);
+  \draw[thick,red] (O)--($(O)!1.5!(P1)$);
+  \fill[red] (P1) circle(1.5pt);
+  \draw[thick,red!70!black] (O)--($(O)!1.4!(P2)$);
+  \fill[red!70!black] (P2) circle(1.5pt);
+  % horizontal line
+  \draw[thick,orange!90!black] ($(O)+(-1.0,0.3)$)--($(O)+(3.0,-0.1)$);
+  \node[orange!90!black,right] at ($(O)+(3.0,-0.2)$) {無限遠点（水平な直線）};
+  \node[red] at (-0.1,2.3) {$[x:y:1]$};
+\end{tikzpicture}
+\caption{射影平面の考え方：$z=1$ 上の点 $\leftrightarrow$ 原点を通る直線．水平な直線は $z=1$ と交わらず，無限遠点に対応する．}
+\label{fig:ch08-motivation}
+\end{figure}
+
+射影空間を導入する動機をまとめると次のようになる．
+\begin{itemize}
+  \item \textbf{交点の勘定に例外をなくす}：$\PP^2$ では任意の2直線がちょうど1点で交わり，次数 $d,e$ の曲線は重複込みで $de$ 点で交わる（第9章）．
+  \item \textbf{コンパクト性}：$\C\PP^n$ は通常の位相でコンパクトである．コンパクト多様体の上では大域的な不変量（種数，Euler数，Chern類など）がよく定義される．
+  \item \textbf{漸近的な振る舞いの代数化}：曲線の無限遠での様子（漸近線など）が，無限遠点の近傍での局所的な性質として扱える．
+\end{itemize}
+
+\subsection{同値関係による射影空間の定義}
+
+\begin{mydef}{射影空間}{ch08-proj}
+$k^{n+1}\setminus\{0\}$ に同値関係
+\[
+  (a_0,\dots,a_n)\sim(b_0,\dots,b_n)\iff\exists\lambda\in k^*=k\setminus\{0\}\ \text{s.t.}\ b_i=\lambda a_i\ (i=0,\dots,n)
+\]
+を入れ，その商集合
+\[
+  \PP^n=\PP^n_k=(k^{n+1}\setminus\{0\})/k^*
+\]
+を $k$ 上の $n$ 次元\textbf{射影空間}という．$(a_0,\dots,a_n)$ の同値類を $[a_0:a_1:\dots:a_n]$ と書く．
+\end{mydef}
+
+$\sim$ が同値関係であることは，$k^*$ が乗法について群であることから直ちに分かる（付録A：群作用の軌道による同値関係）．
+すなわち $\PP^n$ は，乗法群 $k^*$ の $k^{n+1}\setminus\{0\}$ へのスカラー倍作用の\textbf{軌道空間}である．
+原点を除くのは，原点だけはスカラー倍で動かない（固定点である）からであり，原点を含めると商空間の良い性質が失われる．
+
+\subsection{$\PP^n$ の定義}
+
+$k^{n+1}\setminus\{0\}$ の点 $a$ の同値類 $\{\lambda a\mid\lambda\in k^*\}$ は，原点を通る直線 $k\cdot a$ から原点を除いたものである．したがって
+\[
+  \PP^n=\{\,k^{n+1}\text{ の原点を通る直線}\,\}=\{\,k^{n+1}\text{ の1次元部分空間}\,\}
+\]
+とも書ける．より一般に，有限次元ベクトル空間 $V$ に対して $V$ の1次元部分空間全体を $\PP(V)$ と書く．$\PP^n=\PP(k^{n+1})$ である．
+この記述は基底によらないので，物理（例：Hilbert空間の射線）ではこちらの方が自然であることが多い．
+
+$\PP(V)$ の\textbf{射影部分空間}とは，$V$ の部分空間 $W$ に対する $\PP(W)\subset\PP(V)$ のことである．$\dim\PP(W)=\dim W-1$ であり，
+1次元の射影部分空間を\textbf{直線}，$(n-1)$ 次元のものを\textbf{超平面}という．
+
+\paragraph{実・複素射影空間の位相}
+$k=\R,\C$ のとき，$\PP^n$ には商位相が入る．各直線は単位球面とちょうど $\{\pm1\}$ または $U(1)$ の軌道で交わるので
+\[
+  \R\PP^n=S^n/\{\pm1\},\qquad \C\PP^n=S^{2n+1}/U(1)
+\]
+である．ここで $S^{2n+1}=\{z\in\C^{n+1}\mid|z_0|^2+\cdots+|z_n|^2=1\}$．コンパクト空間の連続像なので，$\R\PP^n$，$\C\PP^n$ はコンパクトである．
+$\C\PP^n$ は実 $2n$ 次元の（複素 $n$ 次元の）コンパクト複素多様体である（第13章）．
+
+\begin{myex}{$\C\PP^1$ と Hopf ファイブレーション}{ch08-hopf}
+$n=1$ では $\C\PP^1=S^3/U(1)$ であり，射影 $S^3\to\C\PP^1\cong S^2$ は Hopf ファイブレーション（ファイバー $S^1$）である．
+これは Dirac の磁気単極子（電荷1）の主 $U(1)$ 束と同じものである（第14章）．
+\end{myex}
+
+\subsection{射影空間の点}
+
+$\PP^n$ の点 $[a_0:\dots:a_n]$ は，少なくとも1つの $a_i$ が $0$ でない $(n+1)$ 個の数の\textbf{比}である．
+
+\begin{myex}{$\PP^2$ の点}{ch08-p2pts}
+$[1:2:3]=[2:4:6]=[-1:-2:-3]=[\tfrac13:\tfrac23:1]$ は $\PP^2$ の同じ点である．$[0:0:1]$，$[0:1:0]$，$[1:0:0]$ は相異なる点であり，$[0:0:0]$ は $\PP^2$ の点ではない．
+\end{myex}
+
+\begin{myex}{有限体上の射影空間の点の数}{ch08-fq}
+$k=\F_q$（$q$ 元体）のとき，$|k^{n+1}\setminus\{0\}|=q^{n+1}-1$ で，各同値類は $q-1$ 個の元からなるので
+\[
+  |\PP^n(\F_q)|=\frac{q^{n+1}-1}{q-1}=q^n+q^{n-1}+\cdots+q+1.
+\]
+右辺の各項 $q^j$ は，後で見る分解 $\PP^n=\A^n\sqcup\A^{n-1}\sqcup\cdots\sqcup\A^0$（\S\ref{sec:ch08-infty}）の各片の点の数である．
+$q=2$，$n=2$ では7点・7直線からなる Fano 平面が得られる．
+\end{myex}
+
+\subsection{同次座標}
+
+\begin{mydef}{同次座標}{ch08-homcoord}
+点 $P\in\PP^n$ の代表元 $(a_0,\dots,a_n)\in k^{n+1}\setminus\{0\}$ を，$P$ の\textbf{同次座標}という．$[x_0:\dots:x_n]$ を $\PP^n$ の同次座標と呼ぶ．
+\end{mydef}
+
+同次座標は点によって一意に決まらず，$k^*$ 倍の不定性をもつ．したがって，個々の $x_i$ は $\PP^n$ 上の関数\textbf{ではない}．
+意味をもつのは比 $x_i/x_j$（$x_j\ne0$ のところで）や，後述する同次多項式が $0$ か否か，といったスケール不変な量である．
+この意味で同次座標は物理のゲージ自由度をもつ変数に似ており，$k^*$ がゲージ群，比 $x_i/x_j$ がゲージ不変量に相当する（\S\ref{sec:ch08-phys}）．
+
+射影変換群 $\PGL(n+1,k)=\GL(n+1,k)/k^*$ は $\PP^n$ に $[x]\mapsto[Ax]$ で作用する．この作用で $\PP^n$ の「一般の位置にある」$n+2$ 点はどれも
+$[1:0:\dots:0],\dots,[0:\dots:0:1],[1:1:\dots:1]$ に移せる．例えば $\PP^1$ の任意の相異なる3点は $0,1,\infty$ に移せる（Möbius変換）．
+
+\exprob{ch08-prob-fano}
+$\PP^2(\F_2)$ の7点を同次座標で列挙し，各直線（$a_0x_0+a_1x_1+a_2x_2=0$，$(a_0,a_1,a_2)\neq0$）上にちょうど3点があり，任意の2直線がちょうど1点で交わることを確かめよ．
+
+% ==========================================================
+\section{射影空間の基本性質}
+% ==========================================================
+
+\subsection{射影直線}
+
+$\PP^1=\{[x_0:x_1]\}$ を考える．
+\begin{itemize}
+  \item $x_0\ne0$ の点は $[x_0:x_1]=[1:x_1/x_0]$ と一意に書け，$t=x_1/x_0\in k$ と対応する．
+  \item $x_0=0$ の点は $[0:x_1]=[0:1]$ のただ1点である．これを $\infty$ と書く．
+\end{itemize}
+したがって
+\[
+  \PP^1=\{[1:t]\mid t\in k\}\sqcup\{[0:1]\}=\A^1\sqcup\{\infty\}
+\]
+である．$t\to\infty$ のとき $[1:t]=[1/t:1]\to[0:1]$ となるので，$\infty$ は確かに「$t$ が無限に大きくなった極限」である．
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  \begin{scope}
+    \draw[thick] (-2.6,0)--(2.6,0) node[right]{$\A^1_\R$};
+    \draw[thick,blue!70!black] (0,1) circle(1);
+    \fill (0,0) circle(1.5pt) node[below]{$0$};
+    \fill[red] (0,2) circle(1.8pt) node[above]{$\infty=[0:1]$};
+    % stereographic projection line from N to point on line
+    \coordinate (Q) at (1.8,0);
+    \draw[dashed,gray] (0,2)--(Q);
+    \fill (Q) circle(1.5pt) node[below]{$t$};
+    \path[name path=s] (0,2)--(Q);
+    \path[name path=c] (0,1) circle(1);
+    \fill[blue!70!black, name intersections={of=s and c}] (intersection-2) circle(1.8pt);
+    \node at (0,-0.9) {$\R\PP^1\cong S^1$};
+  \end{scope}
+  \begin{scope}[xshift=7cm,yshift=0.6cm]
+    \shade[ball color=blue!15] (0,0) circle(1.2);
+    \draw[thick,blue!70!black] (0,0) circle(1.2);
+    \draw[blue!70!black] (-1.2,0) arc (180:360:1.2 and 0.3);
+    \draw[blue!70!black,dashed] (1.2,0) arc (0:180:1.2 and 0.3);
+    \fill[red] (0,1.2) circle(1.8pt) node[above]{$\infty$};
+    \fill (0,-1.2) circle(1.5pt) node[below]{$0$};
+    \node at (2.3,0) {$|z|=1$};
+    \node at (0,-2.0) {$\C\PP^1\cong S^2$（Riemann球面）};
+  \end{scope}
+\end{tikzpicture}
+\caption{射影直線．実数上では直線の両端を1点 $\infty$ で閉じて円となり，複素数上では平面に1点を加えて球面（Riemann球面）となる．}
+\label{fig:ch08-p1}
+\end{figure}
+
+$k=\R$ のとき，$\R\PP^1$ は直線の「$+\infty$」と「$-\infty$」を同じ1点で繋いだもので，円 $S^1$ と同相である．
+立体射影（北極 $N$ から直線上の点 $t$ へ線を引き，円との交点を対応させる）がこの同相を与える．
+別の見方をすれば，$\R\PP^1$ は「$\R^2$ の原点を通る直線の傾き角 $\theta\in[0,\pi)$」の集合で，$\theta=0$ と $\theta=\pi$ を同一視した円である．
+
+$k=\C$ のとき，$\C\PP^1=\C\cup\{\infty\}$ は\textbf{Riemann球面}である．立体射影
+\[
+  S^2\ni(X,Y,Z)\longmapsto z=\frac{X+iY}{1-Z}\in\C\cup\{\infty\}
+\]
+がこれを2次元球面と同一視する（北極 $Z=1$ が $\infty$）．複素関数論で $1/z$ の $z=0$ での振る舞いを「$\infty$ での値」として扱ったのは，この空間の上で考えていたことになる．
+
+\subsection{射影平面}
+
+$\PP^2=\{[x:y:z]\}$ について同様に，
+\begin{itemize}
+  \item $z\ne0$ の点は $[x/z:y/z:1]$ と一意に書け，$\A^2$ の点 $(x/z,y/z)$ に対応する．
+  \item $z=0$ の点 $[x:y:0]$ 全体は，$[x:y]\in\PP^1$ と一対一に対応する．これを\textbf{無限遠直線} $L_\infty$ という．
+\end{itemize}
+よって
+\[
+  \PP^2=\A^2\sqcup L_\infty=\A^2\sqcup\PP^1
+\]
+となる．無限遠直線上の点 $[a:b:0]$ は，$\A^2$ の\textbf{方向} $(a,b)$（の比）に対応している．
+
+\begin{myex}{平行線は無限遠で交わる}{ch08-parallel}
+$\A^2$ の直線 $L_c:\ y=mx+c$ を考える．$x=X/Z$，$y=Y/Z$ を代入して分母を払うと，$\PP^2$ の直線
+\[
+  \bar L_c:\ Y=mX+cZ
+\]
+を得る．無限遠直線 $Z=0$ との交点は $Y=mX$ より $[1:m:0]$ であり，$c$ によらない．
+すなわち傾き $m$ の平行線族 $\{L_c\}_c$ はすべて無限遠点 $[1:m:0]$ を通る．
+垂直な直線 $x=c$ は $X=cZ$ となり，無限遠点 $[0:1:0]$ を通る．
+異なる傾き $m\ne m'$ の無限遠点は異なるので，平行でない直線は無限遠では交わらない（$\A^2$ 内のちょうど1点で交わる）．
+
+こうして $\PP^2$ では\textbf{任意の相異なる2直線がちょうど1点で交わる}．実際，$\PP^2$ の直線は $k^3$ の2次元部分空間に対応し，相異なる2つの2次元部分空間の交わりは（次元公式 $2+2-3=1$ により）ちょうど1次元である．
+\end{myex}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.95]
+  \draw[thick,gray] (-3.2,2.4)--(3.2,2.4);
+  \node[gray,right] at (3.2,2.4) {地平線 $=L_\infty$};
+  \fill[red] (0.6,2.4) circle(2pt) node[above]{$[1:m:0]$};
+  \foreach \c in {-2.4,-1.2,0,1.2,2.4}{
+     \draw[thick,blue!70!black] ({0.6+\c*1.3},-1.2)--(0.6,2.4);
+  }
+  \draw[thick,green!50!black] (-3.2,-0.6)--(-1.8,2.4);
+  \draw[thick,green!50!black] (-2.4,-1.2)--(-1.8,2.4);
+  \fill[orange!90!black] (-1.8,2.4) circle(2pt) node[above]{$[1:m':0]$};
+  \node at (0,-1.7) {平行線族は同じ無限遠点で交わる（遠近法の消失点）};
+\end{tikzpicture}
+\caption{射影平面における平行線．}
+\end{figure}
+
+\begin{myex}{2次曲線の無限遠点}{ch08-conic-infty}
+放物線 $y=x^2$ は同次化すると $YZ=X^2$．$Z=0$ とすると $X=0$ なので，無限遠点は $[0:1:0]$ のただ1点（$y$ 軸方向）で，無限遠直線に接している．
+双曲線 $xy=1$ は $XY=Z^2$ となり，無限遠点は $[1:0:0]$ と $[0:1:0]$（2本の漸近線の方向）の2点．
+楕円 $x^2+y^2=1$ は $X^2+Y^2=Z^2$ で，無限遠点は $X^2+Y^2=0$，すなわち実数上ではなし，複素数上では $[1:\pm i:0]$（円環点）の2点．
+こうして，射影平面では楕円・放物線・双曲線は\textbf{無限遠直線との位置関係が違うだけ}の同じ曲線になる（例\ref{ex:ch08-conics}）．
+冒頭の問い「直線 $x=c$ と放物線 $y=x^2$ のもう1つの交点」は，$X=cZ$ と $YZ=X^2$ の交点として $[0:1:0]$ に見つかる．
+\end{myex}
+
+\subsection{射影超平面}
+
+\begin{mydef}{超平面}{ch08-hyperplane}
+$(a_0,\dots,a_n)\neq0$ に対し
+\[
+  H_a=\{[x_0:\dots:x_n]\in\PP^n\mid a_0x_0+\cdots+a_nx_n=0\}
+\]
+を $\PP^n$ の\textbf{超平面}という．
+\end{mydef}
+
+条件 $\sum a_ix_i=0$ は代表元の取り方によらない（$\lambda$ 倍しても $0$ のまま）ので，$H_a$ はwell-definedである．
+$H_a$ は $k^{n+1}$ の $n$ 次元部分空間 $\Ker(a)$ に対応し，$H_a\cong\PP^{n-1}$．
+また $H_a=H_b\iff a=\mu b$（$\mu\in k^*$）なので，超平面全体の集合はそれ自身が射影空間
+\[
+  (\PP^n)^\vee=\PP((k^{n+1})^*)
+\]
+になる．これを\textbf{双対射影空間}という．$\PP^2$ では「点」と「直線」が入れ替わる\textbf{双対原理}が成り立つ：「2点を通る直線がただ1本ある」の双対は「2直線はただ1点で交わる」である．
+
+一般に，$\PP^n$ の $r$ 次元射影部分空間と $s$ 次元射影部分空間は，$r+s\ge n$ なら必ず交わり，交わりの次元は $r+s-n$ 以上である
+（$k^{n+1}$ の $(r+1)$ 次元と $(s+1)$ 次元の部分空間の交わりは $r+s+2-(n+1)$ 次元以上）．
+アフィン空間では平行な部分空間が交わらないことがあるので，これは射影空間特有の性質である．
+
+\subsection{無限遠点}
+\label{sec:ch08-infty}
+
+$\PP^n$ の座標超平面 $H_0=\{x_0=0\}$ を\textbf{無限遠超平面}として選ぶと，
+\[
+  \PP^n=\underbrace{\{x_0\neq0\}}_{\cong\A^n}\sqcup\underbrace{\{x_0=0\}}_{\cong\PP^{n-1}}
+\]
+と分解される．$H_0$ の点 $[0:a_1:\dots:a_n]$ を\textbf{無限遠点}という．無限遠点は $\A^n$ の\textbf{方向}（原点を通る直線）$[a_1:\dots:a_n]\in\PP^{n-1}$ と一対一に対応する．
+$\A^n$ 内の直線 $\{p+tv\mid t\in k\}$ の閉包は，$t\to\infty$ の極限として無限遠点 $[0:v]$ を1つ付け加えたものになる：
+\[
+  [1:p+tv]=[1/t:p/t+v]\xrightarrow{t\to\infty}[0:v].
+\]
+これを繰り返すと
+\[
+  \PP^n=\A^n\sqcup\A^{n-1}\sqcup\cdots\sqcup\A^1\sqcup\A^0
+\]
+という分割（胞体分割）を得る．$k=\C$ ならば $\C\PP^n$ は実 $0,2,\dots,2n$ 次元の胞体を1個ずつもつ CW 複体であり，
+\[
+  H_{2j}(\C\PP^n;\Z)\cong\Z\ (0\le j\le n),\qquad \text{その他は }0,\qquad \chi(\C\PP^n)=n+1
+\]
+が直ちに分かる．$k=\F_q$ なら例\ref{ex:ch08-fq}の点の数え上げが得られる．
+
+\subsection{アフィン空間と射影空間の関係}
+
+単射
+\[
+  \iota_0:\A^n\hookrightarrow\PP^n,\qquad (a_1,\dots,a_n)\mapsto[1:a_1:\dots:a_n]
+\]
+によって，$\A^n$ は $\PP^n$ の部分集合 $U_0=\{x_0\neq0\}$ と同一視される．逆写像は $[x_0:\dots:x_n]\mapsto(x_1/x_0,\dots,x_n/x_0)$ である．
+
+まとめると，射影空間はアフィン空間に「すべての方向の無限遠点」を付け加えたものであり，
+\begin{center}
+\begin{tabular}{ccc}
+$\PP^n$ & $=$ & $\A^n\ \sqcup\ \PP^{n-1}$ \\
+（コンパクト） & & （有限の部分）\ （無限遠）
+\end{tabular}
+\end{center}
+と理解できる．ただし，どの超平面を「無限遠」とするかは選択であり，$\PP^n$ 自身には特別な超平面はない（$\PGL(n+1)$ は超平面全体に推移的に作用する）．
+これが次節で $\PP^n$ を複数のアフィン空間で覆う理由である．
+
+\exprob{ch08-prob-lines}
+$\PP^3$ において，2本の直線は一般には交わらない（ねじれの位置）が，2つの平面は必ず直線で交わり，直線と平面は必ず交わることを，$k^4$ の部分空間の次元公式を用いて示せ．
+
+% ==========================================================
+\section{射影空間の局所座標}
+% ==========================================================
+
+\subsection{標準的な開集合}
+
+\begin{mydef}{標準アフィン開集合}{ch08-ui}
+$i=0,1,\dots,n$ に対して
+\[
+  U_i=\{[x_0:\dots:x_n]\in\PP^n\mid x_i\neq0\}
+\]
+とおく．条件 $x_i\neq0$ は代表元によらない．
+\end{mydef}
+
+任意の点は少なくとも1つの $x_i\neq0$ をもつので
+\[
+  \PP^n=U_0\cup U_1\cup\cdots\cup U_n
+\]
+である．各 $U_i$ の補集合は超平面 $\{x_i=0\}$ であり，後で定義する射影Zariski位相（\S\ref{sec:ch08-projzar}）で $U_i$ は開集合になる．
+これを $\PP^n$ の\textbf{標準アフィン開被覆}という．
+
+\subsection{アフィンチャート}
+
+\begin{myprop}{アフィンチャート}{ch08-chart}
+写像
+\[
+  \varphi_i:U_i\to\A^n,\qquad [x_0:\dots:x_n]\mapsto\Bigl(\frac{x_0}{x_i},\dots,\widehat{\frac{x_i}{x_i}},\dots,\frac{x_n}{x_i}\Bigr)
+\]
+（$\widehat{\ }$ は除くことを表す）は全単射であり，逆写像は $(t_1,\dots,t_n)\mapsto[t_1:\dots:t_i:1:t_{i+1}:\dots:t_n]$（第 $i$ 成分に $1$ を挿入）である．
+\end{myprop}
+
+\begin{proof}
+$\varphi_i$ が well-defined であることは比 $x_j/x_i$ のスケール不変性から．$[x]\in U_i$ は $[x_0/x_i:\dots:1:\dots:x_n/x_i]$ と一意に表されるので全単射である．
+\end{proof}
+
+幾何的には，$U_i$ は「超平面 $\{x_i=0\}$ に含まれない直線」，すなわちアフィン超平面 $\{x_i=1\}\subset k^{n+1}$ と交わる直線の集合であり，
+$\varphi_i$ はその交点の座標を読む写像である（図\ref{fig:ch08-chart}）．
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.25]
+  \draw[->,gray] (-2.4,0)--(2.6,0) node[right]{$x_1$};
+  \draw[->,gray] (0,-0.6)--(0,2.4) node[above]{$x_0$};
+  \draw[thick,blue!70!black] (-2.4,1)--(2.4,1) node[right]{$x_0=1$（$U_0$ のチャート）};
+  \draw[thick,green!50!black] (1,2.4)--(1,-0.6) node[below]{$x_1=1$（$U_1$ のチャート）};
+  \fill (0,0) circle(1.3pt);
+  % lines
+  \draw[red,thick] (-0.4,-0.6)--(1.6,2.4) node[right]{$\ell$};
+  \fill[red] (0.66667,1) circle(1.5pt);
+  \fill[red] (1,1.5) circle(1.5pt);
+  \node[red,above left] at (0.66,1) {$t$};
+  \node[red,right] at (1,1.5) {$1/t$};
+  \draw[orange!90!black,thick] (-2.3,0)--(2.3,0);
+  \node[orange!90!black] at (-1.6,-0.3) {$[0:1]=\infty$};
+\end{tikzpicture}
+\caption{$\PP^1$ のアフィンチャート．原点を通る直線 $\ell$ が $x_0=1$ と交わる点の座標が $t=x_1/x_0$，$x_1=1$ と交わる点の座標が $x_0/x_1=1/t$．$x_1$ 軸（$\infty$）は $x_0=1$ と交わらない．}
+\label{fig:ch08-chart}
+\end{figure}
+
+\subsection{局所座標の構成}
+
+$U_i$ 上の関数 $x_j/x_i$（$j\neq i$）を $U_i$ の\textbf{アフィン座標}（非同次座標）という．
+$\PP^n$ の点の近くで何かを計算するときは，その点を含む $U_i$ を選び，アフィン座標で書けば $\A^n$ での計算に帰着できる．
+これは微分幾何で多様体を局所座標で調べるのとまったく同じ発想である．
+
+\begin{myex}{$\PP^2$ のチャート}{ch08-p2chart}
+$\PP^2=\{[X:Y:Z]\}$ の3つのチャートは
+\[
+  U_Z:\ (x,y)=\Bigl(\frac XZ,\frac YZ\Bigr),\quad
+  U_X:\ (u,v)=\Bigl(\frac YX,\frac ZX\Bigr),\quad
+  U_Y:\ (s,r)=\Bigl(\frac XY,\frac ZY\Bigr).
+\]
+無限遠点 $[1:m:0]$ は $U_Z$ には入らないが，$U_X$ では $(u,v)=(m,0)$ という普通の点である．
+例\ref{ex:ch08-parallel}の平行線 $y=mx+c$ を $U_X$ で見ると，$Y=mX+cZ$ を $X$ で割って $u=m+cv$．
+これらは $(u,v)=(m,0)$ を通る直線族であり，平行線が無限遠点で交わる様子がアフィンチャートの中で普通の交わりとして見える．
+\end{myex}
+
+\subsection{チャート間の座標変換}
+
+$U_i\cap U_j$（$i\neq j$）上では，2つのアフィン座標系が使える．その間の変換は
+\[
+  \frac{x_l}{x_j}=\frac{x_l/x_i}{x_j/x_i}
+\]
+で与えられる．すなわち $U_i$ の座標 $t_l=x_l/x_i$ を使えば，$U_j$ の座標は $t_l/t_j$（ただし $t_i=1$ とおく）であり，
+$\varphi_i(U_i\cap U_j)=\{t_j\neq0\}=D(t_j)\subset\A^n$ 上で
+\[
+  \varphi_j\circ\varphi_i^{-1}:\ (t_l)_{l\ne i}\longmapsto\Bigl(\frac{t_l}{t_j}\Bigr)_{l\neq j}
+\]
+となる．これは分母 $t_j$ が $D(t_j)$ 上で消えない有理関数で書かれた写像，すなわち\textbf{正則写像}（第5章，第10章）であり，逆写像も同じ形である．
+
+\begin{myex}{$\PP^1$ の座標変換}{ch08-p1trans}
+$\PP^1$ で $z=x_1/x_0$（$U_0$），$w=x_0/x_1$（$U_1$）とすると，$U_0\cap U_1=\{z\neq0\}=\{w\neq0\}$ 上で
+\[
+  w=\frac1z.
+\]
+$k=\C$ では，Riemann球面を2枚の複素平面 $\C_z$，$\C_w$ を $w=1/z$ で貼り合わせたものとして記述したことになる．
+$\infty$ の近くの関数の振る舞いは $w=0$ の近くで調べればよい．たとえば $f(z)=z^2$ は $U_1$ で $1/w^2$ となり，$\infty$ で2位の極をもつ．
+\end{myex}
+
+\begin{myex}{$\PP^2$ の座標変換}{ch08-p2trans}
+例\ref{ex:ch08-p2chart}の記号で，$U_Z\cap U_X$ 上 $(u,v)=(y/x,1/x)$，逆に $(x,y)=(1/v,u/v)$．
+\end{myex}
+
+こうして $\PP^n$ は $n+1$ 枚の $\A^n$ を正則な座標変換で貼り合わせたものである．$k=\C$ ならば座標変換は正則関数なので，
+$\C\PP^n$ は複素多様体になる（第13章）．貼り合わせの考え方は層（第11章）・スキーム（第12章）の定義で一般化される．
+
+\begin{note}
+貼り合わせの整合性条件（コサイクル条件）$\varphi_l\circ\varphi_j^{-1}\circ\varphi_j\circ\varphi_i^{-1}=\varphi_l\circ\varphi_i^{-1}$ は自明に成り立つ（全て同次座標の比で書かれているから）．
+一般のスキームの貼り合わせではこの条件を確認する必要がある．
+\end{note}
+
+\exprob{ch08-prob-chart}
+$\PP^1$ の点を $U_0$ の座標 $z$ で表す．射影変換 $[x_0:x_1]\mapsto[cx_1+dx_0:ax_1+bx_0]$（$ad-bc\neq0$）が $z$ 座標で Möbius 変換 $z\mapsto(az+b)/(cz+d)$ になることを示し，$\infty$ の行き先と $\infty$ に行く点を求めよ．
+
+% ==========================================================
+\section{同次多項式}
+% ==========================================================
+
+\subsection{同次多項式の定義}
+
+$S=k[x_0,\dots,x_n]$ とする．
+
+\begin{mydef}{同次多項式}{ch08-homog}
+多項式 $F\in S$ が\textbf{$d$ 次同次多項式}（$d$ 次形式）であるとは，$F$ が $d$ 次の単項式 $x_0^{e_0}\cdots x_n^{e_n}$（$e_0+\cdots+e_n=d$）の $k$-線形結合であることをいう．
+$d$ 次同次多項式全体（と $0$）を $S_d$ と書く．
+\end{mydef}
+
+任意の多項式は同次成分の和に一意に分解されるので，
+\[
+  S=\bigoplus_{d\ge0}S_d,\qquad S_dS_e\subset S_{d+e}
+\]
+となる（次数付き環）．$\dim_kS_d=\binom{n+d}{d}$ である（$d$ 個の玉と $n$ 個の仕切りの並べ方）．
+
+同次多項式の基本的な性質は
+\[
+  F(\lambda x_0,\dots,\lambda x_n)=\lambda^dF(x_0,\dots,x_n)\qquad(\lambda\in k)
+\]
+である．$k$ が無限体なら，これは $F$ が $d$ 次同次であることと同値である．微分すると\textbf{Eulerの恒等式}
+\[
+  \sum_{i=0}^nx_i\frac{\partial F}{\partial x_i}=d\cdot F
+\]
+を得る．
+
+\subsection{同次多項式の零点}
+
+同次座標の不定性のため，一般の多項式 $f\in S$ に対して「$f([a])=0$」は意味をもたない．例えば $f=x_0+x_1^2$ は $(1,i)$ で $0$ だが $(2,2i)$ では $2-4\neq0$ である．
+
+\begin{myprop}{同次多項式の零点}{ch08-homzero}
+$F$ が同次多項式なら，「$F(a)=0$」という条件は $[a]\in\PP^n$ の代表元によらない．
+より一般に，$f=\sum_df_d$（$f_d\in S_d$）とするとき，$f(\lambda a)=0$ がすべての $\lambda\in k^*$ について成り立つことと，すべての $d$ について $f_d(a)=0$ であることは同値である．
+\end{myprop}
+
+\begin{proof}
+前半は $F(\lambda a)=\lambda^dF(a)$ から明らか．後半：$f(\lambda a)=\sum_d\lambda^df_d(a)$ は $\lambda$ の多項式で，無限個の $\lambda\in k^*$ で $0$ なら係数 $f_d(a)$ はすべて $0$．
+\end{proof}
+
+そこで，同次多項式 $F$ に対して $F$ の\textbf{零点}を
+\[
+  \Zero(F)=\{[a]\in\PP^n\mid F(a)=0\}
+\]
+と定める．$F$ の値 $F(a)$ そのものは代表元に依存するので，$F$ は $\PP^n$ 上の関数ではない．
+しかし2つの同じ次数の同次多項式の比 $F/G$ は $\{G\neq0\}$ 上の well-defined な関数（有理関数）になる．
+（$F$ は「$\PP^n$ 上の直線束 $\OO(d)$ の切断」と解釈されるが，これは第11章以降の話題である．）
+
+\subsection{同次イデアル}\label{sec:ch08-homideal}
+
+\begin{mydef}{同次イデアル}{ch08-homideal}
+イデアル $I\subset S$ が\textbf{同次イデアル}であるとは，$f\in I$ ならば $f$ のすべての同次成分 $f_d$ が $I$ に属することをいう．
+\end{mydef}
+
+\begin{myprop}{同次イデアルの特徴づけ}{ch08-homideal-char}
+イデアル $I\subset S$ について次は同値である．
+\begin{enumerate}
+  \item $I$ は同次イデアル．
+  \item $I$ は同次多項式で生成される．
+  \item $I=\bigoplus_d(I\cap S_d)$．
+\end{enumerate}
+\end{myprop}
+
+\begin{proof}
+(1)$\Rightarrow$(2)：$I$ の生成元の同次成分全体は $I$ に含まれ，$I$ を生成する．
+(2)$\Rightarrow$(1)：$I=(F_1,\dots,F_r)$，$F_j$ は $d_j$ 次同次とする．$f=\sum g_jF_j\in I$ の $d$ 次成分は $\sum_j(g_j)_{d-d_j}F_j\in I$．
+(1)$\Leftrightarrow$(3)：定義の言い換え．
+\end{proof}
+
+同次イデアルの和，積，共通部分，根基は同次イデアルである．また，同次イデアル $\p$ が素イデアルであることは，\textbf{同次元に対してだけ} $FG\in\p\Rightarrow F\in\p$ または $G\in\p$ を確かめれば十分である（最高次の成分に注目した帰納法による）．
+
+\begin{myex}{同次でないイデアル}{ch08-nonhom}
+$(x_0-x_1^2)\subset k[x_0,x_1]$ は同次イデアルでない．$x_0-x_1^2$ の同次成分 $x_0$ が属さないからである．
+一方 $(x_0x_2-x_1^2)\subset k[x_0,x_1,x_2]$ は同次イデアルである．
+\end{myex}
+
+\subsection{射影代数的集合}
+\label{sec:ch08-projzar}
+
+\begin{mydef}{射影代数的集合}{ch08-projalg}
+同次多項式の集合 $T\subset S$ に対し
+\[
+  \Zero(T)=\{[a]\in\PP^n\mid F(a)=0\ \ (\forall F\in T)\}
+\]
+とおく．このような形の部分集合を\textbf{射影代数的集合}という．同次イデアル $I$ に対しては $\Zero(I)=\Zero(I\text{ の同次元全体})$ と定める．
+\end{mydef}
+
+Hilbertの基底定理（第2章）により，任意の射影代数的集合は有限個の同次多項式で定義される．
+アフィンの場合（第3章）と同様に
+\[
+  \Zero(0)=\PP^n,\quad \Zero(1)=\emptyset,\quad \Zero(I)\cup\Zero(J)=\Zero(IJ),\quad \bigcap_\alpha\Zero(I_\alpha)=\Zero\Bigl(\sum_\alpha I_\alpha\Bigr)
+\]
+が成り立つ．したがって射影代数的集合を閉集合とする位相が $\PP^n$ に定まる．これを\textbf{射影Zariski位相}という．
+標準開集合 $U_i=\PP^n\setminus\Zero(x_i)$ は開集合であり，$\varphi_i:U_i\to\A^n$ は Zariski 位相に関して同相写像となる（問\ref{ch08-prob-homeo}）．
+
+\paragraph{アフィン錐}
+射影代数的集合 $X\subset\PP^n$ に対し，
+\[
+  C(X)=\{0\}\cup\{a\in k^{n+1}\setminus\{0\}\mid[a]\in X\}\subset\A^{n+1}
+\]
+を $X$ の\textbf{アフィン錐}という．$X=\Zero(I)$ ならば $C(X)$ は $I$ が $\A^{n+1}$ に定める（アフィン）零点集合である（$X\neq\emptyset$ のとき）．
+アフィン錐を通じて，射影代数幾何の多くの問題はアフィンの問題に帰着できる．
+
+\begin{mydef}{射影的な消滅イデアル}{ch08-projideal}
+部分集合 $X\subset\PP^n$ に対し，$\Ideal(X)$ を「$X$ のすべての点で消える同次多項式」で生成されるイデアルとする．$X\neq\emptyset$ ならば $\Ideal(X)=\Ideal(C(X))$ であり，これは同次根基イデアルである．
+\end{mydef}
+
+\begin{mythm}{射影Nullstellensatz}{ch08-projnull}
+$I\subset S$ を同次イデアル，$S_+=(x_0,\dots,x_n)$ を\textbf{無関係イデアル}（irrelevant ideal）とする．
+\begin{enumerate}
+  \item $\Zero(I)=\emptyset\iff\sqrt I\supset S_+$（すなわちある $N$ で $S_N\subset I$）．
+  \item $\Zero(I)\neq\emptyset$ ならば $\Ideal(\Zero(I))=\sqrt I$．
+\end{enumerate}
+\end{mythm}
+
+\begin{proof}
+アフィン錐 $C=\Zero_{\A^{n+1}}(I)$ を考える．$I$ が同次なので $C$ は錐（スカラー倍で閉じる）．
+$\Zero(I)=\emptyset$ $\iff$ $C\subset\{0\}$ $\iff$（アフィンNullstellensatz，第4章）$\sqrt I\supset\Ideal(\{0\})=S_+$ または $\sqrt I=S$．
+(2) は $\Ideal(\Zero(I))=\Ideal(C)=\sqrt I$（アフィンNullstellensatz）から従う．
+\end{proof}
+
+この定理により，空でない射影代数的集合と「$S_+$ を含まない同次根基イデアル」が包含関係を逆にして一対一に対応し，射影多様体は $S_+$ を含まない同次素イデアルに対応する．
+$S_+$ は $\PP^n$ のどの点にも対応しない極大同次イデアルであり，アフィン錐の頂点（原点）に対応する．これが「無関係」と呼ばれる理由である．
+
+\subsection{射影空間上の方程式}
+
+アフィンの方程式と射影の方程式は，同次化と非同次化で行き来できる．
+
+\begin{mydef}{同次化と非同次化}{ch08-homogenize}
+$f\in k[x_1,\dots,x_n]$ が $d$ 次のとき，その\textbf{同次化}を
+\[
+  f^h(x_0,x_1,\dots,x_n)=x_0^d\,f\Bigl(\frac{x_1}{x_0},\dots,\frac{x_n}{x_0}\Bigr)\in S_d
+\]
+とする．同次多項式 $F\in S$ の\textbf{非同次化}を $F_*(x_1,\dots,x_n)=F(1,x_1,\dots,x_n)$ とする．
+\end{mydef}
+
+同次化は「各項に $x_0$ を掛けて全体の次数を $d$ に揃える」操作である．例えば $f=y-x^2-1$ なら $f^h=yz-x^2-z^2$（$x_0=z$ と書いた）．
+基本的な関係は
+\[
+  (f^h)_*=f,\qquad x_0^e\,(F_*)^h=F\quad(e\text{ は }F\text{ が }x_0\text{ で割り切れる回数})
+\]
+である．したがって，$x_0$ で割り切れない同次多項式と，$k[x_1,\dots,x_n]$ の多項式は同次化・非同次化で一対一に対応する．
+
+幾何的には，$\Zero(f^h)\cap U_0=\Zero(f)$（$U_0\cong\A^n$ と同一視）であり，$\Zero(f^h)\cap\{x_0=0\}=\Zero(f_d)$（$f$ の最高次成分の零点）が無限遠点である．
+これは例\ref{ex:ch08-conic-infty}で見たとおり，曲線の無限遠での振る舞いが最高次の項で決まることを表している．
+（第7章で特異点の接錐が\emph{最低次}の項で決まったことと対照的である．）
+
+\exprob{ch08-prob-homeo}
+$\varphi_0:U_0\to\A^n$ が Zariski位相に関して同相写像であることを示せ（ヒント：$U_0$ の閉集合 $\Zero(T)\cap U_0$ の像は $\Zero(\{F_*\mid F\in T\})$，$\A^n$ の閉集合 $\Zero(f)$ の逆像は $\Zero(f^h)\cap U_0$ であることを示せ）．
+
+\exprob{ch08-prob-homprime}
+$F=x_0x_2-x_1^2$ が既約であることを示し，$(F)$ が同次素イデアルであることを確かめよ．
+
+% ==========================================================
+\section{射影多様体}
+% ==========================================================
+
+\subsection{射影代数的集合}
+
+射影代数的集合は，アフィンの場合（第3章・第5章）とほぼ平行な理論をもつ．
+射影Zariski位相に関して $\PP^n$ はNoether位相空間（閉集合の降鎖条件を満たす）なので，
+
+\begin{myprop}{既約分解}{ch08-irrdec}
+任意の射影代数的集合 $X$ は，有限個の既約な射影代数的集合の和 $X=X_1\cup\cdots\cup X_r$ に（冗長なものを除けば一意に）分解される．
+\end{myprop}
+
+証明は第3章のアフィンの場合と同じである．また，射影代数的集合 $X$ を $\PP^n$ のアフィン開被覆 $U_i$ で切ると
+\[
+  X=\bigcup_{i=0}^n(X\cap U_i),\qquad X\cap U_i\cong\Zero(F(\dots,1,\dots)\mid F\in\Ideal(X))\subset\A^n
+\]
+（$i$ 番目の変数に $1$ を代入）となり，$X$ は有限個のアフィン代数的集合で覆われる．
+
+\subsection{射影多様体の定義}
+
+\begin{mydef}{射影多様体・準射影多様体}{ch08-projvar}
+既約な射影代数的集合を\textbf{射影多様体}という．射影多様体の（射影Zariski位相に関する）開部分集合を\textbf{準射影多様体}という．
+射影多様体 $X$ の次元は位相空間としての次元（定義は第7章）であり，$\dim X=\dim C(X)-1$ が成り立つ．
+\end{mydef}
+
+アフィン多様体は $\A^n\cong U_0\subset\PP^n$ を通じて，その閉包（射影多様体）の開部分集合とみなせるので準射影多様体である．
+また $\PP^n$ 自身や $\A^n\setminus\{0\}$ も準射影多様体である．準射影多様体は，アフィン多様体と射影多様体を統一的に扱う枠組みとなる．
+次元，接空間，特異点（第7章）は局所的な概念なので，アフィンチャート $X\cap U_i$ で計算すればよい．射影多様体の次元・余次元については第9章で詳しく扱う．
+
+\subsection{既約射影多様体}
+
+\begin{myprop}{既約性と素イデアル}{ch08-irr-prime}
+射影代数的集合 $X\neq\emptyset$ が既約であることと，$\Ideal(X)$ が素イデアルであることは同値である．
+\end{myprop}
+
+\begin{proof}
+$X$ 既約とし，同次元 $F,G$ で $FG\in\Ideal(X)$ とする．$X=(X\cap\Zero(F))\cup(X\cap\Zero(G))$ なので，既約性よりどちらかが $X$ に一致し，$F\in\Ideal(X)$ または $G\in\Ideal(X)$．
+同次イデアルの素性は同次元で確かめれば十分（\S\ref{sec:ch08-homideal}の注意）なので $\Ideal(X)$ は素イデアル．
+逆に $X=X_1\cup X_2$（真の閉集合）なら $F_i\in\Ideal(X_i)\setminus\Ideal(X)$ をとると $F_1F_2\in\Ideal(X)$ となり素でない．
+\end{proof}
+
+\begin{myex}{可約・既約の判定}{ch08-irr-ex}
+(1) $\Zero(XY)\subset\PP^2$ は2直線 $\Zero(X)\cup\Zero(Y)$ の和で可約．
+
+(2) $\Zero(XZ-Y^2)\subset\PP^2$ は既約（$XZ-Y^2$ は既約多項式）．
+
+(3) $\Zero(X^2+Y^2-Z^2)$ は，$\mathrm{char}\,k\neq2$ で既約．しかし $\Zero(X^2+Y^2)=\Zero((X+iY)(X-iY))$ は $k=\C$ 上2直線に分解する．
+（実数上では1点 $[0:0:1]$ だが，代数閉体上で考えると2本の直線であることが見える．）
+\end{myex}
+
+\subsection{射影多様体の例}
+
+\begin{myex}{射影平面の2次曲線}{ch08-conics}
+$\mathrm{char}\,k\neq2$ とする．$\PP^2$ の2次曲線 $C=\Zero(Q)$，$Q=\sum_{i,j}a_{ij}x_ix_j$（$a_{ij}=a_{ji}$）は，対称行列 $A=(a_{ij})$ で決まる．
+$\PGL(3)$ による座標変換 $x\mapsto Px$ で $A\mapsto P^TAP$ となり，$k$ が代数閉なら $A$ は対角化されて $\mathrm{diag}(1,\dots,1,0,\dots,0)$ に移せる．よって2次曲線は $\rank A$ で分類され，
+\begin{align*}
+  \rank 3&:\ x_0^2+x_1^2+x_2^2=0\quad (\text{非特異2次曲線}),\\
+  \rank 2&:\ x_0^2+x_1^2=0\quad (\text{相異なる2直線}),\\
+  \rank 1&:\ x_0^2=0\quad (\text{重複直線}).
+\end{align*}
+特に\textbf{非特異2次曲線はすべて射影同値}であり，楕円・放物線・双曲線の区別は（実数上での）無限遠直線との位置関係にすぎない（例\ref{ex:ch08-conic-infty}）．
+
+非特異2次曲線 $C=\Zero(x_0x_2-x_1^2)$ は
+\[
+  \nu:\PP^1\to C,\qquad[s:t]\mapsto[s^2:st:t^2]
+\]
+によって $\PP^1$ と同型である．逆写像は $C\cap U_0$ で $[x_0:x_1]$，$C\cap U_2$ で $[x_1:x_2]$ で与えられ，両者は $C$ 上一致する（$x_0x_2=x_1^2$ より $x_0:x_1=x_1:x_2$）．
+複素数上では，非特異2次曲線は Riemann球面である．
+\end{myex}
+
+\begin{myex}{Segre埋め込み}{ch08-segre}
+直積 $\PP^n\times\PP^m$ は（$\A^n\times\A^m=\A^{n+m}$ と違い）$\PP^{n+m}$ ではない．しかし次の写像で射影空間に埋め込める：
+\[
+  \sigma:\PP^n\times\PP^m\to\PP^{(n+1)(m+1)-1},\qquad([x_i],[y_j])\mapsto[x_iy_j]_{0\le i\le n,\,0\le j\le m}.
+\]
+$z_{ij}=x_iy_j$ を $(n+1)\times(m+1)$ 行列 $Z=xy^{T}$ の成分とみなすと，像は\textbf{階数1の行列}全体の射影化であり，
+\[
+  \sigma(\PP^n\times\PP^m)=\Zero\bigl(z_{ij}z_{kl}-z_{il}z_{kj}\bigr)\quad(2\times2\text{ 小行列式全体})
+\]
+である．$\sigma$ は像への全単射であり（階数1の行列 $Z$ から $x$ を列空間，$y$ を行空間として復元できる），像を\textbf{Segre多様体}という．
+
+最も簡単な場合 $n=m=1$ では
+\[
+  \sigma:\PP^1\times\PP^1\to\PP^3,\qquad([x_0:x_1],[y_0:y_1])\mapsto[x_0y_0:x_0y_1:x_1y_0:x_1y_1]
+\]
+で，像は2次曲面 $Q=\Zero(z_{00}z_{11}-z_{01}z_{10})$ である．$x$ を固定すると $Q$ 上の直線が得られ（$y$ を固定しても同様），$Q$ は2つの直線族で覆われる．
+実数上で見れば一葉双曲面の2つの直線族（ルールド曲面）である．
+物理的には，Segre多様体は\textbf{積状態（もつれていない状態）全体}である（\S\ref{sec:ch08-phys}）．
+\end{myex}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.9]
+  \draw[thick,blue!70!black] (0,2) ellipse (1.6 and 0.35);
+  \draw[thick,blue!70!black] (0,-2) ellipse (1.6 and 0.35);
+  \draw[thick,blue!70!black] (-1.6,2) .. controls (-0.97,0.4) and (-0.97,-0.4) .. (-1.6,-2);
+  \draw[thick,blue!70!black] (1.6,2) .. controls (0.97,0.4) and (0.97,-0.4) .. (1.6,-2);
+  \foreach \a in {0,30,...,330}{
+    \draw[red!70!black,opacity=0.7] ({1.6*cos(\a)},{2+0.35*sin(\a)})--({1.6*cos(\a+90)},{-2+0.35*sin(\a+90)});
+  }
+  \foreach \a in {15,75,...,315}{
+    \draw[green!40!black,opacity=0.6,dashed] ({1.6*cos(\a)},{2+0.35*sin(\a)})--({1.6*cos(\a-90)},{-2+0.35*sin(\a-90)});
+  }
+  \node at (0,-2.8) {$z_{00}z_{11}=z_{01}z_{10}$：2つの直線族};
+\end{tikzpicture}
+\caption{Segre曲面 $\PP^1\times\PP^1\subset\PP^3$ の実部分（一葉双曲面）．}
+\end{figure}
+
+\begin{myex}{Veronese埋め込み}{ch08-veronese}
+$d\ge1$ に対し，$x_0,\dots,x_n$ の $d$ 次単項式全体 $\{x^{e}\}_{|e|=d}$（$N+1=\binom{n+d}{d}$ 個）を並べた写像
+\[
+  v_d:\PP^n\to\PP^N,\qquad[x]\mapsto[x^{e}]_{|e|=d}
+\]
+を\textbf{$d$ 次Veronese埋め込み}という．単項式のうち $x_i^d$ の少なくとも1つは $0$ でないので well-defined であり，$v_d$ は像への同型である．
+
+$n=1$ のとき $v_d:[s:t]\mapsto[s^d:s^{d-1}t:\dots:t^d]\in\PP^d$ で，像を\textbf{有理正規曲線}という．$d=2$ が例\ref{ex:ch08-conics}の2次曲線，$d=3$ がねじれ3次曲線である．
+
+$n=2$，$d=2$ のとき $v_2:\PP^2\to\PP^5$，$[x:y:z]\mapsto[x^2:y^2:z^2:yz:xz:xy]$ の像を\textbf{Veronese曲面}という．
+像は対称行列 $\left(\begin{smallmatrix}x^2&xy&xz\\xy&y^2&yz\\xz&yz&z^2\end{smallmatrix}\right)=vv^T$ で階数1のものの射影化であり，$2\times2$ 小行列式で定義される．
+
+Veronese埋め込みの重要な性質は，\textbf{$\PP^n$ の $d$ 次超曲面が $\PP^N$ の超平面切断になる}ことである：$F=\sum_ea_ex^e$ に対し $v_d(\Zero(F))=v_d(\PP^n)\cap\{\sum a_ez_e=0\}$．
+これにより次数の高い超曲面の問題が線形の問題に帰着できる．
+\end{myex}
+
+\begin{myex}{ねじれ3次曲線}{ch08-twisted}
+$v_3:\PP^1\to\PP^3$，$[s:t]\mapsto[s^3:s^2t:st^2:t^3]$ の像 $C$ を\textbf{ねじれ3次曲線}という．$z_0,\dots,z_3$ を $\PP^3$ の座標とすると
+\[
+  C=\Zero(z_0z_2-z_1^2,\ z_1z_3-z_2^2,\ z_0z_3-z_1z_2)
+  =\Bigl\{\rank\begin{pmatrix}z_0&z_1&z_2\\z_1&z_2&z_3\end{pmatrix}\le1\Bigr\}.
+\]
+\textbf{2本の2次式だけでは足りない}ことに注意：例えば $Q_1=\Zero(z_0z_2-z_1^2)$，$Q_2=\Zero(z_1z_3-z_2^2)$ の交わりは $C$ と直線 $\{z_1=z_2=0\}$ の和になる．
+（実際 $z_1=z_2=0$ なら両方の式が消える．）$C$ はアフィンチャート $U_0$ では $(t,t^2,t^3)$ という第7章でおなじみの曲線で，
+アフィンでは2本の式 $y=x^2,z=x^3$ で書けたが，射影閉包をとると無限遠で余分なものが付いてしまうのである（\S\ref{sec:ch08-closure}）．
+$C$ は $\PP^3$ の余次元2の曲線だが，その同次イデアルは2元では生成できない（完全交差でない）．
+\end{myex}
+
+\subsection{アフィン多様体との関係}
+\label{sec:ch08-closure}
+
+\begin{mydef}{射影閉包}{ch08-projclosure}
+アフィン代数的集合 $Y\subset\A^n\cong U_0\subset\PP^n$ の，$\PP^n$ における（射影Zariski位相での）閉包 $\bar Y$ を $Y$ の\textbf{射影閉包}という．
+\end{mydef}
+
+\begin{mythm}{射影閉包の方程式}{ch08-closure-eq}
+$Y\subset\A^n$ をアフィン代数的集合，$I=\Ideal(Y)$ とし，$I^h$ を $\{f^h\mid f\in I\}$ で生成される同次イデアルとする．このとき
+\[
+  \bar Y=\Zero(I^h),\qquad \Ideal(\bar Y)=I^h
+\]
+である．さらに $\bar Y\cap U_0=Y$ で，$Y$ が既約なら $\bar Y$ も既約，$\dim\bar Y=\dim Y$．
+\end{mythm}
+
+\begin{proof}[証明の概略]
+$\Zero(I^h)\cap U_0=\Zero(\{(f^h)_*\})=\Zero(I)=Y$ なので $\bar Y\subset\Zero(I^h)$．
+逆に，同次多項式 $F$ が $Y$ 上で消えるなら $F_*\in I$，よって $F=x_0^e(F_*)^h\in I^h$．したがって $\Ideal(\bar Y)\subset I^h$ で，$\bar Y=\Zero(\Ideal(\bar Y))\supset\Zero(I^h)$．
+$I^h$ が根基であることも同様に示せる．既約性は「既約集合の閉包は既約」から，次元は $\bar Y\cap U_0=Y$ が $\bar Y$ の稠密開集合であることから従う．
+\end{proof}
+
+\textbf{注意}：$I=(f_1,\dots,f_r)$ のとき，一般に $I^h\neq(f_1^h,\dots,f_r^h)$ である．ねじれ3次曲線はその例である：
+\[
+  I=(y-x^2,\,z-x^3)\quad\Rightarrow\quad (yw-x^2,\ zw^2-x^3)\subsetneq I^h.
+\]
+右の2式の零点集合は $w=0$ で $x=0$ となり，無限遠直線 $\{w=x=0\}$ 全体を含んでしまう．正しい $I^h$ には $xz-y^2$（$=(xz-y^2)^h$，$xz-y^2=x(z-x^3)-(y+x^2)(y-x^2)\in I$）が必要である．
+（次数付き単項式順序に関する $I$ の Gröbner 基底を同次化すれば，$I^h$ の生成元が得られることが知られている．）
+1本の多項式 $f$ の場合には $(f)^h=(f^h)$ が成り立つので，超曲面の射影閉包は単に同次化すればよい．
+
+\begin{myprop}{アフィン多様体と射影多様体の対応}{ch08-aff-proj}
+$Y\mapsto\bar Y$，$X\mapsto X\cap U_0$ は
+\[
+  \{\A^n\text{ の空でないアフィン多様体}\}\ \longleftrightarrow\
+  \left\{\begin{array}{c}\PP^n\text{ の射影多様体で}\\ \text{超平面 }\{x_0=0\}\text{ に含まれないもの}\end{array}\right\}
+\]
+の間の互いに逆な全単射を与える．
+\end{myprop}
+
+\begin{proof}
+$\bar Y\cap U_0=Y$ は上の定理．逆に $X$ が既約で $X\not\subset\{x_0=0\}$ なら $X\cap U_0$ は $X$ の空でない開集合なので $X$ で稠密，よって $\overline{X\cap U_0}=X$．
+\end{proof}
+
+こうして，アフィン多様体の研究と射影多様体の研究は「無限遠での振る舞い」を除いて同じである．
+射影多様体は，アフィン多様体を「無限遠まで込めて」閉じたもの，すなわちその自然なコンパクト化である．
+
+\exprob{ch08-prob-closure}
+アフィン曲線 $Y=\Zero(y^2-x^3-x)\subset\A^2$ の射影閉包 $\bar Y\subset\PP^2$ を求め，無限遠点が何点あるか，またそれが $\bar Y$ の正則点であるかを（$U_Y$ チャートで）調べよ．
+
+\exprob{ch08-prob-segre}
+Segre埋め込み $\sigma:\PP^1\times\PP^2\to\PP^5$ の像を定義する2次式を書き下せ．また像の次元を求めよ．
+
+% ==========================================================
+\section{射影幾何の物理的背景}
+\label{sec:ch08-phys}
+% ==========================================================
+
+\subsection{無限遠を含めた幾何学}
+
+物理では「無限遠での境界条件」が本質的な役割を果たすことが多い．場が無限遠で減衰する，あるいは定数に近づくという条件は，
+空間を「無限遠点を付け加えて閉じたもの」の上の場として扱うことを可能にする．
+例えば $\R^n$ 上の場 $\phi$ が $|x|\to\infty$ で方向によらず一定値に近づくなら，$\phi$ は一点コンパクト化 $S^n=\R^n\cup\{\infty\}$ 上の連続関数とみなせる．
+インスタントンの位相的電荷が $\pi_3(SU(2))=\Z$ で分類されるのはこの考え方による．
+
+射影空間はもう一つの「無限遠の付け加え方」であり，\textbf{方向ごとに異なる無限遠点}を付け加える．
+1点コンパクト化 $S^n$ と射影空間 $\PP^n$ は $n=1$（複素なら $\C\PP^1=S^2$）では一致するが，$n\ge2$ では異なる．
+どちらが適切かは，無限遠での場の振る舞い（方向依存性があるか）による．
+
+\begin{physbox}[天球と Lorentz 群]
+観測者が見る夜空の方向（光的方向）の全体は天球 $S^2$ であり，これは複素射影直線 $\C\PP^1$ と同一視できる．
+（未来向きの）光的ベクトル $p^\mu$ は $2\times2$ エルミート行列として $p_\mu\sigma^\mu=\lambda\lambda^\dagger$（$\lambda\in\C^2$，$\sigma^\mu=(1,\vec\sigma)$）と書け，そのスピノル $\lambda\in\C^2$ のスケールを忘れたもの $[\lambda_0:\lambda_1]\in\C\PP^1$ が方向を表す．
+Lorentz群 $SO^+(1,3)\cong\mathrm{PSL}(2,\C)$ は天球に Möbius 変換として作用する（問\ref{ch08-prob-chart}）．
+これはスピノル・ヘリシティ形式やツイスター理論（ツイスター空間は $\C\PP^3$），さらに天球ホログラフィーの出発点である．
+\end{physbox}
+
+\subsection{コンパクト化の数学的背景}
+
+位相空間 $X$ の\textbf{コンパクト化}とは，コンパクト空間 $\bar X$ と，$X$ を稠密な開集合として埋め込む写像 $X\hookrightarrow\bar X$ の組のことである．
+$\A^n_\C=\C^n$ はコンパクトでないが，$\C\PP^n$ はコンパクトで，$\C^n=U_0$ をその稠密開集合として含む．したがって $\C\PP^n$ は $\C^n$ のコンパクト化である．
+
+\begin{myprop}{$\C\PP^n$ のコンパクト性}{ch08-compact}
+$\C\PP^n$ は（通常の位相で）コンパクト Hausdorff 空間である．
+\end{myprop}
+
+\begin{proof}
+商写像 $\pi:S^{2n+1}\to\C\PP^n$ は全射連続なので，コンパクト集合 $S^{2n+1}$ の像としてコンパクト．
+Hausdorff性：$\C\PP^n$ の2点 $[a]\neq[b]$ に対し，連続関数 $[z]\mapsto|\langle a,z\rangle|^2/(\|a\|^2\|z\|^2)$ は well-defined で $[a]$ で $1$，$[b]$ で $1$ より小さい（Cauchy–Schwarz の等号条件）ので，両者を開集合で分離できる．
+\end{proof}
+
+代数幾何では，射影多様体のコンパクト性に相当する性質は\textbf{完備性}（固有性）と呼ばれ，「射影多様体からの射の像は閉集合」という形で表される（Zariski位相は Hausdorff でないので，位相的コンパクト性そのものは意味が弱い）．
+複素射影多様体 $X\subset\C\PP^n$ は $\C\PP^n$ の閉集合なので通常の位相でもコンパクトである．
+コンパクト性により，Riemann面の種数，Calabi–Yau多様体の Hodge数など大域的な不変量が有限に定まり，また Chow の定理と GAGA（第13章）により
+「コンパクト複素多様体の解析的部分集合は代数的」という強力な結果が得られる．
+
+\subsection{射影空間と代数的コンパクト化}
+
+アフィン多様体 $Y$ の射影閉包 $\bar Y$（\S\ref{sec:ch08-closure}）は，$Y$ の\textbf{代数的コンパクト化}である．
+これにより，非コンパクトな多様体の問題をコンパクトな多様体の問題に帰着できる．ただし次の点に注意が必要である．
+
+\begin{itemize}
+  \item 射影閉包は埋め込みに依存する．例えば $\A^2$ のコンパクト化として $\PP^2$（無限遠に $\PP^1$ を1本加える）と $\PP^1\times\PP^1$（無限遠に $\PP^1$ を2本加える）がある．
+  \item 射影閉包は無限遠に特異点をもちうる．例えば $y=x^3$ の閉包 $yz^2=x^3$ は無限遠点 $[0:1:0]$ で cusp をもつ（$U_Y$ チャートで $z^2=x^3$）．
+  これを解消するには，射影空間を変える（重み付き射影空間，トーリック多様体）か，特異点解消（第7章，第15章）を行う．
+  \item 物理的に意味のあるコンパクト化（例えば弦理論の内部空間）では，無限遠に付け加えたもの（境界因子）自体が物理的意味をもつことがある．
+\end{itemize}
+
+射影空間の一般化として，\textbf{重み付き射影空間} $\PP(w_0,\dots,w_n)=(\C^{n+1}\setminus0)/\C^*$（$\lambda\cdot z=(\lambda^{w_0}z_0,\dots,\lambda^{w_n}z_n)$）がある．
+これは Calabi–Yau 超曲面の構成で重要であり，第15章で扱う．さらに $(\C^*)^r$ による商として\textbf{トーリック多様体}が得られ，2次元ゲージ線形シグマ模型の真空のモジュライ空間として現れる．
+
+\subsection{物理に現れる射影的構造}
+
+\paragraph{量子状態の空間}
+量子力学で，状態ベクトル $|\psi\rangle\in\mathcal H$ と $c|\psi\rangle$（$c\in\C^*$）は同じ物理状態を表す．
+規格化 $\langle\psi|\psi\rangle=1$ をしても全体の位相 $e^{i\alpha}$ の不定性が残る．したがって純粋状態の空間は
+\[
+  \PP(\mathcal H)=(\mathcal H\setminus\{0\})/\C^*=S(\mathcal H)/U(1)
+\]
+であり，$\dim\mathcal H=N$ なら\textbf{射影ヒルベルト空間} $\C\PP^{N-1}$ である．
+状態を\textbf{射線}（ray）と呼ぶのは，それが $\mathcal H$ の原点を通る複素直線，すなわち $\PP(\mathcal H)$ の点だからである．
+遷移確率
+\[
+  P([\psi],[\phi])=\frac{|\langle\psi|\phi\rangle|^2}{\langle\psi|\psi\rangle\langle\phi|\phi\rangle}
+\]
+は代表元のスケールによらず，$\C\PP^{N-1}$ 上の well-defined な関数である（同次座標の比だけが意味をもつ）．
+これから定まる計量が Fubini–Study 計量であり，そのシンプレクティック形式（Kähler形式，第15章）のホロノミーが Berry 位相を与える．
+
+\begin{myex}{Bloch球}{ch08-bloch}
+$N=2$（qubit）では状態空間は $\C\PP^1$ である．$|\psi\rangle=\alpha|0\rangle+\beta|1\rangle$ に対し $[\alpha:\beta]\in\C\PP^1$．
+$\alpha\neq0$ のチャートで $\zeta=\beta/\alpha\in\C$，$|1\rangle$ が $\zeta=\infty$ に対応する．
+$|\psi\rangle=\cos\frac\theta2|0\rangle+e^{i\varphi}\sin\frac\theta2|1\rangle$ と書くと $\zeta=\tan\frac\theta2\,e^{i\varphi}$ であり，これは球面の極座標 $(\theta,\varphi)$ の点の（南極からの）立体射影である．
+こうして $\C\PP^1\cong S^2$ が\textbf{Bloch球}であり，Riemann球面と同じものである．
+Bloch ベクトル $\vec n=\langle\psi|\vec\sigma|\psi\rangle/\langle\psi|\psi\rangle=(\sin\theta\cos\varphi,\sin\theta\sin\varphi,\cos\theta)$ は同次座標の2次式の比であり，これは Veronese 型の写像 $\C\PP^1\to\R^3$ である．
+\end{myex}
+
+\begin{myex}{もつれと Segre 多様体}{ch08-entangle}
+2つの系 $\mathcal H_A=\C^{n+1}$，$\mathcal H_B=\C^{m+1}$ の合成系の状態 $|\Psi\rangle=\sum_{ij}c_{ij}|i\rangle|j\rangle$ が\textbf{積状態} $|\psi_A\rangle\otimes|\psi_B\rangle$ であることは，
+係数行列 $(c_{ij})$ の階数が1であることと同値である．したがって積状態全体は Segre 多様体
+\[
+  \sigma(\PP(\mathcal H_A)\times\PP(\mathcal H_B))\subset\PP(\mathcal H_A\otimes\mathcal H_B)
+\]
+であり，その2×2小行列式 $c_{ij}c_{kl}-c_{il}c_{kj}$ がもつれの有無を判定する．2-qubit では $c_{00}c_{11}-c_{01}c_{10}=0$ がちょうど Segre 曲面（例\ref{ex:ch08-segre}）で，
+規格化された状態に対して $2|c_{00}c_{11}-c_{01}c_{10}|$ は concurrence と呼ばれるもつれの尺度になる．
+\end{myex}
+
+\paragraph{$\C\PP^{N-1}$ シグマ模型}
+2次元の $\C\PP^{N-1}$ 模型は，場 $z(x)\in\C^N$，$|z|^2=1$ に $U(1)$ ゲージ対称性 $z\mapsto e^{i\alpha(x)}z$ を課した理論であり，標的空間は $S^{2N-1}/U(1)=\C\PP^{N-1}$ である．
+ラグランジアンは補助的なゲージ場 $A_\mu$ を用いて
+\[
+  \mathcal L=\frac1{g^2}\,\overline{(\partial_\mu-iA_\mu)z}\cdot(\partial^\mu-iA^\mu)z
+\]
+と書け，$A_\mu$ を消去すると Fubini–Study 計量のシグマ模型になる．
+この模型は4次元 Yang–Mills 理論と同様に漸近自由性，質量ギャップ，インスタントン（$\pi_2(\C\PP^{N-1})=\Z$）をもつ「おもちゃの模型」として重要である．
+インスタントン解は $\C\PP^1$（コンパクト化した時空 $S^2$）から $\C\PP^{N-1}$ への\textbf{正則写像}，すなわち次数 $d$ の同次多項式 $[P_1(s,t):\dots:P_N(s,t)]$ で与えられ，
+インスタントンのモジュライ空間は代数幾何的に記述できる（モジュライ空間の一般論は第16章）．Veronese 埋め込み $v_d$（$N=d+1$）はその特別な例である．
+
+\begin{physbox}[ゲージ理論としての射影空間]
+射影空間の構成 $\PP^n=(\C^{n+1}\setminus0)/\C^*$ は，物理的には「$n+1$ 個の荷電場 $z_i$ をもつ $U(1)$ ゲージ理論の真空」として理解できる．
+D項条件 $\sum|z_i|^2=r$（Fayet–Iliopoulos パラメータ $r>0$）を課して $U(1)$ で割ると $S^{2n+1}/U(1)=\C\PP^n$ が得られ，これは $\C^*$ による商と一致する（シンプレクティック商 $=$ GIT商）．
+$r$ は $\C\PP^n$ の大きさ（Kähler類）を表し，原点 $0$ を除くことは $r>0$ によって自動的に実現される．
+これが Witten のゲージ線形シグマ模型の基本構造であり，同じ方法で重み付き射影空間やトーリック多様体，さらに超ポテンシャルを加えて Calabi–Yau 超曲面（第15章）が構成される．
+\end{physbox}
+
+\exprob{ch08-prob-bloch}
+qubit 状態 $[\alpha:\beta]\in\C\PP^1$ に対し，Bloch ベクトル $\vec n=\langle\psi|\vec\sigma|\psi\rangle/\langle\psi|\psi\rangle$ を $\alpha,\beta$ で書き下し，$|\vec n|=1$ を確かめよ．
+また直交する2状態が Bloch 球面上で対蹠点に写ることを示せ．
+
+\section*{問題の解答}
+\addcontentsline{toc}{section}{問題の解答}
+
+\exsol{ch08-prob-fano}
+$\F_2^*=\{1\}$ なので同値関係は自明であり，$\PP^2(\F_2)$ の点は $\F_2^3\setminus\{0\}$ の7個のベクトルそのものである：
+\[
+  P_1=[1:0:0],\ P_2=[0:1:0],\ P_3=[0:0:1],\ P_4=[1:1:0],\ P_5=[1:0:1],\ P_6=[0:1:1],\ P_7=[1:1:1].
+\]
+同様に直線は $(a_0,a_1,a_2)\in\F_2^3\setminus\{0\}$ の7通りで，各直線上の点を列挙すると次のとおり．
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{lll}
+\hline
+$(a_0,a_1,a_2)$ & 方程式 & 直線上の点 \\
+\hline
+$(1,0,0)$ & $x_0=0$ & $P_2,P_3,P_6$ \\
+$(0,1,0)$ & $x_1=0$ & $P_1,P_3,P_5$ \\
+$(0,0,1)$ & $x_2=0$ & $P_1,P_2,P_4$ \\
+$(1,1,0)$ & $x_0+x_1=0$ & $P_3,P_4,P_7$ \\
+$(1,0,1)$ & $x_0+x_2=0$ & $P_2,P_5,P_7$ \\
+$(0,1,1)$ & $x_1+x_2=0$ & $P_1,P_6,P_7$ \\
+$(1,1,1)$ & $x_0+x_1+x_2=0$ & $P_4,P_5,P_6$ \\
+\hline
+\end{tabular}
+\end{center}
+各直線はちょうど3点を含む．表から任意の2行がちょうど1つの点を共有することも直接確かめられる（例えば1行目と7行目は $P_6$ のみ）．
+
+一般的には次のように示せる．直線 $\{a\cdot x=0\}$ は線形形式 $a\neq0$ の核，すなわち $\F_2^3$ の2次元部分空間に対応し，その非零ベクトルは $2^2-1=3$ 個なのでちょうど3点を含む．
+相異なる2直線 $a\neq b$ について，$\F_2$ 上では相異なる非零ベクトルは一次独立（スカラーが $1$ しかない）なので，$\Ker a\cap\Ker b$ は $\F_2^3$ の $3-2=1$ 次元部分空間であり，非零ベクトルは $2-1=1$ 個．よって2直線はちょうど1点で交わる．
+
+\begin{center}
+\begin{tikzpicture}[scale=1.3]
+  \coordinate (A) at (90:2);   % P1
+  \coordinate (B) at (210:2);  % P2
+  \coordinate (C) at (330:2);  % P3
+  \coordinate (AB) at ($(A)!0.5!(B)$); % P4
+  \coordinate (AC) at ($(A)!0.5!(C)$); % P5
+  \coordinate (BC) at ($(B)!0.5!(C)$); % P6
+  \coordinate (O) at (0,0);    % P7
+  \draw[thick] (A)--(B)--(C)--cycle;
+  \draw[thick] (A)--(BC) (B)--(AC) (C)--(AB);
+  \draw[thick] (O) circle (1);
+  \foreach \p/\n/\pos in {A/P_1/above,B/P_2/below left,C/P_3/below right,AB/P_4/left,AC/P_5/right,BC/P_6/below,O/P_7/above right}{
+    \fill (\p) circle (2pt); \node[\pos] at (\p) {$\n$};
+  }
+\end{tikzpicture}
+\end{center}
+これが Fano 平面の図であり，6本の線分と1つの円がちょうど7本の直線に対応する（円が直線 $x_0+x_1+x_2=0$）．
+
+\exsol{ch08-prob-lines}
+$\PP^3=\PP(k^4)$ の直線・平面は，それぞれ $k^4$ の2次元・3次元部分空間 $W$ に対応する．射影部分空間の交わり $\PP(W_1)\cap\PP(W_2)=\PP(W_1\cap W_2)$ であり，次元公式
+\[
+  \dim(W_1\cap W_2)=\dim W_1+\dim W_2-\dim(W_1+W_2)\ \ge\ \dim W_1+\dim W_2-4
+\]
+を用いる．$\PP(W_1\cap W_2)\neq\emptyset\iff\dim(W_1\cap W_2)\ge1$ である．
+
+\textbf{2直線}：$\dim W_i=2$ なので下限は $2+2-4=0$ で，交わりが空でありうる．実際 $W_1+W_2=k^4$ のとき $W_1\cap W_2=0$ で2直線は交わらない．
+例えば $L_1=\Zero(x_2,x_3)$，$L_2=\Zero(x_0,x_1)$ では $W_1=\langle e_0,e_1\rangle$，$W_2=\langle e_2,e_3\rangle$ で $W_1\cap W_2=0$．
+「一般の」2つの2次元部分空間は $W_1+W_2=k^4$ を満たす（$W_1,W_2$ の基底を並べた $4\times4$ 行列式 $\neq0$ という開条件）ので，2直線は一般にはねじれの位置にある．
+交わるのは $\dim(W_1+W_2)\le3$，すなわち2直線が同一平面上にあるときに限る．
+
+\textbf{2平面}：$\dim W_i=3$ なので $\dim(W_1\cap W_2)\ge3+3-4=2$．相異なる平面なら $W_1\neq W_2$ より $W_1+W_2=k^4$ で，$\dim(W_1\cap W_2)=2$ ちょうど．よって2平面は必ず直線 $\PP(W_1\cap W_2)$ で交わる．
+
+\textbf{直線と平面}：$\dim(W_1\cap W_2)\ge2+3-4=1$ なので交わりは空でない．直線が平面に含まれなければ $W_1+W_2=k^4$ で $\dim(W_1\cap W_2)=1$，すなわちちょうど1点で交わる．
+
+アフィン空間 $\A^3$ では平行な平面や平行な直線と平面は交わらないが，射影空間ではそれらは無限遠平面上で交わっている．
+
+\exsol{ch08-prob-chart}
+$U_0=\{x_0\neq0\}$ の座標は $z=x_1/x_0$ であり，$\infty=[0:1]$ である．まず写像が well-defined であること：$(cx_1+dx_0,\ ax_1+bx_0)=(0,0)$ となるのは $\begin{pmatrix}d&c\\b&a\end{pmatrix}\begin{pmatrix}x_0\\x_1\end{pmatrix}=0$ のときで，行列式 $ad-bc\neq0$ より $(x_0,x_1)=(0,0)$ に限るから，像は $\PP^1$ の点である．スカラー倍とも可換である．
+
+$[x_0:x_1]=[1:z]\in U_0$ の像は $[cz+d:az+b]$ であり，$cz+d\neq0$ ならこれは $U_0$ の点で，その $z$ 座標は
+\[
+  z'=\frac{az+b}{cz+d}
+\]
+となる．すなわち射影変換は $z$ 座標で Möbius 変換として表される．
+
+\textbf{$\infty$ の行き先}：$[0:1]\mapsto[c:a]$．$c\neq0$ なら $z'=a/c$，$c=0$ なら（このとき $a\neq0$）$[0:a]=\infty$．
+これは $\lim_{z\to\infty}(az+b)/(cz+d)=a/c$ と一致する．
+
+\textbf{$\infty$ に行く点}：像が $[0:\ast]$ となるのは $cx_1+dx_0=0$ のとき，すなわち $[x_0:x_1]=[c:-d]$．$c\neq0$ ならこれは $U_0$ の点 $z=-d/c$（Möbius 変換の分母の零点），$c=0$ なら $[0:-d]=\infty$ 自身である．
+
+まとめると，$c\neq0$ のとき $\infty\mapsto a/c$，$-d/c\mapsto\infty$；$c=0$ のとき $\infty\mapsto\infty$ で，変換は $U_0$ 上のアフィン変換 $z\mapsto(az+b)/d$ になる．
+$\C$ 上では，Möbius 変換の「分母が0になる点」や「$z=\infty$」という例外処理が，同次座標では例外なしの線形写像として統一的に扱われているわけである．
+
+\exsol{ch08-prob-homeo}
+$U_0$ には $\PP^n$ の射影 Zariski 位相からの相対位相を入れる．すなわち $U_0$ の閉集合は $\Zero(T)\cap U_0$（$T$ は同次多項式の集合）の形の集合である．
+$\varphi_0$ は全単射なので（命題\ref{prop:ch08-chart}），閉集合を閉集合に写すこと（$\varphi_0^{-1}$ の連続性）と，閉集合の逆像が閉集合であること（$\varphi_0$ の連続性）を示せばよい．
+
+\textbf{(i) $\varphi_0(\Zero(T)\cap U_0)=\Zero(\{F_*\mid F\in T\})$．}
+$U_0$ の点は $[1:a_1:\dots:a_n]$ と一意に表され，$\varphi_0$ はこれを $a=(a_1,\dots,a_n)$ に写す．同次多項式 $F$ について
+\[
+  [1:a]\in\Zero(F)\iff F(1,a_1,\dots,a_n)=0\iff F_*(a)=0
+\]
+（同次多項式の零点は代表元によらないので，代表元 $(1,a)$ で判定してよい）．よって $\varphi_0(\Zero(T)\cap U_0)=\Zero(\{F_*\mid F\in T\})$ であり，これは $\A^n$ の閉集合である．
+
+\textbf{(ii) $\varphi_0^{-1}(\Zero(f))=\Zero(f^h)\cap U_0$．}
+$f=0$ なら両辺とも $U_0$ 全体なので $f\neq0$，$\deg f=d$ とする．$[x]\in U_0$（$x_0\neq0$）について，定義から
+\[
+  f^h(x_0,\dots,x_n)=x_0^d\,f\Bigl(\frac{x_1}{x_0},\dots,\frac{x_n}{x_0}\Bigr)=x_0^d\,f(\varphi_0([x]))
+\]
+で $x_0^d\neq0$ だから，$f(\varphi_0([x]))=0\iff f^h(x)=0$．よって $\varphi_0^{-1}(\Zero(f))=\Zero(f^h)\cap U_0$．
+$\A^n$ の一般の閉集合 $\Zero(S)=\bigcap_{f\in S}\Zero(f)$ については，$\varphi_0^{-1}(\Zero(S))=\Zero(\{f^h\mid f\in S\})\cap U_0$ であり，これは $U_0$ の閉集合である．
+
+(i) より $\varphi_0$ は閉写像，(ii) より $\varphi_0$ は連続で，全単射だから同相写像である．
+
+\exsol{ch08-prob-homprime}
+\textbf{既約性．}$F=x_2\cdot x_0-x_1^2$ を $A=k[x_1,x_2]$ 係数の $x_0$ の多項式とみる．$x_0$ について1次で，係数 $x_2$ と $-x_1^2$ は $A$ で互いに素（共通の既約因子をもたない）．
+$F=GH$ と分解すると，$x_0$ についての次数の和が1なので一方，例えば $G$ は $x_0$ を含まず $G\in A$．すると $G$ は $F$ の $x_0$ の係数 $x_2$ と定数項 $-x_1^2$ の両方を割り切るので，$G$ は定数である．よって $F$ は既約である．
+（別証：可約なら2つの1次式の積 $F=L_1L_2$ となり，$\Zero(F)\subset\PP^2$ は2直線の和になるが，$\Zero(F)$ は $[s^2:st:t^2]$ でパラメータ付けされる既約曲線で直線を含まない．あるいは対称行列の階数が3であることからも分かる．）
+
+\textbf{$(F)$ が同次素イデアルであること．}$S=k[x_0,x_1,x_2]$ は UFD なので，既約元 $F$ は素元であり，$(F)$ は素イデアルである．
+また $(F)$ は同次多項式 $F$ で生成されるので，命題\ref{prop:ch08-homideal-char}より同次イデアルである．
+さらに $(F)$ は $S_+=(x_0,x_1,x_2)$ を含まない（$x_0\notin(F)$）ので，$(F)$ は空でない射影多様体 $C=\Zero(x_0x_2-x_1^2)$（例\ref{ex:ch08-conics}の非特異2次曲線）に対応し，$\Ideal(C)=(F)$ である．
+
+\exsol{ch08-prob-closure}
+$f=y^2-x^3-x$ は1本の多項式なので $(f)^h=(f^h)$ であり（定理\ref{thm:ch08-closure-eq}の後の注意），同次化の変数を $Z$ として
+\[
+  \bar Y=\Zero(F),\qquad F=f^h=Y^2Z-X^3-XZ^2.
+\]
+\textbf{無限遠点}：$Z=0$ とおくと $F=-X^3=0$ より $X=0$．よって無限遠点は $[0:1:0]$ の\textbf{1点}のみである（$f$ の最高次成分 $-x^3$ の零点が「$y$ 軸方向」1つだけであることに対応）．
+
+\textbf{正則性}：$[0:1:0]\in U_Y$ なので，例\ref{ex:ch08-p2chart}のチャート $(s,r)=(X/Y,Z/Y)$ を使う．$F$ を $Y^3$ で割ると
+\[
+  g(s,r)=F(s,1,r)=r-s^3-sr^2,
+\]
+無限遠点は $(s,r)=(0,0)$ である．$g\in\Ideal(\bar Y\cap U_Y)$ であり（実際 $F$ が既約なので $\Ideal(\bar Y)=(F)$，チャートでは $(g)$ が消滅イデアル），
+\[
+  \frac{\partial g}{\partial s}=-3s^2-r^2,\qquad \frac{\partial g}{\partial r}=1-2sr
+\]
+で，$(0,0)$ では $\partial g/\partial r=1\neq0$．よって Jacobian 行列の階数は $1=2-\dim\bar Y$ で，$[0:1:0]$ は $\bar Y$ の\textbf{正則点}である．
+接線は $d_{(0,0)}g=r=0$，すなわち無限遠直線 $Z=0$ である．実際 $g=0$ に $r=0$ を代入すると $-s^3=0$ となり，無限遠直線とは重複度3で接している（$[0:1:0]$ は $\bar Y$ の変曲点）．
+これは B\'ezout の意味で $3\cdot1=3$ 個の交点がすべて $[0:1:0]$ に集まっていることを表す（第9章）．
+
+なお有限の部分 $Y$ も非特異である（$\mathrm{char}\,k\neq2$ で $f_y=2y$，$f_x=-(3x^2+1)$，$f=0$ の共通零点は $x^3+x$ と $3x^2+1$ の共通根だが，それは存在しない）ので，$\bar Y$ は滑らかな射影3次曲線（楕円曲線）である．
+
+\exsol{ch08-prob-segre}
+$\PP^1\times\PP^2\ni([x_0:x_1],[y_0:y_1:y_2])$ に対し $z_{ij}=x_iy_j$（$i=0,1$，$j=0,1,2$）とおくと，$\sigma$ は
+\[
+  \sigma([x],[y])=[z_{00}:z_{01}:z_{02}:z_{10}:z_{11}:z_{12}]\in\PP^5
+\]
+であり，$Z=(z_{ij})=xy^T$ は $2\times3$ 行列
+$\begin{pmatrix}z_{00}&z_{01}&z_{02}\\z_{10}&z_{11}&z_{12}\end{pmatrix}$ である．例\ref{ex:ch08-segre}より像は $\rank Z\le1$ で定義され，$2\times2$ 小行列式は次の3つ：
+\[
+  z_{00}z_{11}-z_{01}z_{10},\qquad z_{00}z_{12}-z_{02}z_{10},\qquad z_{01}z_{12}-z_{02}z_{11}.
+\]
+すなわち $\sigma(\PP^1\times\PP^2)=\Zero(z_{00}z_{11}-z_{01}z_{10},\ z_{00}z_{12}-z_{02}z_{10},\ z_{01}z_{12}-z_{02}z_{11})$．
+
+\textbf{次元}：$\Sigma=\sigma(\PP^1\times\PP^2)$ は既約（既約な $\PP^1\times\PP^2$ の像．あるいはアフィン錐が既約な $\A^2\times\A^3$ の像）である．
+開集合 $\Sigma\cap\{z_{00}\neq0\}$ で $z_{00}=1$ とすると，小行列式の消滅から
+\[
+  z_{11}=z_{10}z_{01},\qquad z_{12}=z_{10}z_{02}
+\]
+が従い（第3式は前2式から自動的に成り立つ），逆にこれを満たす点は $x=(1,z_{10})$，$y=(1,z_{01},z_{02})$ の像である．
+よって $\Sigma\cap U_{00}$ は $(z_{01},z_{02},z_{10})$ を自由な座標とする写像 $\A^3\to\A^2$ のグラフであり $\A^3$ と同型．既約な $\Sigma$ の空でない開集合 $\Sigma\cap U_{00}$ は稠密で，その次元は $\Sigma$ の次元に等しいから
+\[
+  \dim\Sigma=3=\dim\PP^1+\dim\PP^2.
+\]
+パラメータの勘定としては，$x\in k^2$，$y\in k^3$ の5パラメータから2つのスケール（$x\mapsto\lambda x$，$y\mapsto\mu y$）を引いて3，と見てもよい．
+なお $\Sigma$ は $\PP^5$ の余次元2の多様体だが3本の2次式を必要とし，完全交差ではない（ねじれ3次曲線と同様の状況）．
+
+\exsol{ch08-prob-bloch}
+$|\psi\rangle=\alpha|0\rangle+\beta|1\rangle$，$N=\langle\psi|\psi\rangle=|\alpha|^2+|\beta|^2$ とする．Pauli 行列
+$\sigma_x=\begin{pmatrix}0&1\\1&0\end{pmatrix}$，$\sigma_y=\begin{pmatrix}0&-i\\i&0\end{pmatrix}$，$\sigma_z=\begin{pmatrix}1&0\\0&-1\end{pmatrix}$ について
+\begin{align*}
+  \langle\psi|\sigma_x|\psi\rangle&=\bar\alpha\beta+\bar\beta\alpha=2\operatorname{Re}(\bar\alpha\beta),\\
+  \langle\psi|\sigma_y|\psi\rangle&=-i\bar\alpha\beta+i\bar\beta\alpha=-i(\bar\alpha\beta-\overline{\bar\alpha\beta})=2\operatorname{Im}(\bar\alpha\beta),\\
+  \langle\psi|\sigma_z|\psi\rangle&=|\alpha|^2-|\beta|^2.
+\end{align*}
+よって
+\[
+  \vec n=\frac{1}{|\alpha|^2+|\beta|^2}\bigl(2\operatorname{Re}(\bar\alpha\beta),\ 2\operatorname{Im}(\bar\alpha\beta),\ |\alpha|^2-|\beta|^2\bigr).
+\]
+分子・分母とも $(\alpha,\beta)$ と $(\bar\alpha,\bar\beta)$ について2次同次なので，$(\alpha,\beta)\mapsto(\lambda\alpha,\lambda\beta)$（$\lambda\in\C^*$）で $|\lambda|^2$ 倍され，比 $\vec n$ は $[\alpha:\beta]\in\C\PP^1$ だけで決まる．
+
+\textbf{$|\vec n|=1$}：
+\[
+  N^2|\vec n|^2=4|\bar\alpha\beta|^2+(|\alpha|^2-|\beta|^2)^2=4|\alpha|^2|\beta|^2+|\alpha|^4-2|\alpha|^2|\beta|^2+|\beta|^4=(|\alpha|^2+|\beta|^2)^2=N^2.
+\]
+したがって $|\vec n|=1$ で，$\vec n$ は単位球面 $S^2$ 上にある．$(\alpha,\beta)=(\cos\frac\theta2,e^{i\varphi}\sin\frac\theta2)$ とすれば $\bar\alpha\beta=\frac12\sin\theta\,e^{i\varphi}$，$|\alpha|^2-|\beta|^2=\cos\theta$ で，例\ref{ex:ch08-bloch}の式を再現する．
+
+\textbf{直交状態は対蹠点}：$\C^2$ で $(\alpha,\beta)$ に直交するベクトルは1次元で，$(\alpha',\beta')=(-\bar\beta,\bar\alpha)$ で張られる（$\bar\alpha\alpha'+\bar\beta\beta'=-\bar\alpha\bar\beta+\bar\beta\bar\alpha=0$）．
+したがって直交する状態は $[\alpha':\beta']=[-\bar\beta:\bar\alpha]$ ただ1つであり，
+\[
+  \bar\alpha'\beta'=(-\beta)\bar\alpha=-\bar\alpha\beta,\qquad |\alpha'|^2-|\beta'|^2=|\beta|^2-|\alpha|^2,\qquad |\alpha'|^2+|\beta'|^2=N
+\]
+より $\vec n'=-\vec n$．すなわち直交する2状態は Bloch 球面上の対蹠点に写る（例：$|0\rangle\mapsto(0,0,1)$，$|1\rangle\mapsto(0,0,-1)$）．
+より一般に，遷移確率は $P([\psi],[\phi])=\frac{1+\vec n_\psi\cdot\vec n_\phi}{2}$ となり，$P=0\iff\vec n_\phi=-\vec n_\psi$ である．

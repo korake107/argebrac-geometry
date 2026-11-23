@@ -1,0 +1,345 @@
+% ==========================================================
+\chapter{圏論の基礎}\label{app:G}
+% ==========================================================
+
+本編の第5章と第10章では，「アフィン多様体とその射」と「有限生成被約 $k$-代数とその準同型」が
+\emph{向きを逆にして}一対一に対応することを見る．
+この種の対応を正確に述べるための言語が圏論である．
+この付録では圏・関手・自然変換・圏同値を定義し，米田の補題の主張と，
+スキーム論（第12章）の基本的な随伴「$\Spec$ と大域切断」を紹介する．
+
+% ----------------------------------------------------------
+\section{圏の定義}
+% ----------------------------------------------------------
+
+\begin{mydef}{圏}{appG-category}
+\textbf{圏} $\mathcal C$ とは，次のデータからなるものをいう．
+\begin{enumerate}
+\item \textbf{対象}の集まり $\mathrm{Ob}(\mathcal C)$．
+\item 対象 $X,Y$ の各組に対し，$X$ から $Y$ への\textbf{射}の集合 $\Hom_{\mathcal C}(X,Y)$．$f\in\Hom(X,Y)$ を $f\colon X\to Y$ と書く．
+\item \textbf{合成} $\Hom(Y,Z)\times\Hom(X,Y)\to\Hom(X,Z)$，$(g,f)\mapsto g\circ f$．
+\item 各対象 $X$ の\textbf{恒等射} $\mathrm{id}_X\in\Hom(X,X)$．
+\end{enumerate}
+これらは次の公理を満たす．
+\begin{itemize}
+\item（結合律）$h\circ(g\circ f)=(h\circ g)\circ f$．
+\item（単位律）$f\colon X\to Y$ に対し $f\circ\mathrm{id}_X=f=\mathrm{id}_Y\circ f$．
+\end{itemize}
+\end{mydef}
+
+対象の集まりは一般に集合より大きくてもよい（「すべての集合の集まり」など）．
+本ノートではこの集合論的な問題には立ち入らない．
+
+\begin{myex}{圏の例}{appG-catex}
+\begin{center}
+\begin{tabular}{lll}
+圏 & 対象 & 射\\ \hline
+$\mathbf{Set}$ & 集合 & 写像\\
+$\mathbf{Grp}$ & 群 & 群準同型\\
+$\mathbf{Ab}$ & 可換群 & 準同型\\
+$\mathbf{Vect}_k$ & $k$ 上のベクトル空間 & 線形写像\\
+$\mathbf{Ring}$ & 可換環 & 環準同型\\
+$\mathbf{Alg}_k$ & 可換 $k$-代数 & $k$-代数準同型\\
+$\mathbf{Top}$ & 位相空間 & 連続写像\\
+$\mathbf{Man}$ & 可微分多様体 & 滑らかな写像\\
+$\mathbf{Aff}_k$ & アフィン多様体 & 射（多項式写像，第5章）\\
+$\mathbf{Var}_k$ & 代数多様体 & 射（第10章）\\
+$\mathbf{Sch}$ & スキーム & スキームの射（第12章）\\
+$\mathbf{Vect}(M)$ & $M$ 上のベクトル束 & ベクトル束の射（付録F）
+\end{tabular}
+\end{center}
+\end{myex}
+
+\begin{myex}{少し変わった圏}{appG-catex2}
+\begin{enumerate}
+\item 半順序集合 $(P,\leq)$ は，$x\leq y$ のときに限り $x\to y$ という射がただ一つある圏とみなせる．
+特に位相空間 $X$ の開集合全体は，包含 $U\subset V$ を射とする圏 $\mathbf{Open}(X)$ をなす．
+前層とは $\mathbf{Open}(X)$ からの反変関手のことである（第11章，後述）．
+\item 1つの対象からなる圏で，すべての射が同型であるものは群と同じものである．
+\item 物理では，境界条件（D-brane）を対象，その間の開弦の状態を射とする圏が考えられる（第17章，導来圏）．
+\end{enumerate}
+\end{myex}
+
+% ----------------------------------------------------------
+\section{対象と射}
+% ----------------------------------------------------------
+
+圏論の基本的な考え方は，対象の「中身」ではなく，対象の間の\emph{射}によって性質を記述することである．
+
+\begin{mydef}{同型}{appG-iso}
+射 $f\colon X\to Y$ に対し $g\circ f=\mathrm{id}_X$，$f\circ g=\mathrm{id}_Y$ を満たす $g\colon Y\to X$ が存在するとき，$f$ を\textbf{同型射}といい，
+$X\cong Y$ と書く．$g$ は一意的であり $f^{-1}$ と書く．
+\end{mydef}
+
+同型は圏ごとに意味が異なる：$\mathbf{Top}$ では同相写像，$\mathbf{Man}$ では微分同相，$\mathbf{Aff}_k$ では多様体の同型である．
+付録Aで注意したように，$\mathbf{Aff}_k$ の射 $\A^1\to\Zero(y^2-x^3)$，$t\mapsto(t^2,t^3)$ は全単射だが同型ではない．
+
+\begin{mydef}{単射・全射}{appG-mono}
+射 $f\colon X\to Y$ が，任意の $g_1,g_2\colon Z\to X$ について $f\circ g_1=f\circ g_2\Rightarrow g_1=g_2$ を満たすとき\textbf{モノ射}，
+任意の $h_1,h_2\colon Y\to Z$ について $h_1\circ f=h_2\circ f\Rightarrow h_1=h_2$ を満たすとき\textbf{エピ射}という．
+\end{mydef}
+
+$\mathbf{Set}$ ではモノ射＝単射，エピ射＝全射である．
+しかし $\mathbf{Ring}$ では包含 $\Z\to\Q$ はエピ射であるが全射ではない．
+同様に，代数多様体の射で像が稠密なもの（支配的な射）は，関数の引き戻しが単射となる（第10章）．
+
+\begin{mydef}{始対象・終対象・積}{appG-terminal}
+任意の $X$ に対し $\Hom(X,T)$ がちょうど1元からなるとき $T$ を\textbf{終対象}，$\Hom(I,X)$ が1元のとき $I$ を\textbf{始対象}という．
+対象 $X,Y$ の\textbf{積}とは，対象 $X\times Y$ と射 $\pi_1,\pi_2$ の組で，付録Aの直積と同じ普遍性を満たすものをいう．
+矢印を逆にした概念を\textbf{余積}という．
+\end{mydef}
+
+\begin{myex}{}{appG-terminalex}
+\begin{enumerate}
+\item $\mathbf{Set}$ の終対象は1点集合，始対象は $\emptyset$．
+\item $\mathbf{Ring}$ の始対象は $\Z$（任意の環へ一意な準同型 $\Z\to R$ がある），終対象は零環．
+\item $\mathbf{Sch}$ の終対象は $\Spec\Z$．$k$ 上のスキームの圏では $\Spec k$（1点）が終対象である．
+\item $\mathbf{Alg}_k$ における余積はテンソル積 $A\otimes_kB$ である．これは $\mathbf{Aff}_k$ における積 $X\times Y$ に対応する（付録C，付録E）．
+\end{enumerate}
+\end{myex}
+
+普遍性によって定義された対象は，存在すれば同型を除いて一意的である（付録A，命題\ref{prop:appA-unique}と同じ議論）．
+
+% ----------------------------------------------------------
+\section{射の合成}
+% ----------------------------------------------------------
+
+射の合成の関係は\textbf{可換図式}で表すと見通しがよい．
+図式が可換であるとは，同じ始点と終点を持つどの経路に沿って射を合成しても結果が等しいことをいう．
+例えば次の正方形が可換であるとは $g\circ f=k\circ h$ を意味する．
+\[
+\begin{tikzcd}
+A \arrow[r,"f"] \arrow[d,"h"'] & B \arrow[d,"g"]\\
+C \arrow[r,"k"'] & D
+\end{tikzcd}
+\]
+
+\begin{mydef}{双対圏}{appG-opposite}
+圏 $\mathcal C$ に対し，対象は同じで $\Hom_{\mathcal C^{op}}(X,Y)=\Hom_{\mathcal C}(Y,X)$，
+合成を $f\circ^{op}g=g\circ f$ と定めた圏を\textbf{双対圏}（反対圏）$\mathcal C^{op}$ という．
+\end{mydef}
+
+すなわち $\mathcal C^{op}$ は $\mathcal C$ の矢印をすべて逆にした圏である．
+圏論の命題は双対圏で解釈し直すことで自動的に「双対命題」を与える（積と余積，モノ射とエピ射，始対象と終対象）．
+第5章の主定理は，この記号を用いると $\mathbf{Aff}_k\simeq(\text{有限生成被約 }k\text{-代数})^{op}$ と簡潔に書ける．
+
+\begin{myex}{ファイバー積}{appG-fiberprod}
+射 $f\colon X\to S$，$g\colon Y\to S$ に対し，可換図式
+\[
+\begin{tikzcd}
+X\times_SY \arrow[r,"p_2"] \arrow[d,"p_1"'] & Y \arrow[d,"g"]\\
+X \arrow[r,"f"'] & S
+\end{tikzcd}
+\]
+を普遍的に完成させる対象 $X\times_SY$ を\textbf{ファイバー積}という．
+$\mathbf{Set}$ では $X\times_SY=\{(x,y)\mid f(x)=g(y)\}$．特に $g$ が点 $s$ の包含なら $X\times_S\{s\}=f^{-1}(s)$（ファイバー）である．
+アフィンスキームでは $\Spec A\times_{\Spec R}\Spec B=\Spec(A\otimes_RB)$ であり，
+楕円ファイバー空間のファイバー（第17章）や，族のモジュライ（第16章）を扱う基本操作となる．
+\end{myex}
+
+% ----------------------------------------------------------
+\section{関手}
+% ----------------------------------------------------------
+
+\begin{mydef}{共変関手}{appG-functor}
+圏 $\mathcal C$ から $\mathcal D$ への（共変）\textbf{関手} $F\colon\mathcal C\to\mathcal D$ とは，
+各対象 $X$ に対象 $F(X)$ を，各射 $f\colon X\to Y$ に射 $F(f)\colon F(X)\to F(Y)$ を対応させ，
+\[
+F(g\circ f)=F(g)\circ F(f),\qquad F(\mathrm{id}_X)=\mathrm{id}_{F(X)}
+\]
+を満たすものをいう．
+\end{mydef}
+
+関手は同型を同型に移す：$F(f)^{-1}=F(f^{-1})$．
+したがって $F(X)\not\cong F(Y)$ ならば $X\not\cong Y$ であり，関手は「不変量」を与える．
+
+\begin{myex}{共変関手の例}{appG-functorex}
+\begin{enumerate}
+\item \textbf{忘却関手} $\mathbf{Grp}\to\mathbf{Set}$，$\mathbf{Ring}\to\mathbf{Ab}$ など（構造の一部を忘れる）．
+\item 基本群 $\pi_1\colon\mathbf{Top}_*\to\mathbf{Grp}$（基点付き位相空間から群へ）．
+\item 接束 $T\colon\mathbf{Man}\to\mathbf{Man}$，$M\mapsto TM$，$f\mapsto df$．連鎖律 $d(g\circ f)=dg\circ df$ が関手性である．
+\item 自由ベクトル空間 $\mathbf{Set}\to\mathbf{Vect}_k$，$S\mapsto k^{(S)}$（$S$ を基底とするベクトル空間）．
+\item 固定した $A$ に対し $\Hom_{\mathcal C}(A,-)\colon\mathcal C\to\mathbf{Set}$，$X\mapsto\Hom(A,X)$，$f\mapsto f\circ(-)$．
+\end{enumerate}
+\end{myex}
+
+% ----------------------------------------------------------
+\section{反変関手}
+% ----------------------------------------------------------
+
+\begin{mydef}{反変関手}{appG-contra}
+$\mathcal C$ から $\mathcal D$ への\textbf{反変関手}とは，各射 $f\colon X\to Y$ に\emph{逆向きの}射 $F(f)\colon F(Y)\to F(X)$ を対応させ，
+\[
+F(g\circ f)=F(f)\circ F(g),\qquad F(\mathrm{id}_X)=\mathrm{id}_{F(X)}
+\]
+を満たすものをいう．これは共変関手 $\mathcal C^{op}\to\mathcal D$ と同じものである．
+\end{mydef}
+
+\begin{myex}{反変関手の例}{appG-contraex}
+\begin{enumerate}
+\item 双対空間 $\mathbf{Vect}_k\to\mathbf{Vect}_k$，$V\mapsto V^*$，$f\mapsto f^*$（付録C）．
+\item $\Hom_{\mathcal C}(-,A)\colon\mathcal C\to\mathbf{Set}$，$X\mapsto\Hom(X,A)$，$f\mapsto(-)\circ f$．
+\item 連続関数環 $\mathbf{Top}\to\mathbf{Ring}$，$X\mapsto C(X)$，$f\mapsto f^*$（引き戻し）．
+\item 微分形式・de Rham コホモロジー $M\mapsto\Omega^\bullet(M)$，$H^\bullet_{dR}(M)$．
+\item \textbf{座標環関手} $\mathbf{Aff}_k\to\mathbf{Alg}_k$，$X\mapsto k[X]$，$(\varphi\colon X\to Y)\mapsto(\varphi^*\colon k[Y]\to k[X])$（第5章）．
+$(\psi\circ\varphi)^*=\varphi^*\circ\psi^*$ が反変性である．
+\item \textbf{Spec} $\mathbf{Ring}\to\mathbf{Sch}$，$R\mapsto\Spec R$．環準同型 $\phi\colon R\to S$ は $\p\mapsto\phi^{-1}(\p)$ により $\Spec S\to\Spec R$ を誘導する（第12章）．
+\item \textbf{前層}：位相空間 $X$ 上の前層 $\sheaf F$ とは反変関手 $\mathbf{Open}(X)\to\mathbf{Set}$（あるいは $\mathbf{Ab}$，$\mathbf{Ring}$）である．
+包含 $V\subset U$ に制限写像 $\sheaf F(U)\to\sheaf F(V)$ が対応し，関手性は「制限の制限は制限」を表す（第11章）．
+\end{enumerate}
+\end{myex}
+
+\begin{note}
+幾何学的対象から代数的対象（関数のなす環）への対応は，ほとんど常に反変である．
+写像 $\varphi\colon X\to Y$ は「点を前に押す」が，関数は「後ろに引く」（$g\mapsto g\circ\varphi$）からである．
+物理で言えば，能動的変換（状態を動かす）と受動的変換（座標・観測量を変換する）が逆向きに働くことに対応する．
+\end{note}
+
+% ----------------------------------------------------------
+\section{自然変換}
+% ----------------------------------------------------------
+
+\begin{mydef}{自然変換}{appG-nat}
+関手 $F,G\colon\mathcal C\to\mathcal D$ の間の\textbf{自然変換} $\eta\colon F\Rightarrow G$ とは，
+各対象 $X$ に射 $\eta_X\colon F(X)\to G(X)$ を対応させたもので，任意の $f\colon X\to Y$ について次の図式が可換となるものをいう．
+\[
+\begin{tikzcd}
+F(X) \arrow[r,"\eta_X"] \arrow[d,"F(f)"'] & G(X) \arrow[d,"G(f)"]\\
+F(Y) \arrow[r,"\eta_Y"'] & G(Y)
+\end{tikzcd}
+\]
+すべての $\eta_X$ が同型であるとき\textbf{自然同型}といい，$F\cong G$ と書く．
+\end{mydef}
+
+\begin{myex}{二重双対}{appG-doubledual}
+有限次元ベクトル空間の圏で，$\eta_V\colon V\to V^{**}$，$v\mapsto(\xi\mapsto\xi(v))$ は恒等関手から二重双対関手への自然同型である．
+一方 $V\cong V^*$ は各 $V$ ごとには成り立つが，それらを自然変換として選ぶことはできない
+（そもそも $V\mapsto V^*$ は反変なので恒等関手と比較できない）．
+「自然」とは，選択（基底，座標）によらず定まり，すべての射と整合的であることを意味する．
+\end{myex}
+
+\begin{myex}{点の評価}{appG-eval}
+アフィン多様体 $X$ の点 $p$ に対し，評価写像 $\mathrm{ev}_p\colon k[X]\to k$，$f\mapsto f(p)$ は $k$-代数準同型である．
+これにより写像 $X\to\Hom_{\mathbf{Alg}_k}(k[X],k)$ が得られ，これは $X$ について自然であり，
+$k$ が代数閉体ならば全単射である（弱零点定理，第4章）．
+すなわち「点＝座標環から $k$ への準同型＝極大イデアル」であり，これが第5章の対応および第12章の $\Spec$ の出発点である．
+\end{myex}
+
+% ----------------------------------------------------------
+\section{代数幾何における圏論}
+% ----------------------------------------------------------
+
+\subsection*{圏同値}
+
+\begin{mydef}{圏同値}{appG-equiv}
+関手 $F\colon\mathcal C\to\mathcal D$ に対し，関手 $G\colon\mathcal D\to\mathcal C$ と自然同型
+$G\circ F\cong\mathrm{id}_{\mathcal C}$，$F\circ G\cong\mathrm{id}_{\mathcal D}$ が存在するとき，$F$ を\textbf{圏同値}といい，$\mathcal C\simeq\mathcal D$ と書く．
+反変関手 $F$ が圏同値 $\mathcal C\simeq\mathcal D^{op}$ を与えるとき\textbf{反変同値}（双対同値）という．
+\end{mydef}
+
+圏同値は圏の同型（$G\circ F=\mathrm{id}$）より弱いが，「対象を同型を除いて同一視すれば同じ圏」という正しい意味での同一視である．
+
+\begin{myprop}{圏同値の判定}{appG-equivcrit}
+関手 $F\colon\mathcal C\to\mathcal D$ が圏同値であることは，次の2条件と同値である．
+\begin{enumerate}
+\item（忠実充満）各 $X,Y$ について $\Hom_{\mathcal C}(X,Y)\to\Hom_{\mathcal D}(F(X),F(Y))$ が全単射．
+\item（本質的全射）$\mathcal D$ の任意の対象は，ある $F(X)$ と同型．
+\end{enumerate}
+\end{myprop}
+
+\begin{mythm}{アフィン多様体と座標環の反変同値}{appG-affine}
+$k$ を代数閉体とする．座標環関手 $X\mapsto k[X]$ は反変同値
+\[
+\mathbf{Aff}_k\ \simeq\ (\text{有限生成被約 }k\text{-代数の圏})^{op}
+\]
+を与える．逆関手は $A\mapsto\Hom_{\mathbf{Alg}_k}(A,k)=\{A\text{ の極大イデアル}\}$（$A=k[x_1,\dots,x_n]/I$ と表示すれば $\Zero(I)\subset\A^n$）である．
+\end{mythm}
+\begin{proof}[概略]
+忠実充満性：射 $\varphi\colon X\to Y\subset\A^m$ は座標関数の引き戻し $\varphi^*(y_j)\in k[X]$ で決まり，
+逆に任意の準同型 $k[Y]\to k[X]$ は $y_j$ の行き先を成分とする多項式写像を定める（第5章）．
+本質的全射性：有限生成被約 $k$-代数 $A=k[x_1,\dots,x_n]/I$ に対し，零点定理より $\Ideal(\Zero(I))=\sqrt I=I$ なので $k[\Zero(I)]=A$（第4章）．
+\end{proof}
+
+同様に，既約多様体と支配的有理写像の圏は，$k$ 上有限生成な体拡大の圏と反変同値である（第10章，関数体）．
+
+\subsection*{米田の補題}
+
+\begin{mythm}{米田の補題}{appG-yoneda}
+$\mathcal C$ を圏，$F\colon\mathcal C^{op}\to\mathbf{Set}$ を反変関手，$A$ を対象とする．
+$h_A=\Hom_{\mathcal C}(-,A)$ と置くと，自然な全単射
+\[
+\mathrm{Nat}(h_A,F)\ \cong\ F(A),\qquad\eta\mapsto\eta_A(\mathrm{id}_A)
+\]
+が存在する．特に $\mathrm{Nat}(h_A,h_B)\cong\Hom(A,B)$ であり，関手 $A\mapsto h_A$ は忠実充満である．
+したがって $h_A\cong h_B$（自然同型）ならば $A\cong B$．
+\end{mythm}
+
+証明は「$\eta$ は $\mathrm{id}_A$ の行き先で決まる：$\eta_X(f)=F(f)(\eta_A(\mathrm{id}_A))$」という観察から直ちに得られる．
+
+米田の補題の意味は，対象 $A$ は「他のすべての対象 $X$ から $A$ への射の集まり $h_A(X)$」によって（同型を除いて）完全に決まる，ということである．
+代数幾何では $h_X(T)=\Hom(T,X)$ を\textbf{$X$ の $T$ 値点}といい，$X$ をその\textbf{点の関手}と同一視する．
+例えば $T=\Spec k$ のとき $h_X(\Spec k)$ は通常の $k$ 値点の集合であり，
+$T=\Spec k[\varepsilon]/(\varepsilon^2)$ のとき $h_X(T)$ は点と接ベクトルの組（接束）である（第7章，第12章）．
+
+\begin{myex}{表現可能関手とモジュライ空間}{appG-moduli}
+関手 $F\colon\mathbf{Sch}^{op}\to\mathbf{Set}$ が，ある $M$ について $F\cong h_M$ となるとき，$F$ は\textbf{表現可能}であるといい，$M$ を $F$ を表現する対象という．
+モジュライ問題（第16章）とは，「$T$ 上の幾何学的対象の族の同型類の集合」$F(T)$ を表現する空間 $M$ を探す問題である．
+$F$ が表現可能なら $M$ を\textbf{精モジュライ空間}といい，$\mathrm{id}_M\in h_M(M)\cong F(M)$ に対応する族が\textbf{普遍族}である．
+例えば $\PP^n$ は「直線束 $L$ と，$L$ を生成する $n+1$ 個の切断の組」の同値類を表現する．
+多くの物理的なモジュライ問題（楕円曲線，Calabi--Yau の複素構造など）は自己同型の存在のために厳密には表現可能でなく，
+粗モジュライ空間やスタックという概念が必要になる．
+\end{myex}
+
+\subsection*{随伴関手と Spec}
+
+\begin{mydef}{随伴}{appG-adjoint}
+関手 $F\colon\mathcal C\to\mathcal D$，$G\colon\mathcal D\to\mathcal C$ に対し，$X,Y$ について自然な全単射
+\[
+\Hom_{\mathcal D}(F(X),Y)\ \cong\ \Hom_{\mathcal C}(X,G(Y))
+\]
+が存在するとき，$F$ を $G$ の\textbf{左随伴}，$G$ を $F$ の\textbf{右随伴}といい，$F\dashv G$ と書く．
+\end{mydef}
+
+\begin{myex}{随伴の例}{appG-adjex}
+\begin{enumerate}
+\item 自由関手 $\dashv$ 忘却関手：$\Hom_{\mathbf{Vect}_k}(k^{(S)},V)\cong\Hom_{\mathbf{Set}}(S,V)$（線形写像は基底の行き先で決まる）．
+\item 多項式環：$\Hom_{\mathbf{Alg}_k}(k[x_1,\dots,x_n],A)\cong A^n$（$x_i$ の行き先）．これは $\A^n$ の $A$ 値点が $A^n$ であることを意味する．
+\item テンソル積 $-\otimes W\dashv\Hom(W,-)$（付録C，命題\ref{prop:appC-tensoriso} (5)）．
+\end{enumerate}
+\end{myex}
+
+\begin{mythm}{Spec と大域切断の随伴}{appG-specgamma}
+任意のスキーム $X$ と可換環 $R$ に対して，自然な全単射
+\[
+\Hom_{\mathbf{Sch}}(X,\Spec R)\ \cong\ \Hom_{\mathbf{Ring}}(R,\Gamma(X,\OO_X))
+\]
+が存在する．ここで $\Gamma(X,\OO_X)=\OO_X(X)$ は構造層の大域切断（$X$ 上の大域的な関数の環）である．
+すなわち $\Gamma\colon\mathbf{Sch}\to\mathbf{Ring}^{op}$ は $\Spec\colon\mathbf{Ring}^{op}\to\mathbf{Sch}$ の左随伴である．
+\end{mythm}
+\begin{proof}[概略]
+射 $f\colon X\to\Spec R$ に対し，大域切断の引き戻し $f^\#\colon R=\Gamma(\Spec R,\OO)\to\Gamma(X,\OO_X)$ を対応させる．
+逆に $\phi\colon R\to\Gamma(X,\OO_X)$ が与えられたとき，$X$ をアフィン開集合 $U_i=\Spec A_i$ で覆えば，
+$R\to\Gamma(X,\OO_X)\to A_i$ がアフィンスキームの射 $U_i\to\Spec R$ を定め，これらは重なりで一致して貼り合わさる．
+\end{proof}
+
+$X=\Spec A$ のときこの全単射は $\Hom(\Spec A,\Spec R)\cong\Hom(R,A)$ となり，
+$\Spec$ が反変同値 $\mathbf{Ring}^{op}\simeq\mathbf{AffSch}$（アフィンスキームの圏）を与えることを示す．
+これは定理\ref{thm:appG-affine}を，被約性・有限生成性・代数閉体の仮定なしに一般化したものである（第12章）．
+また $R=\Z$ とすれば $\Hom(X,\Spec\Z)$ が1点となり，$\Spec\Z$ が $\mathbf{Sch}$ の終対象であることが分かる．
+$R=\Z[x]$ とすれば $\Hom(X,\A^1_\Z)\cong\Gamma(X,\OO_X)$，すなわち「$X$ 上の関数とは $X$ から直線への射」である．
+
+\begin{figure}[H]
+\centering
+\begin{tikzcd}[column sep=large,row sep=large]
+\text{幾何（空間）} \arrow[r,bend left=20,"\Gamma\ (\text{関数をとる})"] & \text{代数（環）} \arrow[l,bend left=20,"\Spec\ (\text{点をとる})"]
+\end{tikzcd}
+\caption{本ノートを貫く代数と幾何の対応の模式図．矢印はいずれも反変である．}
+\end{figure}
+
+\begin{physbox}[物理における圏論的視点]
+量子論では「空間そのもの」よりも「空間上の観測量の代数」が基本的であり，
+可換な観測量の代数から空間を復元する発想（Gelfand 双対性：コンパクト Hausdorff 空間 $\simeq$ 可換 $C^*$ 代数$^{op}$）は，
+$\Spec$ による環から空間の復元と同じ精神を持つ．非可換な代数を「非可換空間」とみなすのが非可換幾何である．
+また位相的場の理論は「境界付き多様体の圏（コボルディズム圏）からベクトル空間の圏への関手」として定式化され，
+D-brane は導来圏の対象として記述される（第17章）．
+\end{physbox}

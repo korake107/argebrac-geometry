@@ -1,0 +1,309 @@
+% ==========================================================
+\chapter{複素解析}\label{app:D}
+% ==========================================================
+
+この付録では，第13章以降の複素幾何で前提とする複素関数論をまとめる．
+1変数の正則関数・Cauchy の積分定理・Taylor 展開・Laurent 展開と留数を復習し，
+最後に多変数複素解析の基本事項（Hartogs 現象，一致の定理，Wirtinger 微分など）を述べる．
+証明は概略にとどめる．
+
+% ----------------------------------------------------------
+\section{複素関数}
+% ----------------------------------------------------------
+
+複素数 $z=x+iy$（$x,y\in\R$）に対し，$\bar z=x-iy$，$|z|=\sqrt{x^2+y^2}$ とする．
+$\C$ は $|z-w|$ を距離として $\R^2$ と同じ位相を持つ．
+$z\ne0$ は極形式 $z=re^{i\theta}$（$r=|z|$，$\theta=\arg z$）で表され，$\arg z$ は $2\pi$ の整数倍の不定性を持つ．
+
+\begin{mydef}{複素関数}{appD-func}
+開集合 $U\subset\C$ 上の関数 $f\colon U\to\C$ を\textbf{複素関数}という．
+$f(x+iy)=u(x,y)+iv(x,y)$（$u,v$ は実数値）と書いて実部・虚部に分ける．
+\end{mydef}
+
+\begin{myex}{基本的な関数}{appD-funcex}
+\begin{enumerate}
+\item 多項式 $\sum a_nz^n$ と有理関数 $P(z)/Q(z)$．
+\item 指数関数 $e^z=\sum_{n\geq0}z^n/n!$．$e^{x+iy}=e^x(\cos y+i\sin y)$，周期 $2\pi i$ を持つ．
+\item 対数関数 $\log z=\log|z|+i\arg z$ は $\arg$ の不定性のため $\C\setminus\{0\}$ 上で一価にならない．
+例えば負の実軸を除いた領域に制限すれば一価な分枝が取れる．
+\item $\sqrt z$ も同様に多価である．$w^2=z$ を満たす $(z,w)$ の集合 $\Zero(w^2-z)\subset\C^2$ を考えれば一価な対象になる．
+多価関数を一価化する空間として Riemann 面が導入される（第13章）．
+\end{enumerate}
+\end{myex}
+
+% ----------------------------------------------------------
+\section{正則関数}
+% ----------------------------------------------------------
+
+\begin{mydef}{正則関数}{appD-holo}
+開集合 $U\subset\C$ 上の関数 $f$ が，各点 $z_0\in U$ で極限
+\[
+f'(z_0)=\lim_{h\to0,\,h\in\C}\frac{f(z_0+h)-f(z_0)}{h}
+\]
+を持つとき，$f$ を $U$ 上\textbf{正則}（holomorphic）という．$\C$ 全体で正則な関数を\textbf{整関数}という．
+\end{mydef}
+
+$h$ が複素平面内のあらゆる方向から $0$ に近づいても同じ極限を持つことを要求している点が，実微分可能性との本質的な違いである．
+
+\begin{mythm}{Cauchy--Riemann 方程式}{appD-CR}
+$f=u+iv$ が $C^1$ 級のとき，$f$ が正則であることは
+\[
+\frac{\partial u}{\partial x}=\frac{\partial v}{\partial y},\qquad
+\frac{\partial u}{\partial y}=-\frac{\partial v}{\partial x}
+\]
+と同値である．
+\end{mythm}
+\begin{proof}[概略]
+$h$ を実軸方向に取ると $f'=u_x+iv_x$，虚軸方向に取ると $f'=(u_y+iv_y)/i=v_y-iu_y$．両者の一致が条件である．
+逆に $C^1$ 級で条件を満たせば，実微分 $df$ が $\C$-線形写像（複素数倍）となり正則である．
+\end{proof}
+
+\begin{mydef}{Wirtinger 微分}{appD-wirtinger}
+\[
+\frac{\partial}{\partial z}=\frac12\Bigl(\frac{\partial}{\partial x}-i\frac{\partial}{\partial y}\Bigr),\qquad
+\frac{\partial}{\partial\bar z}=\frac12\Bigl(\frac{\partial}{\partial x}+i\frac{\partial}{\partial y}\Bigr)
+\]
+と定める．$\partial z/\partial z=1$，$\partial\bar z/\partial z=0$，$\partial z/\partial\bar z=0$，$\partial\bar z/\partial\bar z=1$ である．
+\end{mydef}
+
+Cauchy--Riemann 方程式は $\partial f/\partial\bar z=0$ と簡潔に書ける．
+つまり正則関数とは「$\bar z$ に依存しない関数」である．
+微分形式で書くと $df=\frac{\partial f}{\partial z}dz+\frac{\partial f}{\partial\bar z}d\bar z$ であり，正則性は $df$ が $dz$ 成分のみを持つことである．
+また $\Delta=\partial_x^2+\partial_y^2=4\partial_z\partial_{\bar z}$ より，正則関数の実部・虚部は調和関数である．
+
+\begin{myex}{}{appD-holoex}
+多項式，$e^z$，有理関数（分母の零点を除く）は正則である．
+$\bar z$，$|z|^2=z\bar z$，$\operatorname{Re}z$ は正則でない．
+\end{myex}
+
+\begin{myprop}{正則写像は等角}{appD-conformal}
+$f$ が正則で $f'(z_0)\ne0$ ならば，$f$ は $z_0$ の近傍で向きと角度を保つ（等角写像）．
+\end{myprop}
+\begin{proof}
+$z_0$ での実微分は $f'(z_0)=re^{i\theta}$ 倍，すなわち回転と相似拡大である．
+\end{proof}
+
+この性質のため，2次元の共形場理論では局所的な共形変換が正則関数で記述される（第13章）．
+
+% ----------------------------------------------------------
+\section{Cauchyの積分定理}
+% ----------------------------------------------------------
+
+区分的に $C^1$ な曲線 $\gamma\colon[a,b]\to\C$ に沿った複素線積分を
+$\int_\gamma f(z)\,dz=\int_a^bf(\gamma(t))\gamma'(t)\,dt$ で定める．
+
+\begin{mythm}{Cauchy の積分定理}{appD-cauchy}
+$D\subset\C$ を区分的に滑らかな境界 $\partial D$ を持つ有界領域とし，$f$ を $\bar D$ の近傍で正則とする．
+このとき
+\[
+\oint_{\partial D}f(z)\,dz=0 .
+\]
+\end{mythm}
+\begin{proof}[概略]
+Stokes（Green）の定理と $d(f\,dz)=\frac{\partial f}{\partial\bar z}d\bar z\wedge dz=0$ による：
+$\oint_{\partial D}f\,dz=\int_Dd(f\,dz)=0$．
+（$f$ の $C^1$ 性を仮定しない証明は Goursat による．）
+\end{proof}
+
+この定理は「正則関数 $f$ に対して $f\,dz$ は閉1形式である」ことを述べている（付録F）．
+積分路を正則な領域内で連続変形しても積分値は変わらない．
+
+\begin{mythm}{Cauchy の積分公式}{appD-cauchyformula}
+上の仮定のもとで，$z\in D$ に対し
+\[
+f(z)=\frac1{2\pi i}\oint_{\partial D}\frac{f(\zeta)}{\zeta-z}\,d\zeta,\qquad
+f^{(n)}(z)=\frac{n!}{2\pi i}\oint_{\partial D}\frac{f(\zeta)}{(\zeta-z)^{n+1}}\,d\zeta .
+\]
+\end{mythm}
+\begin{proof}[概略]
+$z$ を中心とする小円 $C_\varepsilon$ を除いた領域に積分定理を適用すると，$\partial D$ 上の積分は $C_\varepsilon$ 上の積分に等しい．
+$\oint_{C_\varepsilon}\frac{d\zeta}{\zeta-z}=2\pi i$ と $f$ の連続性から $\varepsilon\to0$ で第1式を得る．
+第2式は積分記号下で微分する．
+\end{proof}
+
+\begin{mycor}{正則関数の基本性質}{appD-cor}
+\begin{enumerate}
+\item 正則関数は何回でも微分可能であり，導関数も正則である．
+\item （Liouville）有界な整関数は定数である．
+\item （最大値原理）連結開集合上の正則関数 $|f|$ が内点で最大値をとれば $f$ は定数である．
+\item （代数学の基本定理）定数でない複素係数多項式は根を持つ．
+\end{enumerate}
+\end{mycor}
+\begin{proof}
+(2) 半径 $R$ の円に積分公式を適用すると $|f'(z)|\leq\sup|f|/R\to0$．
+(4) $P$ が根を持たなければ $1/P$ は有界な整関数（$|z|\to\infty$ で $\to0$）となり，(2) より定数で矛盾．
+(3) は積分公式から得られる平均値の性質 $f(z_0)=\frac1{2\pi}\int_0^{2\pi}f(z_0+re^{i\theta})d\theta$ による．
+\end{proof}
+
+\begin{note}
+(2)(3) の帰結として，\emph{コンパクト}な連結複素多様体上の正則関数は定数である（第13章）．
+したがって射影多様体のようなコンパクトな対象を調べるには，正則関数ではなく，
+正則直線束の切断（例えば $\PP^n$ 上の同次多項式）や有理関数を用いる必要がある．
+これが第11章・第15章で層や直線束を導入する重要な動機の一つである．
+\end{note}
+
+% ----------------------------------------------------------
+\section{Taylor展開}
+% ----------------------------------------------------------
+
+\begin{mythm}{Taylor 展開}{appD-taylor}
+$f$ が円板 $|z-z_0|<R$ で正則ならば，その円板上で
+\[
+f(z)=\sum_{n=0}^\infty a_n(z-z_0)^n,\qquad a_n=\frac{f^{(n)}(z_0)}{n!}=\frac1{2\pi i}\oint_{|\zeta-z_0|=r}\frac{f(\zeta)}{(\zeta-z_0)^{n+1}}d\zeta
+\]
+と収束冪級数に展開される（$0<r<R$）．逆に収束冪級数は収束円板内で正則である．
+\end{mythm}
+\begin{proof}[概略]
+積分公式の $\frac1{\zeta-z}=\sum_n\frac{(z-z_0)^n}{(\zeta-z_0)^{n+1}}$（$|z-z_0|<|\zeta-z_0|$ で一様収束）を項別積分する．
+\end{proof}
+
+すなわち，複素関数については「正則」と「解析的（局所的に収束冪級数）」は同じことである．
+実関数では $C^\infty$ でも解析的でない関数（$e^{-1/x^2}$ など）が存在するのと対照的である．
+
+\begin{mythm}{一致の定理}{appD-identity}
+連結開集合 $U$ 上の正則関数 $f,g$ が，$U$ 内に集積点を持つ集合上で一致すれば，$U$ 上で $f=g$ である．
+特に $f\not\equiv0$ の零点は孤立している．
+\end{mythm}
+\begin{proof}[概略]
+$h=f-g$ のすべての微分係数が消える点の集合は開かつ閉で，集積点 $z_0$ では Taylor 係数が帰納的にすべて $0$ になるので空でない．
+\end{proof}
+
+\begin{mydef}{零点の位数}{appD-order}
+正則関数 $f\not\equiv0$ が $f(z)=(z-z_0)^mg(z)$，$g(z_0)\ne0$ と書けるとき，$z_0$ を $f$ の\textbf{$m$ 位の零点}という．
+\end{mydef}
+
+一致の定理は，正則関数が局所的なデータから一意に決まる「剛性」を表す．
+これは代数幾何において，既約多様体上の多項式関数が空でない Zariski 開集合上の値で決まることの類似である（第3章，第10章）．
+また零点の位数は，第9章の交点の重複度や第7章の局所環の議論の解析的な対応物である：
+$z_0$ での正則関数の芽のなす局所環 $\OO_{z_0}$ において，$f$ の位数は $\dim_\C\OO_{z_0}/(f)$ に等しい．
+
+% ----------------------------------------------------------
+\section{Laurent展開}
+% ----------------------------------------------------------
+
+\begin{mythm}{Laurent 展開}{appD-laurent}
+$f$ が円環 $r<|z-z_0|<R$ で正則ならば，そこで
+\[
+f(z)=\sum_{n=-\infty}^{\infty}a_n(z-z_0)^n,\qquad
+a_n=\frac1{2\pi i}\oint_{|\zeta-z_0|=\rho}\frac{f(\zeta)}{(\zeta-z_0)^{n+1}}d\zeta\quad(r<\rho<R)
+\]
+と展開される．
+\end{mythm}
+
+\begin{mydef}{孤立特異点の分類}{appD-sing}
+$f$ が $0<|z-z_0|<R$ で正則なとき，$z_0$ を\textbf{孤立特異点}という．Laurent 展開の負冪部分により
+\begin{itemize}
+\item 負冪がない：\textbf{除去可能特異点}（$f$ は $z_0$ まで正則に拡張される）．
+\item 負冪が有限個で $a_{-m}\ne0$，$a_{n}=0\ (n<-m)$：\textbf{$m$ 位の極}．
+\item 負冪が無限個：\textbf{真性特異点}．
+\end{itemize}
+と分類する．開集合上で，極を除いて正則な関数を\textbf{有理型関数}（meromorphic）という．
+\end{mydef}
+
+\begin{myprop}{Riemann の除去可能特異点定理}{appD-riemann}
+$f$ が孤立特異点 $z_0$ の近傍で有界ならば，$z_0$ は除去可能特異点である．
+\end{myprop}
+\begin{proof}
+$|f|\leq M$ なら $|a_n|\leq M\rho^{-n}$ で，$n<0$ のとき $\rho\to0$ で $a_n=0$．
+\end{proof}
+
+\begin{mydef}{留数}{appD-residue}
+孤立特異点 $z_0$ における Laurent 係数 $a_{-1}$ を $f$ の\textbf{留数}といい $\Res_{z=z_0}f$ と書く．
+\end{mydef}
+
+\begin{mythm}{留数定理}{appD-restheorem}
+$f$ が $\bar D$ の近傍で，有限個の孤立特異点 $z_1,\dots,z_N\in D$ を除いて正則ならば
+\[
+\oint_{\partial D}f(z)\,dz=2\pi i\sum_{j=1}^N\Res_{z=z_j}f .
+\]
+\end{mythm}
+\begin{proof}
+各 $z_j$ のまわりの小円を除いて積分定理を用い，小円上では Laurent 展開を項別積分すると
+$\oint(z-z_j)^ndz=2\pi i\,\delta_{n,-1}$ により $a_{-1}$ のみ残る．
+\end{proof}
+
+\begin{myex}{偏角の原理}{appD-argument}
+有理型関数 $f$ に対し $f'/f$ の留数は，$m$ 位の零点で $m$，$m$ 位の極で $-m$ である．よって
+\[
+\frac1{2\pi i}\oint_{\partial D}\frac{f'(z)}{f(z)}dz=(\text{$D$ 内の零点の個数})-(\text{極の個数})
+\]
+（位数込み）．コンパクト Riemann 面上では $\partial D=\emptyset$ と考えられるので，
+\emph{有理型関数の零点と極の個数は等しい}．例えば $\PP^1$ 上の有理関数 $P(z)/Q(z)$ について，
+$\infty$ での零点・極も数えれば両者は一致する．これは第9章・第13章の次数の議論の原型である．
+\end{myex}
+
+\begin{myex}{リーマン球面}{appD-sphere}
+$\hat\C=\C\cup\{\infty\}$ を，$\infty$ の近傍で座標 $w=1/z$ を用いて定義すると，コンパクトな Riemann 面になり $\PP^1$ と同一視される（第8章，第13章）．
+$f$ の $\infty$ での振る舞いは $f(1/w)$ の $w=0$ での振る舞いで定義する．
+多項式 $P$ は $\infty$ に $\deg P$ 位の極を持つ．
+$\hat\C$ 上の有理型関数は有理関数に限る．
+\end{myex}
+
+% ----------------------------------------------------------
+\section{多変数複素解析の初歩}
+% ----------------------------------------------------------
+
+$\C^n$ の座標を $z=(z_1,\dots,z_n)$，$z_j=x_j+iy_j$ とする．
+
+\begin{mydef}{多変数正則関数}{appD-several}
+開集合 $U\subset\C^n$ 上の連続関数 $f$ が各変数 $z_j$ について（他の変数を固定して）正則であるとき，$f$ を\textbf{正則}という．
+同値な条件として，各点の近傍で多重冪級数 $\sum_\alpha a_\alpha(z-a)^\alpha$ に展開される．
+Wirtinger 微分 $\partial/\partial z_j$，$\partial/\partial\bar z_j$ を用いれば正則性は $\partial f/\partial\bar z_j=0$（$j=1,\dots,n$）である．
+\end{mydef}
+
+\begin{mythm}{多重円板上の Cauchy の積分公式}{appD-polydisc}
+$f$ が閉多重円板 $\bar\Delta=\{|z_j-a_j|\leq r_j\}$ の近傍で正則ならば，$z\in\Delta$ に対し
+\[
+f(z)=\frac1{(2\pi i)^n}\oint_{|\zeta_1-a_1|=r_1}\!\!\cdots\oint_{|\zeta_n-a_n|=r_n}\frac{f(\zeta)}{(\zeta_1-z_1)\cdots(\zeta_n-z_n)}\,d\zeta_1\cdots d\zeta_n .
+\]
+\end{mythm}
+
+1変数の場合と同様に，多変数の正則関数は何回でも微分でき，一致の定理と最大値原理が成り立つ．
+一方，次のような1変数にはない現象が生じる．
+
+\begin{mythm}{Hartogs の拡張定理}{appD-hartogs}
+$n\geq2$ とし，$U\subset\C^n$ を開集合，$K\subset U$ をコンパクト集合で $U\setminus K$ が連結とする．
+このとき $U\setminus K$ 上の正則関数は $U$ 上の正則関数に一意に拡張される．
+\end{mythm}
+
+\begin{myex}{孤立特異点は存在しない}{appD-hartogsex}
+$n\geq2$ のとき，$\C^n\setminus\{0\}$ 上の正則関数は $\C^n$ 全体に拡張される．
+特に多変数の正則関数の零点集合は孤立点を持たない（$1/f$ を考えよ）．
+実際，$f\colon U\to\C$ が正則で $f\not\equiv0$ なら，$\Zero(f)$ は余次元1（複素 $n-1$ 次元）の解析的集合になる．
+これは代数幾何で「1本の方程式は次元を1だけ下げる」（Krull の単項イデアル定理，第7章）ことの解析版である．
+\end{myex}
+
+\begin{mythm}{正則関数の陰関数定理・逆関数定理}{appD-implicit}
+\begin{enumerate}
+\item 正則写像 $F\colon U\to\C^n$（$U\subset\C^n$）の点 $a$ における複素 Jacobi 行列 $(\partial F_i/\partial z_j(a))$ が正則行列ならば，
+$F$ は $a$ の近傍で正則な逆写像を持つ．
+\item 正則関数 $f_1,\dots,f_r$（$r\leq n$）が $f(a)=0$ を満たし，$(\partial f_i/\partial z_j(a))$ の階数が $r$ ならば，
+$\Zero(f_1,\dots,f_r)$ は $a$ の近傍で複素 $n-r$ 次元の複素部分多様体であり，
+適当な $n-r$ 個の座標で正則にパラメータ付けされる．
+\end{enumerate}
+\end{mythm}
+
+(2) が第7章の Jacobian criterion および第13章「非特異な代数多様体は複素多様体である」の解析的根拠である．
+実の陰関数定理と Cauchy--Riemann 方程式から，陰関数が正則であることが従う．
+複素 Jacobi 行列 $J_\C$ と実 Jacobi 行列 $J_\R$ の間には $\det J_\R=|\det J_\C|^2\geq0$ が成り立ち，
+これから複素多様体が自然に向き付けられることが分かる．
+
+\begin{mythm}{Weierstrass の予備定理（概略）}{appD-weierstrass}
+原点の近傍で正則な $f(z_1,\dots,z_n)$ が $f(0,\dots,0,z_n)\not\equiv0$ を満たし，$z_n$ について $m$ 位の零点を持つとする．
+このとき原点の近傍で
+\[
+f=u\cdot\bigl(z_n^m+a_1(z')z_n^{m-1}+\cdots+a_m(z')\bigr),\qquad z'=(z_1,\dots,z_{n-1})
+\]
+と書ける．ここで $u$ は $u(0)\ne0$ の正則関数，$a_i$ は $a_i(0)=0$ の正則関数である．
+\end{mythm}
+
+この定理により，解析的集合は局所的には「$z'$ をパラメータとする多項式の零点」として扱え，
+局所環 $\OO_{\C^n,0}$（収束冪級数環）が Noether 環であることなど，
+代数的な手法を解析的な局所理論に持ち込むことができる（第13章，複素解析的空間）．
+
+\begin{physbox}[正則性と物理]
+2次元共形場理論では，世界面の座標 $z,\bar z$ を独立に扱い，エネルギー運動量テンソルは正則成分 $T(z)$ と反正則成分 $\bar T(\bar z)$ に分かれる．
+演算子積展開は Laurent 展開であり，保存電荷は留数（周回積分）として得られる（第13章）．
+また4次元 $\mathcal N=1$ 超対称理論のスーパーポテンシャル $W(\Phi)$ はカイラル場の正則関数であり，
+真空条件 $\partial W/\partial\Phi_i=0$ は代数方程式系となる．このような「正則性」が，物理に代数幾何が現れる主要な理由の一つである（第1章）．
+\end{physbox}

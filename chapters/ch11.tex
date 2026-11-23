@@ -1,0 +1,1052 @@
+\chapter{層の理論への導入}
+\label{ch:ch11}
+
+\begin{chapterlead}
+これまでの章では，アフィン多様体を座標環 $k[X]$ によって，点の近くの様子を局所環 $\OO_{X,p}$ によって記述してきた．
+しかし射影多様体のように「大域的な座標環」が関数の情報をうまく担えない空間や，いくつものアフィン片を貼り合わせて得られる空間を扱うには，
+「各開集合の上で定義された関数（やより一般のデータ）が，制限と貼り合わせについてどう振る舞うか」を一括して管理する道具が必要になる．
+それが\textbf{層}（sheaf）である．
+本章では前層・層の定義から始めて，茎，層の射，核と像，層化，環付き空間を導入し，
+多様体や代数多様体が「位相空間＋関数の層」として統一的に記述できることを見る．
+物理的には，層はパッチごとに定義された場を遷移関数で貼り合わせるという，ゲージ理論で日常的に行っている操作の数学的な定式化である．
+層の言葉は第12章のスキームの定義にそのまま使われる．
+\end{chapterlead}
+
+%=====================================================================
+\section{局所情報と大域情報}
+%=====================================================================
+
+\subsection{局所的に定義される関数}
+
+解析学で最初に出会う関数の多くは，定義域全体で一つの式として与えられる．
+しかし幾何学で現れる「関数」は，しばしば\emph{局所的にしか式で書けない}．
+典型例は複素平面上の対数関数である．
+$\C^* = \C\setminus\{0\}$ 上で $\log z$ を一価の正則関数として定義することはできないが，
+原点を通る半直線を除いた領域，例えば
+\[
+  U_1 = \C\setminus \R_{\le 0},\qquad U_2 = \C \setminus \R_{\ge 0}
+\]
+の上ではそれぞれ主値の分枝 $\log_1 z$，$\log_2 z$ が正則関数として定義できる．
+$U_1\cap U_2$ は上半平面 $H_+$ と下半平面 $H_-$ の二つの連結成分からなり，そこで
+\[
+  \log_2 z - \log_1 z =
+  \begin{cases} 0 & (z\in H_+)\\ 2\pi i & (z\in H_-)\end{cases}
+\]
+となる（$\log_2$ の偏角を $(0,2\pi)$ に取った場合）．
+つまり「各開集合の上には正則関数がある」が，「それらは重なりで一致しないので一つの関数にまとまらない」．
+
+一方，$\log z$ の導関数 $1/z$ は $\C^*$ 全体で一価な正則関数として定義される（$\sqrt{z}$ は $\log z$ と同様に一価にならない；問~\ref{prob:ch11-1-1}）．
+$1/z$ は $U_1$ 上でも $U_2$ 上でも $\log$ の導関数であり，こちらは重なりで一致するので一つの関数になる．
+この対比——局所的には存在するが大域的にはまとまらないもの，局所的なデータがまとまって大域的なものになる場合——が本章の主題である．
+
+\subsection{開集合上の関数}
+
+位相空間 $X$ の各開集合 $U$ に対して，$U$ 上で定義された「良い関数」全体の集合 $\sheaf{F}(U)$ を考える．
+「良い」の意味は文脈で変わる：
+\begin{itemize}
+  \item $X$ が位相空間なら，$\sheaf{F}(U) = C^0(U,\R)$（連続関数）．
+  \item $X$ が $C^\infty$ 多様体なら，$\sheaf{F}(U) = C^\infty(U,\R)$（滑らかな関数）．
+  \item $X$ が複素多様体なら，$\sheaf{F}(U) = \{U \text{ 上の正則関数}\}$．
+  \item $X$ が代数多様体なら，$\sheaf{F}(U) = \OO_X(U)$（$U$ 上の正則関数．第5・6章および 11.5.1 小節参照）．
+\end{itemize}
+いずれの場合も次の二つの事実が成り立つ．
+\begin{enumerate}
+  \item $V\subset U$ なら，$U$ 上の関数を $V$ に\textbf{制限}できる：$f \mapsto f|_V$．
+  \item 関数であることは局所的な条件で判定できる：$U = \bigcup_i U_i$ のとき，各 $U_i$ 上の良い関数 $f_i$ が重なりで一致すれば，それらは $U$ 上の一つの良い関数を定める．
+\end{enumerate}
+1 は「前層」，1 と 2 をあわせたものが「層」の定義となる．
+重要なのは，$X$ 全体の関数 $\sheaf{F}(X)$ だけを見るのでは情報が不足することである．
+例えば連結なコンパクト複素多様体（$\PP^1$ など）の上の大域的正則関数は定数しかない（最大値原理）．
+すなわち $\sheaf{F}(\PP^1)=\C$ からは $\PP^1$ についてほとんど何もわからない．
+しかし \emph{すべての開集合} $U$ に対する $\sheaf{F}(U)$ と制限写像の全体は $\PP^1$ の複素構造を完全に記憶している．
+
+\subsection{局所情報}
+
+点 $p\in X$ の「ごく近く」での関数の振る舞いは，$p$ を含む開集合をどんどん小さくしたときに残る情報として捉えられる．
+例えば $X=\C$ の原点のまわりで正則な関数は，原点の十分小さな近傍上で収束べき級数 $\sum a_n z^n$ として表され，二つの正則関数が原点の\emph{ある}近傍で一致すれば，それらは「原点での局所情報」としては同じものとみなされる．
+これが第6章で導入した局所環の考え方であり，層の言葉では\textbf{芽}（germ）と\textbf{茎}（stalk）として 11.3.5 小節以降で定式化される．
+
+局所情報には二つの側面がある．
+\begin{itemize}
+  \item \textbf{点の周りの局所情報}：芽・茎．点ごとの代数構造（局所環）を与える．
+  \item \textbf{開被覆に関する局所情報}：開被覆 $\{U_i\}$ の各成員上のデータ $s_i\in\sheaf{F}(U_i)$．
+\end{itemize}
+前者は「無限小」の，後者は「有限の大きさのパッチ」の局所性である．
+物理でいえば，前者は一点の近傍での Taylor 展開や演算子積展開に，後者は座標パッチ（ゲージパッチ）ごとの場の記述に対応する．
+
+\subsection{局所情報の整合性}
+
+開被覆 $X=\bigcup_i U_i$ と各 $U_i$ 上の関数 $f_i$ が与えられたとき，これらが一つの大域的関数の制限になるための明らかな必要条件は
+\begin{equation}\label{eq:ch11-compat}
+  f_i|_{U_i\cap U_j} = f_j|_{U_i\cap U_j}\qquad (\forall i,j)
+\end{equation}
+である．これを\textbf{整合性条件}（compatibility condition）とよぶ．
+関数の場合，整合性条件は十分条件でもある：$x\in U_i$ に対して $f(x) := f_i(x)$ と定義すれば，\eqref{eq:ch11-compat} によりこれは $i$ の取り方によらず，各点の近傍で $f_i$ に一致するので連続（滑らか，正則）である．
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  \fill[blue!10] (0,0) ellipse (2.2 and 1.3);
+  \fill[red!10] (2.6,0) ellipse (2.2 and 1.3);
+  \begin{scope}
+    \clip (0,0) ellipse (2.2 and 1.3);
+    \fill[violet!25] (2.6,0) ellipse (2.2 and 1.3);
+  \end{scope}
+  \draw[blue!70!black,thick] (0,0) ellipse (2.2 and 1.3);
+  \draw[red!70!black,thick] (2.6,0) ellipse (2.2 and 1.3);
+  \node at (-1.1,0.2) {$U_i$};
+  \node at (3.8,0.2) {$U_j$};
+  \node[font=\small] at (1.3,0.25) {$U_i\cap U_j$};
+  \node[blue!60!black] at (-1.0,-0.5) {$s_i$};
+  \node[red!60!black] at (3.7,-0.5) {$s_j$};
+  \node[font=\small,violet!60!black] at (1.3,-0.4) {$s_i|=s_j|$};
+  \draw[-{Stealth},thick] (1.3,-1.6) -- (1.3,-2.3);
+  \fill[green!10] (1.3,-3.3) ellipse (4.3 and 0.8);
+  \draw[green!50!black,thick] (1.3,-3.3) ellipse (4.3 and 0.8);
+  \node at (1.3,-3.3) {$U_i\cup U_j$ 上の唯一の切断 $s$，\ $s|_{U_i}=s_i,\ s|_{U_j}=s_j$};
+  \node[font=\small,right] at (1.5,-1.95) {貼り合わせ};
+\end{tikzpicture}
+\caption{開被覆と貼り合わせ．重なり $U_i\cap U_j$ で整合する局所データ $s_i,s_j$ は和集合上の一つのデータに一意的にまとまる．}
+\label{fig:ch11-gluing}
+\end{figure}
+
+ところが，扱う「データ」が関数でない場合や，関数にある大域的な制約を課した場合には，整合性条件だけでは大域化できないことがある．
+これが次の小節の問題である．
+
+\subsection{局所情報を大域化する問題}
+
+大域化の問題は二つのレベルに分かれる．
+
+\paragraph{(a) 整合する局所データが大域化できるか．}
+関数の場合は常にできた．しかし例えば「有界な関数」という条件は局所的な条件ではない．
+$f(x)=x$ は $\R$ のどの有界開区間上でも有界だが，$\R$ 上では有界でない．
+したがって，有界関数たちは整合していても大域的な有界関数にまとまらない（11.3.5 小節）．
+この種の失敗は「対象のクラスの選び方」が悪いことに起因し，層の公理によって排除される．
+
+\paragraph{(b) 局所的には存在するデータが，整合するように選べるか．}
+11.1.1 小節の $\log z$ の例では，各 $U_i$ 上に $\exp(g_i)=z$ を満たす $g_i$ は存在するが，重なりで $2\pi i$ の整数倍だけずれる．
+ずれを修正して整合させることは不可能である（できたら $\C^*$ 上の一価な $\log$ が存在してしまう）．
+これは対象のクラスの問題ではなく，空間 $X=\C^*$ の大域的な形（穴がある）に由来する\emph{本質的な障害}である．
+
+(a) を解決する枠組みが層であり，(b) の障害を測る道具が層コホモロジーである．
+本章では主に (a) を扱い，(b) については 11.6 節で予告する．
+
+\begin{physbox}[パッチと大域的な場]
+電磁気学で Dirac モノポールのベクトルポテンシャルを考えると，球面全体で特異点なく $A$ を選ぶことはできず，北半球と南半球で別々の $A_N,A_S$ を選び，赤道でゲージ変換で繋ぐ必要がある（11.6.3 小節）．
+これはまさに (b) 型の現象であり，ゲージ場は「関数」ではなく「局所データとその貼り合わせの規則」として理解すべきことを示している．
+\end{physbox}
+
+\exprob{prob:ch11-1-1}
+$X=\C^*$ の開被覆 $U_1=\C\setminus\R_{\le0}$，$U_2=\C\setminus\R_{\ge0}$ を考える．
+$U_1$ 上の $\sqrt{z}$ の主値の分枝 $h_1$ と，$U_2$ 上の分枝 $h_2$（偏角を $(0,2\pi)$ に取ったもの）について，$U_1\cap U_2$ の各連結成分上で $h_2/h_1$ を求めよ．
+また，$\C^*$ 上の連続関数 $h$ で $h(z)^2=z$ を満たすものが存在しないことを示せ．
+
+%=====================================================================
+\section{前層}
+%=====================================================================
+
+\subsection{前層の定義}
+
+\begin{mydef}{前層}{ch11-presheaf}
+位相空間 $X$ 上の（アーベル群の）\textbf{前層}（presheaf）$\sheaf{F}$ とは，次のデータからなるものである．
+\begin{enumerate}
+  \item 各開集合 $U\subset X$ に対するアーベル群 $\sheaf{F}(U)$．
+  \item 開集合の包含 $V\subset U$ ごとの群準同型 $\rho_{UV}\colon \sheaf{F}(U)\to\sheaf{F}(V)$（\textbf{制限写像}）．
+\end{enumerate}
+これらは次を満たす：
+\begin{enumerate}
+  \item[(P0)] $\sheaf{F}(\emptyset)=0$．
+  \item[(P1)] $\rho_{UU}=\mathrm{id}_{\sheaf{F}(U)}$．
+  \item[(P2)] $W\subset V\subset U$ に対し $\rho_{UW}=\rho_{VW}\circ\rho_{UV}$．
+\end{enumerate}
+$\sheaf{F}(U)$ の元を $U$ 上の\textbf{切断}（section）とよび，$\Gamma(U,\sheaf{F})$ とも書く．
+$s\in\sheaf{F}(U)$ に対して $\rho_{UV}(s)$ を $s|_V$ と書く．
+アーベル群の代わりに集合・環・ベクトル空間などを用いれば，集合の前層，環の前層，などが定義される（環の場合 $\sheaf{F}(\emptyset)$ は零環とする）．
+\end{mydef}
+
+圏論の言葉では（付録 G 参照），$X$ の開集合を対象とし，包含 $V\subset U$ をただ一つの射 $V\to U$ とする圏 $\mathrm{Open}(X)$ を考えると，
+前層とは\emph{反変関手}
+\[
+  \sheaf{F}\colon \mathrm{Open}(X)^{\mathrm{op}}\longrightarrow \mathbf{Ab}
+\]
+にほかならない．(P1)(P2) はちょうど関手性（恒等射と合成の保存）である．
+「反変」なのは，開集合を小さくする向きに切断が移る（関数の引き戻しと同じ向き）からである．
+
+\begin{note}
+(P0) を公理に入れない流儀もあるが，その場合でも層の公理（貼り合わせ公理を空な被覆に適用）から $\sheaf{F}(\emptyset)$ は一点集合（零群）になる．
+\end{note}
+
+\subsection{制限写像}
+
+制限写像は「関数の定義域を狭める」操作の抽象化である．
+具体的な関数の場合は文字どおり $f\mapsto f|_V$ であるが，前層の定義では $\sheaf{F}(U)$ の元が関数である必要はない．
+例えば次のようなものも前層になる（微分形式については 11.2.4 小節の例も参照）：
+\begin{itemize}
+  \item $U\mapsto \Omega^p(U)$（$U$ 上の $p$ 次微分形式）．制限は微分形式の制限．
+  \item $U\mapsto \{U \text{ 上のベクトル場}\}$．
+  \item $U\mapsto H^p_{\mathrm{dR}}(U)$（de Rham コホモロジー）．制限は包含写像による引き戻し．
+\end{itemize}
+最後の例の元はもはや「各点に値をもつもの」ではない．
+このような場合でも制限写像の関手性だけで多くのことが議論できるのが前層の言葉の利点である．
+
+制限写像は単射とも全射とも限らない．
+例えば連続関数の前層で $V\subsetneq U$ のとき，$U$ 上で異なる関数が $V$ 上で一致することはあり得る（非単射）し，
+$V=(0,1)\subset U=\R$ のとき $V$ 上の連続関数 $1/x$ は $\R$ 上の連続関数の制限ではない（非全射）．
+一方，複素多様体上の正則関数の前層では，一致の定理により\emph{連結な}開集合 $U$ からその\emph{空でない}開部分集合への制限は単射である．
+この「剛性」は正則関数・代数的関数の著しい特徴である．
+
+\subsection{前層の公理}
+
+前層の公理 (P0)--(P2) は自明に見えるが，次のような帰結がある．
+
+\begin{myprop}{前層の基本性質}{ch11-presheaf-basic}
+$\sheaf{F}$ を $X$ 上の前層とする．
+\begin{enumerate}
+  \item $V\subset U$ と $s,t\in\sheaf{F}(U)$ について $(s+t)|_V = s|_V+t|_V$．
+  \item 任意の開集合 $U$ に対し $\sheaf{F}$ を $U$ の開集合に制限したものは $U$ 上の前層 $\sheaf{F}|_U$ を与える．
+  \item 連続写像 $f\colon X\to Y$ に対し $(f_*\sheaf{F})(V):=\sheaf{F}(f^{-1}(V))$ は $Y$ 上の前層である（\textbf{順像}）．
+\end{enumerate}
+\end{myprop}
+\begin{proof}
+1 は $\rho_{UV}$ が準同型であることそのもの．2 は明らか．
+3 は $V'\subset V$ ならば $f^{-1}(V')\subset f^{-1}(V)$ であり，$f^{-1}$ が包含と合成を保つことから (P1)(P2) が従う．$f^{-1}(\emptyset)=\emptyset$ より (P0) も成り立つ．
+\end{proof}
+
+順像は物理でもよく現れる：例えば時空 $M=\R\times\Sigma$ から時間軸 $\R$ への射影 $\pi$ を考えると，
+$\pi_*\sheaf{F}$ の区間 $I$ 上の切断は「時間帯 $I$ の間の時空全体 $I\times\Sigma$ 上の場」である．
+
+\subsection{前層の例}
+
+\begin{myex}{定数前層}{ch11-const-presheaf}
+アーベル群 $A$ を固定し，$X$ の空でない開集合 $U$ に対し $\sheaf{A}^{\mathrm{pre}}(U)=A$，$\sheaf{A}^{\mathrm{pre}}(\emptyset)=0$，
+空でない $V\subset U$ に対し $\rho_{UV}=\mathrm{id}_A$ と定めたものは前層である．これを\textbf{定数前層}とよぶ．
+「各開集合上で $A$ に値をとる定数関数」と思えばよい．
+\end{myex}
+
+\begin{myex}{有界関数の前層}{ch11-bounded}
+$X=\R$ とし，$\sheaf{B}(U)=\{f\colon U\to\R \text{ 連続かつ有界}\}$ と置く．
+有界関数の制限は有界だから，通常の制限で $\sheaf{B}$ は前層になる．
+\end{myex}
+
+\begin{myex}{摩天楼前層}{ch11-skyscraper}
+点 $p\in X$ とアーベル群 $A$ に対し，$p\in U$ なら $\sheaf{F}(U)=A$，$p\notin U$ なら $\sheaf{F}(U)=0$，
+制限は $p\in V\subset U$ なら恒等写像，それ以外は零写像と定める．これは前層（実は層）であり，\textbf{摩天楼層}（skyscraper sheaf）$i_{p*}A$ とよばれる．
+物理的には「点 $p$ に局在した自由度」のモデルである．
+\end{myex}
+
+\begin{myex}{連続関数・滑らかな関数}{ch11-cont-presheaf}
+$X$ を位相空間とすると $U\mapsto C^0(U,\R)$ は環の前層である．
+$X$ が $C^\infty$ 多様体なら $U\mapsto C^\infty(U)$ も環の前層である．
+さらに $U\mapsto \Omega^p(U)$ は $C^\infty$ 関数の前層の上の「加群の前層」になる：$f\in C^\infty(U)$ と $\omega\in\Omega^p(U)$ の積 $f\omega$ は制限と可換である．
+\end{myex}
+
+\subsection{正則関数の前層}
+
+$X$ を複素多様体（あるいは $\C^n$ の開集合）とする．
+$U\subset X$ 開に対し
+\[
+  \OO_X(U) = \{\, f\colon U\to\C \mid f \text{ は } U \text{ 上正則} \,\}
+\]
+と置き，制限を通常の関数の制限とすれば，正則関数の制限は正則だから $\OO_X$ は $\C$ 代数の前層となる．
+これを\textbf{正則関数の前層}とよぶ（次節で層であることを見る）．
+同様に，$\OO_X^*(U)=\{f\in\OO_X(U)\mid f \text{ は } U \text{ 上零点をもたない}\}$ は乗法群の前層である．
+
+\begin{myex}{$\OO_{\C}$ の切断}{ch11-OC}
+$X=\C$ のとき，
+$\OO_{\C}(\C)$ は整関数全体，
+$\OO_{\C}(\C^*)$ は $\sum_{n\in\Z}a_nz^n$ の形の（$\C^*$ 上広義一様収束する）Laurent 級数全体，
+$\OO_{\C}(D)$（$D$ は単位円板）は収束半径 $1$ 以上のべき級数全体である．
+制限 $\OO_{\C}(\C)\to\OO_{\C}(\C^*)$ は単射で，像は $a_n=0\ (n<0)$ となる Laurent 級数からなる．
+$1/z\in\OO_{\C}(\C^*)$ は像に入らない．
+\end{myex}
+
+代数多様体の場合，$X$ の開集合 $U$ 上の正則関数とは，各点の近傍で多項式の比 $g/h$（$h\neq0$）として書ける関数のことであった（第5・6章）．これも同様に前層 $\OO_X$ を定める．
+これらの前層では，次の\emph{局所性}がすでに定義に組み込まれていることに注意しよう：
+「$f$ が $U$ 上正則」とは「$U$ の各点の近傍で正則」ということである．
+この局所性が層の公理の本質である．
+
+\exprob{prob:ch11-2-1}
+$X$ を位相空間とし，$U\mapsto H^0(U):=\{U \text{ の連結成分から } \Z \text{ への写像}\}$ と置く．
+$V\subset U$ のとき，$V$ の各連結成分はちょうど一つの $U$ の連結成分に含まれることを用いて制限写像 $H^0(U)\to H^0(V)$ を定義し，これが前層になることを確かめよ．
+
+%=====================================================================
+\section{層}
+%=====================================================================
+
+\subsection{層の定義}
+
+\begin{mydef}{層}{ch11-sheaf}
+位相空間 $X$ 上の前層 $\sheaf{F}$ が\textbf{層}（sheaf）であるとは，
+任意の開集合 $U$ とその任意の開被覆 $U=\bigcup_{i\in I}U_i$ に対し，次の二条件が成り立つことをいう．
+\begin{enumerate}
+  \item[(S1)] \textbf{局所性}（locality）：$s,t\in\sheaf{F}(U)$ が全ての $i$ で $s|_{U_i}=t|_{U_i}$ を満たせば，$s=t$．
+  \item[(S2)] \textbf{貼り合わせ}（gluing）：$s_i\in\sheaf{F}(U_i)$ が全ての $i,j$ で $s_i|_{U_i\cap U_j}=s_j|_{U_i\cap U_j}$ を満たせば，$s\in\sheaf{F}(U)$ で全ての $i$ について $s|_{U_i}=s_i$ となるものが存在する．
+\end{enumerate}
+(S1) により (S2) の $s$ は一意である．
+\end{mydef}
+
+(S1)(S2) は，次の系列が\emph{完全}（equalizer）であるとまとめて書ける：
+\begin{equation}\label{eq:ch11-equalizer}
+  0\longrightarrow \sheaf{F}(U)\xrightarrow{\ \alpha\ }\prod_{i}\sheaf{F}(U_i)\xrightarrow{\ \beta\ }\prod_{i,j}\sheaf{F}(U_i\cap U_j),
+\end{equation}
+ここで $\alpha(s)=(s|_{U_i})_i$，$\beta((s_i)_i) = (s_j|_{U_i\cap U_j}-s_i|_{U_i\cap U_j})_{i,j}$ である．
+(S1) は $\alpha$ の単射性，(S2) は $\Ker\beta\subset\Img\alpha$ に対応する（$\beta\circ\alpha=0$ は自明）．
+この形は 11.6.4 小節で Čech コホモロジーへと延長される．
+
+\subsection{局所性の公理}
+
+(S1) は「切断は局所的なデータで決まる」ことを述べている．
+関数の前層ではこれは自明である：各点 $x\in U$ はある $U_i$ に属し，そこで $s(x)=t(x)$ だから $s=t$．
+(S1) が成り立たない前層の例を見ておくと意味がはっきりする．
+
+\begin{myex}{(S1) を満たさない前層}{ch11-not-S1}
+$X$ を位相空間とし，$\sheaf{F}(X)=\Z$，$U\neq X$ なる開集合に対し $\sheaf{F}(U)=0$ と置く（制限は自明なもの）．
+$X$ が二つの真の開集合 $U_1,U_2$ で覆われるとき，$1\in\sheaf{F}(X)$ と $0$ は $U_1,U_2$ への制限が一致する（どちらも $0$）が $1\ne0$．
+よって (S1) が破れる．「局所的には見えない大域的な切断」が存在するのである．
+\end{myex}
+
+(S1) が成り立つ前層を\textbf{分離前層}（separated presheaf）とよぶ．
+各点で値をもつ関数からなる前層は常に分離的である．
+(S1) は，切断を各点の芽（11.3.5 小節）の族と同一視できることと同値になる（命題~\ref{prop:ch11-stalk-detect}）．
+
+\subsection{貼り合わせの公理}
+
+(S2) は「整合する局所データは大域化できる」ことを述べる．
+関数の場合，大域化を妨げるのは「関数のクラスを決める条件が局所的でない」ことであった．
+すなわち，ある性質 P をもつ関数の前層が層になるのは，おおまかにいえば P が\emph{局所的な性質}（各点の近傍で確かめられる性質）であるときである．
+\begin{itemize}
+  \item 連続・滑らか・正則・調和・$\Delta f=0$ を満たす，などは局所的な性質．
+  \item 有界・$L^2$ 可積分・コンパクト台・定数，などは局所的でない性質．
+\end{itemize}
+例えば「定数関数」は局所的な性質ではなく（連結でない開集合上で局所的に定数でも定数とは限らない），
+「局所定数」が局所的な性質である．これが次の小節で見る定数前層と定数層の違いである．
+
+物理では微分方程式の解の空間を考えることが多い．
+$X$ 上の線形偏微分作用素 $D$ に対し $U\mapsto\{f\in C^\infty(U)\mid Df=0\}$ は層である（$Df=0$ は局所的条件だから）．
+例えば Laplace 方程式の解の層，自由 Maxwell 方程式の解の層などである．
+これに対し，「エネルギー有限の解」の前層は層でない．
+
+\subsection{層の例}
+
+\begin{myprop}{関数の層}{ch11-function-sheaves}
+次はいずれも層である．
+\begin{enumerate}
+  \item 位相空間 $X$ 上の連続関数の層 $\sheaf{C}^0_X$．
+  \item $C^\infty$ 多様体 $M$ 上の滑らかな関数の層 $\sheaf{C}^\infty_M$，$p$ 形式の層 $\Omega^p_M$．
+  \item 複素多様体 $X$ 上の正則関数の層 $\OO_X$ と，零点をもたない正則関数の乗法群の層 $\OO_X^*$．
+  \item 代数多様体 $X$ 上の正則関数の層 $\OO_X$．
+\end{enumerate}
+\end{myprop}
+\begin{proof}
+いずれも「$U\to\C$（または $\R$）の関数で，各点の近傍である局所的条件を満たすもの」の前層である．
+(S1) は関数が各点の値で決まることから従う．
+(S2)：$s_i$ が整合すれば $s(x):=s_i(x)$（$x\in U_i$）は well-defined な関数で，$x$ の近傍 $U_i$ 上 $s=s_i$ だから $s$ は $x$ の近傍で条件を満たす．条件は局所的なので $s$ は $U$ 上で条件を満たす．
+\end{proof}
+
+\begin{myex}{定数層}{ch11-const-sheaf}
+アーベル群 $A$（離散位相を入れる）に対し
+\[
+  \underline{A}_X(U) = \{\, f\colon U\to A \mid f \text{ は局所定数} \,\}
+\]
+は層である（局所定数は局所的な性質）．これを\textbf{定数層}とよぶ．
+$U$ の連結成分が $\pi_0(U)$ で有限個なら $\underline{A}_X(U)\cong A^{\pi_0(U)}$ である．
+問~\ref{prob:ch11-2-1} の前層は $\underline{\Z}_X$ にほかならない（局所連結な $X$ の場合）．
+\end{myex}
+
+\begin{myex}{連続写像の切断の層}{ch11-sections-of-map}
+連続写像 $\pi\colon E\to X$ に対し，$\Gamma(U,E)=\{\sigma\colon U\to E \text{ 連続},\ \pi\circ\sigma=\mathrm{id}_U\}$ は（集合の）層である．
+$E$ がベクトル束のとき（第14章）これはベクトル空間の層になり，ベクトル束の\emph{切断の層}とよばれる．
+物理の「場」はたいていこの形の層の切断である（11.6.1 小節）．
+\end{myex}
+
+\subsection{前層と層の違い}
+
+\paragraph{定数前層は一般に層でない．}
+例~\ref{ex:ch11-const-presheaf} の定数前層 $\sheaf{A}^{\mathrm{pre}}$ を考え，$A\neq0$ とする．
+$X$ が互いに交わらない空でない開集合 $U_1,U_2$ を含むとし，$U=U_1\sqcup U_2$ とする．
+$a_1\neq a_2\in A$ を取ると，$U_1\cap U_2=\emptyset$ なので整合性条件は $\sheaf{A}^{\mathrm{pre}}(\emptyset)=0$ の中で自動的に成り立つ．
+しかし $\sheaf{A}^{\mathrm{pre}}(U)=A$ の元 $s$ で $s|_{U_1}=a_1$，$s|_{U_2}=a_2$ となるものはない（制限は恒等写像）．
+よって (S2) が破れる．定数層 $\underline{A}_X$ では $s$ は「$U_1$ 上 $a_1$，$U_2$ 上 $a_2$」という局所定数関数として存在する．
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+  \draw[thick] (0,0) ellipse (1.1 and 0.7); \node at (0,0) {$U_1$}; \node[below] at (0,-0.75) {$a_1$};
+  \draw[thick] (3,0) ellipse (1.1 and 0.7); \node at (3,0) {$U_2$}; \node[below] at (3,-0.75) {$a_2$};
+  \node[align=center,font=\small] at (1.5,1.4) {定数前層：$U_1\sqcup U_2$ 上の切断は\\ $A$ の一元 $\Rightarrow$ 貼れない};
+  \begin{scope}[xshift=6.2cm]
+  \draw[thick] (0,0) ellipse (1.1 and 0.7); \node at (0,0) {$U_1$}; \node[below] at (0,-0.75) {$a_1$};
+  \draw[thick] (3,0) ellipse (1.1 and 0.7); \node at (3,0) {$U_2$}; \node[below] at (3,-0.75) {$a_2$};
+  \node[align=center,font=\small] at (1.5,1.4) {定数層：局所定数関数\\ $(a_1,a_2)$ として貼れる};
+  \end{scope}
+\end{tikzpicture}
+\caption{定数前層と定数層の違い．}
+\label{fig:ch11-constant}
+\end{figure}
+
+\paragraph{有界関数の前層は層でない．}
+例~\ref{ex:ch11-bounded} の $\sheaf{B}$ で，$\R=\bigcup_{n\in\Z}U_n$，$U_n=(n-1,n+1)$ とし，$s_n=x|_{U_n}$ とすると，
+$s_n$ は $U_n$ 上で有界（$|x|<|n|+1$）で，明らかに整合する．しかし貼り合わせた関数 $x$ は $\R$ 上で有界でない．
+(S1) は成り立つが (S2) が破れている．
+
+\paragraph{茎と芽．}
+前層と層の関係を理解するため，点での局所情報を定式化する．
+
+\begin{mydef}{茎と芽}{ch11-stalk}
+前層 $\sheaf{F}$ と点 $p\in X$ に対し，
+\[
+  \sheaf{F}_p := \varinjlim_{U\ni p}\sheaf{F}(U)
+  = \Big(\bigsqcup_{U\ni p}\sheaf{F}(U)\Big)\Big/\sim
+\]
+を $p$ における\textbf{茎}（stalk）とよぶ．ここで $s\in\sheaf{F}(U)$，$t\in\sheaf{F}(V)$ に対し，$p\in W\subset U\cap V$ なる開集合 $W$ で $s|_W=t|_W$ となるものがあるとき $s\sim t$ と定める．
+$s$ の同値類を $s_p$ と書き，$s$ の $p$ における\textbf{芽}（germ）とよぶ．
+\end{mydef}
+
+例えば $\OO_{\C}$ の原点での茎 $\OO_{\C,0}$ は，正の収束半径をもつべき級数の環 $\C\{z\}$ と同型である．
+これは唯一の極大イデアル $\m=\{f\mid f(0)=0\}=(z)$ をもつ局所環である．
+代数多様体 $X$ の正則関数の層の茎 $\OO_{X,p}$ は，第6章の局所環（座標環の $p$ に対応する極大イデアルでの局所化）に一致する．
+一方，$\sheaf{C}^\infty_{\R,0}$ は「原点での $C^\infty$ 関数の芽」の環であり，$e^{-1/x^2}$（$x>0$），$0$（$x\le0$）のような
+Taylor 級数が $0$ なのに $0$ でない芽を含む．$C^\infty$ の芽はべき級数では捉えきれない．
+
+\begin{myprop}{層の切断は芽で決まる}{ch11-stalk-detect}
+$\sheaf{F}$ が層なら，任意の開集合 $U$ に対し
+\[
+  \sheaf{F}(U)\longrightarrow \prod_{p\in U}\sheaf{F}_p,\qquad s\mapsto (s_p)_{p\in U}
+\]
+は単射である．逆に，この写像が全ての $U$ で単射な前層は (S1) を満たす．
+\end{myprop}
+\begin{proof}
+$s_p=t_p$ が全ての $p\in U$ で成り立つとすると，各 $p$ に開近傍 $W_p\subset U$ があって $s|_{W_p}=t|_{W_p}$．
+$\{W_p\}$ は $U$ の開被覆だから (S1) より $s=t$．
+逆に単射性を仮定し，$s|_{U_i}=t|_{U_i}$ とすると，各 $p\in U_i$ で $s_p=t_p$ なので $s=t$．
+\end{proof}
+
+この命題により，層の切断は「各点の芽の族で，局所的に一つの切断から来るもの」と同一視できる．
+この見方は次節の層化の構成に用いる．
+
+\exprob{prob:ch11-3-1}
+$X=\R$ 上の前層 $\sheaf{F}(U)=\{f\in C^\infty(U)\mid \int_U |f|^2\,dx<\infty\}$ は層か．
+層でなければ (S1)(S2) のどちらが破れるかを具体例で示せ．
+
+\exprob{prob:ch11-3-2}
+摩天楼前層 $i_{p*}A$（例~\ref{ex:ch11-skyscraper}）が層であることを示し，$q\in X$ における茎を求めよ．
+ただし $X$ は Hausdorff 空間とする．$q\in\overline{\{p\}}$ だが $q\ne p$ となりうる非 Hausdorff 空間（例えば第12章の $\Spec$）では茎はどうなるか．
+
+%=====================================================================
+\section{層の基本的な構成}
+%=====================================================================
+
+\subsection{層の射}
+
+\begin{mydef}{層の射}{ch11-morphism}
+$X$ 上の前層 $\sheaf{F},\sheaf{G}$ の間の\textbf{射} $\varphi\colon\sheaf{F}\to\sheaf{G}$ とは，各開集合 $U$ に対する準同型 $\varphi_U\colon\sheaf{F}(U)\to\sheaf{G}(U)$ の族で，$V\subset U$ に対し
+\[
+\begin{tikzcd}
+  \sheaf{F}(U) \arrow[r,"\varphi_U"] \arrow[d,"\rho_{UV}"'] & \sheaf{G}(U) \arrow[d,"\rho_{UV}"] \\
+  \sheaf{F}(V) \arrow[r,"\varphi_V"'] & \sheaf{G}(V)
+\end{tikzcd}
+\]
+が可換になるもの，すなわち関手 $\sheaf{F},\sheaf{G}$ の間の\emph{自然変換}である．層の射は前層としての射のことである．
+\end{mydef}
+
+射 $\varphi$ は茎の間の準同型 $\varphi_p\colon\sheaf{F}_p\to\sheaf{G}_p$，$s_p\mapsto(\varphi_U(s))_p$ を誘導する（可換性から well-defined）．
+
+\begin{myex}{層の射の例}{ch11-morph-ex}
+\begin{enumerate}
+  \item 複素多様体 $X$ 上で，微分 $d\colon \OO_X\to\Omega^1_X$，$f\mapsto df$（$\Omega^1_X$ は正則 1 形式の層）．
+  \item 包含 $\underline{\C}_X\hookrightarrow\OO_X$（局所定数関数は正則）．
+  \item 指数写像 $\exp\colon\OO_X\to\OO_X^*$，$f\mapsto e^{2\pi i f}$．加法群から乗法群への準同型である．
+  \item $C^\infty$ 多様体上の外微分 $d\colon\Omega^p_M\to\Omega^{p+1}_M$．
+\end{enumerate}
+\end{myex}
+
+\begin{myprop}{射は茎で判定できる}{ch11-stalk-iso}
+$\varphi\colon\sheaf{F}\to\sheaf{G}$ を層の射とする．次は同値である．
+(i) 全ての $U$ で $\varphi_U$ が単射．(ii) 全ての $p$ で $\varphi_p$ が単射．
+また $\varphi$ が同型であることと，全ての $p$ で $\varphi_p$ が同型であることは同値である．
+\end{myprop}
+\begin{proof}[証明の概略]
+(i)$\Rightarrow$(ii)：$\varphi_p(s_p)=0$ なら，ある $W\ni p$ で $\varphi_W(s|_W)=0$，よって $s|_W=0$，$s_p=0$．
+(ii)$\Rightarrow$(i)：$\varphi_U(s)=0$ なら全ての $p\in U$ で $\varphi_p(s_p)=0$，よって $s_p=0$，命題~\ref{prop:ch11-stalk-detect} より $s=0$．
+同型については，茎で全射なら $t\in\sheaf{G}(U)$ に対し局所的に $\varphi(s_i)=t|_{U_i}$ となる $s_i$ が取れ，単射性から $s_i$ たちは整合するので (S2) で貼り合わせて $\varphi_U(s)=t$ を得る．
+\end{proof}
+
+注意すべきは，\emph{茎で全射でも各 $\varphi_U$ が全射とは限らない}ことである．これが次の小節の核心である．
+
+\subsection{層の核と像の概念}
+
+アーベル群の層の射 $\varphi\colon\sheaf{F}\to\sheaf{G}$ に対し，前層
+\[
+  (\Ker\varphi)(U) := \Ker(\varphi_U),\qquad
+  (\Img^{\mathrm{pre}}\varphi)(U) := \Img(\varphi_U)
+\]
+を考える．
+
+\begin{myprop}{核は層}{ch11-kernel}
+$\Ker\varphi$ は層であり，$(\Ker\varphi)_p=\Ker(\varphi_p)$．
+\end{myprop}
+\begin{proof}
+(S1) は $\sheaf{F}$ の (S1) から従う．(S2)：$s_i\in\Ker\varphi_{U_i}$ が整合すれば，$\sheaf{F}$ の中で $s\in\sheaf{F}(U)$ に貼り合う．
+$\varphi_U(s)|_{U_i}=\varphi_{U_i}(s_i)=0$ だから $\sheaf{G}$ の (S1) により $\varphi_U(s)=0$．
+茎についての主張は定義から直接確かめられる．
+\end{proof}
+
+一方，像の前層は一般に層でない．基本的な例が指数写像である．
+
+\begin{myex}{指数写像の像}{ch11-exp-image}
+$X=\C^*$ とし，$\exp\colon\OO_X\to\OO_X^*$，$f\mapsto e^{2\pi i f}$ を考える．
+\begin{itemize}
+  \item \textbf{核}：$e^{2\pi i f}=1$ となる正則関数 $f$ は整数値の連続関数，すなわち局所定数で $\Z$ に値をとる関数．よって $\Ker(\exp)=\underline{\Z}_X$．
+  \item \textbf{茎では全射}：$g\in\OO^*_{X,p}$ に対し，$p$ の単連結な近傍（円板）上で $g$ の対数 $\frac{1}{2\pi i}\log g$ が取れるから $\exp_p$ は全射．
+  \item \textbf{大域的には全射でない}：$g(z)=z\in\OO_X^*(\C^*)$ は $e^{2\pi i f}=z$ となる $f\in\OO_X(\C^*)$ をもたない（$\C^*$ 上一価な $\log z$ はない）．
+\end{itemize}
+したがって $U\mapsto\Img(\exp_U)$ は次の意味で層でない：
+11.1.1 小節の被覆 $U_1,U_2$ 上で $z|_{U_k}=\exp(\frac{1}{2\pi i}\log_k z)$ は像に属し，これらは整合して $z\in\OO^*(\C^*)$ に貼り合うが，$z$ は $\Img(\exp_{\C^*})$ に属さない．
+すなわち像の前層は (S2) を満たさない．
+\end{myex}
+
+この問題を解決するのが\textbf{層化}である．
+
+\begin{mythm}{層化}{ch11-sheafification}
+$X$ 上の任意の前層 $\sheaf{F}$ に対し，層 $\sheaf{F}^+$ と前層の射 $\theta\colon\sheaf{F}\to\sheaf{F}^+$ で次の普遍性をもつものが同型を除き一意に存在する：
+任意の層 $\sheaf{G}$ と前層の射 $\psi\colon\sheaf{F}\to\sheaf{G}$ に対し，$\psi=\tilde\psi\circ\theta$ となる層の射 $\tilde\psi\colon\sheaf{F}^+\to\sheaf{G}$ が一意に存在する．
+さらに全ての $p$ で $\theta_p\colon\sheaf{F}_p\to\sheaf{F}^+_p$ は同型である．
+\end{mythm}
+\begin{proof}[構成の概略]
+$\sheaf{F}^+(U)$ を，写像 $\sigma\colon U\to\bigsqcup_{p\in U}\sheaf{F}_p$ で $\sigma(p)\in\sheaf{F}_p$ を満たし，
+かつ各 $p\in U$ に近傍 $W\subset U$ と $t\in\sheaf{F}(W)$ があって全ての $q\in W$ で $\sigma(q)=t_q$ となるもの（「局所的に $\sheaf{F}$ の切断から来る芽の族」）全体と定める．
+これは条件が局所的なので層であり，$\theta_U(s)=(p\mapsto s_p)$ と置く．
+茎が変わらないこと，普遍性は定義から確かめられる．
+\end{proof}
+
+定数前層の層化は定数層 $\underline{A}_X$ であり，有界関数の前層の層化は「局所有界な連続関数の層」すなわち連続関数の層 $\sheaf{C}^0_{\R}$ である．
+
+\begin{mydef}{像層・完全系列}{ch11-image}
+層の射 $\varphi\colon\sheaf{F}\to\sheaf{G}$ の\textbf{像層} $\Img\varphi$ を，像の前層の層化と定義する．これは自然に $\sheaf{G}$ の部分層になり，$(\Img\varphi)_p=\Img(\varphi_p)$ である．
+層の系列 $\sheaf{F}\xrightarrow{\varphi}\sheaf{G}\xrightarrow{\psi}\sheaf{H}$ が\textbf{完全}であるとは，$\Ker\psi=\Img\varphi$，同値なことに全ての $p$ で茎の系列が完全であることをいう．
+\end{mydef}
+
+例~\ref{ex:ch11-exp-image} により，任意の複素多様体 $X$ 上で
+\begin{equation}\label{eq:ch11-exp-seq}
+  0\longrightarrow\underline{\Z}_X\longrightarrow\OO_X\xrightarrow{\ \exp\ }\OO_X^*\longrightarrow0
+\end{equation}
+は層の完全系列である（\textbf{指数完全系列}）．
+しかし大域切断を取った $\OO_X(X)\to\OO_X^*(X)$ は全射とは限らない．
+このずれを測るのが層コホモロジー $H^1(X,\underline{\Z}_X)$ であり（11.6.4 小節），
+$X=\C^*$ の場合，その「ずれ」は $z$ の巻き付き数（$H^1(\C^*,\Z)\cong\Z$）として現れる．
+
+\subsection{層の制限}
+
+$U\subset X$ を開集合とするとき，$\sheaf{F}$ の $U$ への\textbf{制限} $\sheaf{F}|_U$ は，$U$ に含まれる開集合 $V$ に対し $\sheaf{F}|_U(V)=\sheaf{F}(V)$ と置いたものである．$\sheaf{F}$ が層なら $\sheaf{F}|_U$ も層であり，茎は変わらない：$(\sheaf{F}|_U)_p=\sheaf{F}_p$（$p\in U$）．
+
+閉集合（あるいは一般の部分集合）$Z\subset X$ への制限はもう少し微妙である．包含 $i\colon Z\hookrightarrow X$ に対し，
+\[
+  (i^{-1}\sheaf{F})(V) = \Big(\text{前層 } V\mapsto \varinjlim_{U\supset V,\ U\subset X\text{ 開}}\sheaf{F}(U) \text{ の層化}\Big)
+\]
+（$V$ は $Z$ の開集合）として\textbf{逆像層} $\sheaf{F}|_Z := i^{-1}\sheaf{F}$ を定義する．茎は $(\sheaf{F}|_Z)_p=\sheaf{F}_p$（$p\in Z$）である．
+例えば $\OO_{\C}|_{\{0\}}$ の唯一の茎は $\C\{z\}$ であり，「原点の上に乗っている関数の芽」の情報をもつ．
+「部分集合の上の切断」は，部分集合を含む開集合上の切断の芽として捉えるわけである．
+
+\begin{myex}{部分多様体への制限}{ch11-restriction-ex}
+$X=\C^2$，$Z=\{y=0\}\cong\C$ とする．$\OO_X|_Z$ の $Z$ 上の切断は，「$Z$ のある近傍で正則な関数の，$Z$ に沿った芽」であり，$Z$ 上の正則関数の層 $\OO_Z$ とは異なる：
+$\OO_X|_Z$ の切断は $y$ 方向の Taylor 展開 $\sum_n f_n(x)y^n$ の情報をすべてもつ．
+$\OO_Z$ は $\OO_X|_Z$ を $y$ で生成されるイデアルで割ったもの $\OO_Z=\OO_X|_Z/(y)$ である．
+この「法方向の情報を残すか捨てるか」の区別は第12章の非被約構造（$y^2$ で割ると $y$ の 1 次の情報が残る）に直結する．
+\end{myex}
+
+\subsection{層の局所的な記述}
+
+層は局所的なデータで決まる．このことを二通りに定式化しておく．
+
+\paragraph{開基による記述．}
+$\mathfrak{B}$ を $X$ の開基とし，$\mathfrak{B}$ が有限交叉で閉じているとする．
+$\mathfrak{B}$ の元に対してだけ $\sheaf{F}(U)$ と制限が与えられ，$\mathfrak{B}$ の元からなる被覆について (S1)(S2) が成り立つとき（\textbf{$\mathfrak{B}$-層}），これは $X$ 上の層に一意に拡張される：
+\[
+  \sheaf{F}(U) := \varprojlim_{\mathfrak{B}\ni V\subset U}\sheaf{F}(V)
+  =\Big\{(s_V)_{V\in\mathfrak{B},V\subset U}\ \Big|\ V'\subset V \Rightarrow s_V|_{V'}=s_{V'}\Big\}.
+\]
+これは第12章でアフィンスキームの構造層を基本開集合 $D(f)$ 上で $\OO(D(f))=R_f$ と与えるときに本質的に使う．
+
+\paragraph{貼り合わせによる記述．}
+$X=\bigcup_iU_i$ を開被覆とし，各 $U_i$ 上の層 $\sheaf{F}_i$ と，同型 $\varphi_{ij}\colon\sheaf{F}_j|_{U_i\cap U_j}\xrightarrow{\sim}\sheaf{F}_i|_{U_i\cap U_j}$ が与えられ，
+\begin{equation}\label{eq:ch11-cocycle-sheaf}
+  \varphi_{ii}=\mathrm{id},\qquad
+  \varphi_{ij}\circ\varphi_{jk}=\varphi_{ik}\quad (U_i\cap U_j\cap U_k \text{ 上})
+\end{equation}
+（\textbf{コサイクル条件}）を満たすとする．このとき $X$ 上の層 $\sheaf{F}$ と同型 $\psi_i\colon\sheaf{F}|_{U_i}\xrightarrow{\sim}\sheaf{F}_i$ で $\psi_i=\varphi_{ij}\circ\psi_j$ を満たすものが同型を除き一意に存在する．
+具体的には $\sheaf{F}(U)=\{(s_i)\in\prod_i\sheaf{F}_i(U\cap U_i)\mid s_i=\varphi_{ij}(s_j)\}$ と置けばよい．
+これはベクトル束を遷移関数で構成すること（11.5.3 小節）の層版であり，第12章でスキームを貼り合わせる際の雛形でもある．
+
+\subsection{層による幾何学的構造の記述}
+
+層の最も重要な使い方は，\emph{空間そのものを「位相空間＋関数の層」として定義する}ことである．
+
+\begin{mydef}{環付き空間}{ch11-ringed-space}
+\textbf{環付き空間}（ringed space）とは，位相空間 $X$ と $X$ 上の可換環の層 $\OO_X$ の組 $(X,\OO_X)$ である．$\OO_X$ を\textbf{構造層}とよぶ．
+環付き空間の射 $(f,f^\#)\colon(X,\OO_X)\to(Y,\OO_Y)$ とは，連続写像 $f\colon X\to Y$ と，環の層の射 $f^\#\colon\OO_Y\to f_*\OO_X$ の組である．
+\end{mydef}
+
+$f^\#$ は「$Y$ 上の関数 $g$ を $X$ 上の関数 $g\circ f$ に引き戻す」操作の抽象化である：$V\subset Y$ に対し $f^\#_V\colon\OO_Y(V)\to\OO_X(f^{-1}(V))$．
+関数の層なら引き戻しは $f$ から自動的に決まるが，第12章で構造層の元が「各点で値をもつ関数」でなくなる（べき零元）ため，$f^\#$ をデータとして指定する必要が生じる．
+
+\begin{mythm}{多様体の層による特徴付け}{ch11-manifold-ringed}
+$C^\infty$ 多様体 $M$ に対し $(M,\sheaf{C}^\infty_M)$ は環付き空間であり，
+各点が開近傍 $U$ をもって $(U,\sheaf{C}^\infty_M|_U)\cong(B,\sheaf{C}^\infty_{\R^n}|_B)$（$B\subset\R^n$ 開球）となる．
+逆に，Hausdorff かつ第二可算な位相空間 $X$ と $\R$ 値関数の環の層 $\OO_X$ の組で，各点のまわりでこのように $(\R^n,\sheaf{C}^\infty)$ の開集合と局所同型なものは，$C^\infty$ 多様体の構造を一意に定め，$\OO_X=\sheaf{C}^\infty_X$ となる．
+さらに $C^\infty$ 写像 $f\colon M\to N$ は，$f^\#(g)=g\circ f$ によって環付き空間の射を与え，逆も成り立つ．
+\end{mythm}
+\begin{proof}[証明の概略]
+局所同型 $(U,\OO_X|_U)\cong(B,\sheaf{C}^\infty)$ において座標関数 $x^1,\dots,x^n\in\sheaf{C}^\infty(B)$ に対応する $\OO_X(U)$ の元を局所座標とする．
+二つのチャートの座標変換は，一方の座標関数が他方の構造層の元すなわち $C^\infty$ 関数として書けることになり，$C^\infty$ 級である．
+$f$ が $C^\infty$ であることは，$C^\infty$ 関数の引き戻しが $C^\infty$ であることと同値である（座標関数を引き戻せばよい）．
+\end{proof}
+
+同様に，
+複素多様体は $(\C^n$ の開集合$,\OO)$ と局所同型な環付き空間，
+代数多様体は（第5章の意味の）アフィン多様体 $(X,\OO_X)$ と局所同型な環付き空間として特徴づけられる．
+「幾何学の種類」は局所モデルとなる環付き空間の選択で決まり，大域的な空間は局所モデルを貼り合わせたものである．
+第12章ではこの局所モデルを「任意の可換環 $R$ から作られる $(\Spec R,\OO_{\Spec R})$」に取り替えることでスキームを定義する．
+
+\begin{physbox}[場の理論における「関数環が空間を決める」]
+環付き空間の見方は，Gelfand の定理（コンパクト Hausdorff 空間 $X$ は可換 $C^*$ 環 $C(X)$ で決まる）や，非可換幾何（空間を非可換環で置き換える）とも同じ精神にある．
+物理では「観測量の代数が先にあり，空間はそこから再構成される」という見方がしばしば有用であり，層はその見方を\emph{局所的に}実行するための言葉である．
+\end{physbox}
+
+\exprob{prob:ch11-4-1}
+$X=\C$ 上の層の射 $d\colon\OO_X\to\OO_X$，$f\mapsto f'$ は全射（茎ごとに全射）であることを示せ．
+$X=\C^*$ のとき $d_{X}\colon\OO(\C^*)\to\OO(\C^*)$ は全射か．全射でないなら像に入らない元を一つ挙げよ．
+
+%=====================================================================
+\section{層と幾何学}
+%=====================================================================
+
+\subsection{局所的な関数の層}
+
+代数多様体の正則関数の層を改めて整理しておく．
+$k$ を代数閉体，$X\subset\A^n_k$ をアフィン多様体，$k[X]$ をその座標環とする（第5章）．
+$U\subset X$ 開集合上の関数 $\varphi\colon U\to k$ が\textbf{正則}であるとは，各点 $p\in U$ に近傍 $W\subset U$ と $g,h\in k[X]$ があって，$W$ 上 $h\ne0$ かつ $\varphi=g/h$ となることであった．
+これは局所的な条件だから，$\OO_X(U)=\{U \text{ 上の正則関数}\}$ は層である．
+
+\begin{mythm}{基本開集合上の正則関数}{ch11-regular-Df}
+$f\in k[X]$ に対し $D(f)=\{p\in X\mid f(p)\ne0\}$ と置くと
+\[
+  \OO_X(D(f)) \cong k[X]_f = \Big\{\frac{g}{f^m}\ \Big|\ g\in k[X],\ m\ge0\Big\}.
+\]
+特に $f=1$ として $\OO_X(X)=k[X]$．また茎は $\OO_{X,p}\cong k[X]_{\m_p}$（第6章の局所環）．
+\end{mythm}
+
+証明は Nullstellensatz を用いる（第4章）．
+要点は，$\varphi\in\OO_X(D(f))$ の「分母たち」$h_i$ の共通零点が $D(f)$ の外，すなわち $\Zero(f)$ に含まれることから $f^N\in(h_1,\dots,h_r)$ となる点にある．
+スキームの場合の同じ主張（$\OO(D(f))=R_f$）の証明は第12章で与えるので，ここでは省略する．
+
+\begin{myex}{原点を除いた平面}{ch11-A2-minus-0}
+$X=\A^2$，$U=\A^2\setminus\{(0,0)\}=D(x)\cup D(y)$ とする．
+$U$ 上の正則関数 $\varphi$ は $D(x)$ 上 $g/x^m$，$D(y)$ 上 $h/y^n$ と書け，$D(xy)$ 上で一致するので $g\,y^n=h\,x^m$ が $k[x,y]$ で成り立つ（$g,h$ は $x,y$ で割り切れない形に約分しておく）．
+$k[x,y]$ は UFD だから $m=n=0$，すなわち $\varphi\in k[x,y]$．
+したがって $\OO_X(U)=k[x,y]=\OO_X(\A^2)$ である．
+原点を抜いても正則関数は増えない（Hartogs 現象の代数版）．
+これは $U$ がアフィン多様体でないことを示している（アフィンなら $\OO(U)$ から $U$ が復元されるはずだが，$\OO(U)$ は $\A^2$ を復元してしまう）．
+\end{myex}
+
+\subsection{多様体上の層}
+
+多様体上には関数の層以外にも多くの自然な層がある．それらの多くは構造層上の\emph{加群}の層である．
+
+\begin{mydef}{$\OO_X$ 加群}{ch11-OX-module}
+環付き空間 $(X,\OO_X)$ 上の\textbf{$\OO_X$ 加群}とは，アーベル群の層 $\sheaf{F}$ で，各 $\sheaf{F}(U)$ が $\OO_X(U)$ 加群であり，制限が加群構造と両立する（$(fs)|_V=f|_V\,s|_V$）ものである．
+$\sheaf{F}$ が\textbf{階数 $r$ の局所自由層}であるとは，各点の近傍 $U$ で $\sheaf{F}|_U\cong\OO_U^{\oplus r}$ となることをいう．階数 1 の局所自由層を\textbf{直線束}（可逆層）とよぶ．
+\end{mydef}
+
+\begin{myex}{多様体上の層の例}{ch11-manifold-sheaves}
+\begin{enumerate}
+  \item $C^\infty$ 多様体 $M$ 上で，ベクトル場の層 $\sheaf{T}_M$ と $p$ 形式の層 $\Omega^p_M$ は局所自由な $\sheaf{C}^\infty_M$ 加群で，階数はそれぞれ $n$，$\binom{n}{p}$．
+  局所座標 $x^\mu$ のパッチ上で $\{\partial_\mu\}$，$\{dx^{\mu_1}\wedge\cdots\wedge dx^{\mu_p}\}$ が基底を与える．
+  \item 複素多様体上の正則接ベクトル場の層，正則 $p$ 形式の層 $\Omega^p_X$ は局所自由 $\OO_X$ 加群．
+  \item 部分多様体 $Z\subset X$ を定義する関数のイデアル層 $\sheaf{I}_Z(U)=\{f\in\OO_X(U)\mid f|_{Z\cap U}=0\}$ は $\OO_X$ 加群だが，一般に局所自由ではない（$Z$ の外では $\OO_X$ と一致し，$Z$ 上で「小さく」なる）．
+  \item ベクトル束 $E\to M$ の切断の層は局所自由層であり，逆に局所自由層からベクトル束が復元できる（第14章）．
+\end{enumerate}
+\end{myex}
+
+局所自由層とベクトル束の対応は，物理の場の多くを層の言葉で扱えることを意味する．
+例えば Dirac 場はスピノル束の切断，荷電スカラー場は複素直線束の切断である．
+
+\subsection{局所的なデータの貼り合わせ}
+
+11.4.4 小節の貼り合わせを，直線束の構成に適用しよう．
+$X=\bigcup_iU_i$ で，各 $U_i$ 上に自明な直線束 $\OO_{U_i}$ を置く．
+$\OO_{U_i\cap U_j}$ の $\OO$ 加群としての自己同型は，零点をもたない関数 $g_{ij}\in\OO^*(U_i\cap U_j)$ による掛け算に限る．
+したがってコサイクル条件 \eqref{eq:ch11-cocycle-sheaf} は
+\begin{equation}\label{eq:ch11-cocycle}
+  g_{ii}=1,\qquad g_{ij}\,g_{jk}=g_{ik}\quad (U_i\cap U_j\cap U_k\text{ 上})
+\end{equation}
+となる．これを満たす $\{g_{ij}\}$（\textbf{遷移関数}）から直線束 $\sheaf{L}$ が得られ，その切断は
+\[
+  \sheaf{L}(U)=\{(s_i)_i\mid s_i\in\OO(U\cap U_i),\ s_i=g_{ij}s_j\}
+\]
+である．$g_{ij}$ を $h_i g_{ij}h_j^{-1}$（$h_i\in\OO^*(U_i)$）に取り替えても同型な直線束が得られる．これは局所的な「ゲージ変換」$s_i\mapsto h_is_i$ に対応する．
+
+\begin{myex}{$\PP^1$ 上の直線束 $\OO(n)$}{ch11-O(n)}
+$\PP^1=U_0\cup U_1$，$U_0=\{[z_0:z_1]\mid z_0\ne0\}$（座標 $z=z_1/z_0$），$U_1=\{z_1\ne0\}$（座標 $w=z_0/z_1$），$U_0\cap U_1$ 上 $w=1/z$ とする．
+$n\in\Z$ に対し $g_{01}=z^{n}$（$g_{10}=z^{-n}$）として得られる直線束を $\OO(n)$ と書く（3 つ以上の添字はないのでコサイクル条件は自明）．
+大域切断は $s_0(z)\in\OO(U_0)$（$z$ の整関数），$s_1(w)\in\OO(U_1)$ で $s_0=z^{n}s_1$，すなわち
+\[
+  s_1(1/z) = z^{-n}s_0(z)\qquad (z\ne0).
+\]
+$s_0=\sum_{k\ge0}a_kz^k$ とすると右辺は $\sum a_kz^{k-n}$ で，左辺は $1/z$ のべき級数だから $z$ の非正べきしか含まない．
+よって $k>n$ なる $a_k$ は消え，$n\ge0$ のとき $s_0$ は次数 $n$ 以下の多項式，$n<0$ のとき $s_0=0$．
+\[
+  \dim_{\C}\Gamma(\PP^1,\OO(n)) = \begin{cases} n+1 & (n\ge0)\\ 0 & (n<0)\end{cases}
+\]
+例えば $n=0$ は「$\PP^1$ 上の正則関数は定数」を再現する．
+各 $\OO(n)$ はどのパッチ上でも自明（$\OO_{U_i}$ と同型）なのに，大域的な性質は $n$ によって異なる．
+\end{myex}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+  \draw[thick] (0,0) circle (1.6);
+  \draw[dashed] (-1.6,0) arc (180:360:1.6 and 0.45);
+  \draw[dotted] (1.6,0) arc (0:180:1.6 and 0.45);
+  \fill (0,1.6) circle (1.5pt) node[above] {$\infty$ ($w=0$)};
+  \fill (0,-1.6) circle (1.5pt) node[below] {$0$ ($z=0$)};
+  \draw[blue!70!black,thick,-{Stealth}] (-2.2,-1.4) -- (-2.2,0.6);
+  \node[blue!70!black,left] at (-2.2,-0.4) {$U_0$：座標 $z$};
+  \draw[red!70!black,thick,-{Stealth}] (2.2,1.4) -- (2.2,-0.6);
+  \node[red!70!black,right] at (2.2,0.4) {$U_1$：座標 $w=1/z$};
+  \node[font=\small] at (0,0.0) {$s_0=z^{n}s_1$};
+\end{tikzpicture}
+\caption{$\PP^1$ の二つのパッチと直線束 $\OO(n)$ の遷移関数．}
+\label{fig:ch11-P1}
+\end{figure}
+
+\subsection{大域的構造と局所的構造}
+
+前小節の例が示すように，\emph{局所的にはみな同じ}ものが大域的に異なりうる．
+この現象の典型は以下のとおりである．
+\begin{itemize}
+  \item 多様体はすべて局所的に $\R^n$ と同じだが，大域的には異なる．
+  \item 直線束はすべて局所的に自明だが，$\PP^1$ 上の $\OO(n)$ たちは互いに同型でない（大域切断の次元が異なる）．
+  \item 指数完全系列 \eqref{eq:ch11-exp-seq} は茎ごとには全射だが，大域切断では全射でない．
+\end{itemize}
+
+これらの「局所から大域への移行の失敗」を体系的に測るのが層コホモロジー $H^q(X,\sheaf{F})$ である．
+本ノートでは第13章以降で必要に応じて用い（体系的な理論への道筋は 17.6.3 小節），ここでは 11.6.4 小節で Čech コホモロジーの一番低い次数だけを見ておく．
+直線束の同型類と Čech コホモロジーの関係を先取りすると，
+\[
+  \{X \text{ 上の直線束}\}/\cong\ \ \cong\ \ H^1(X,\OO_X^*) = \Pic(X)
+\]
+であり，$\PP^1$ の場合 $\Pic(\PP^1)\cong\Z$，$\OO(n)\mapsto n$ である．
+物理的には $n$ は $\PP^1\cong S^2$ を貫く磁束の量子数（第一 Chern 数）に対応する（11.6.3 小節）．
+
+\begin{physbox}[局所的には同じ，大域的には違う]
+場の理論の真空や配位を分類するとき，「局所的には自明な場（純ゲージ）」が大域的に非自明な位相的セクターを形成することがある．
+インスタントン数，モノポール電荷，Aharonov--Bohm 位相はいずれも「局所的なデータの貼り合わせ方」に符号化された大域的情報であり，層とそのコホモロジーはこれらを統一的に扱う言葉を提供する．
+\end{physbox}
+
+\exprob{prob:ch11-5-1}
+例~\ref{ex:ch11-O(n)} の記号で，$\OO(n)\otimes\OO(m)$（遷移関数 $z^{n}\cdot z^{m}$）は $\OO(n+m)$ に同型であることを確かめよ．
+また，$\OO(-2)$ と $\PP^1$ の正則余接束（正則 1 形式の層）$\Omega^1_{\PP^1}$ が同型であることを，$dz$ と $dw$ の変換則から示せ．
+
+%=====================================================================
+\section{物理との接点}
+%=====================================================================
+
+\subsection{局所的な場の記述}
+
+物理の場は，時空 $M$ の各開集合 $U$ 上の場の配位の集合 $\sheaf{F}(U)$ と，その制限写像として自然に前層の構造をもつ．
+\begin{itemize}
+  \item 実スカラー場：$\sheaf{F}=\sheaf{C}^\infty_M$．
+  \item 電磁場の強さ：$\sheaf{F}=\Omega^2_M$（2 形式）．
+  \item 荷電場：$U(1)$ 主束に付随する複素直線束 $L$ の切断の層．
+  \item 運動方程式の解：例えば $\{\phi\in C^\infty(U)\mid (\Box+m^2)\phi=0\}$．
+\end{itemize}
+これらがすべて\emph{層}であるのは，場の理論が局所的であること——ラグランジアン密度や運動方程式が各点の近傍の情報だけで書かれること——の反映である．
+「局所的な条件で定義されたものは層をなす」（11.3.3 小節）という原理が，物理の局所性と直接対応している．
+
+注意として，場の量子論における「局所性」（空間的に離れた観測量の可換性）と，ここでの層の局所性は別の概念である（第6章 6.6.2 小節参照）．
+もっとも，代数的場の量子論では時空の開領域 $\mathcal{O}$ に観測量の代数 $\mathfrak{A}(\mathcal{O})$ を対応させるが，
+これは包含 $\mathcal{O}_1\subset\mathcal{O}_2$ に対し $\mathfrak{A}(\mathcal{O}_1)\subset\mathfrak{A}(\mathcal{O}_2)$ という\emph{共変}な対応（余前層）であり，層とは向きが逆である．
+「関数（場の配位）は小さい領域へ制限され，観測量は大きい領域へ拡張される」という双対性に対応している．
+
+\subsection{局所的なデータと大域的な整合性}
+
+Aharonov--Bohm 配位を例に取る．
+$X=\R^2\setminus\{0\}$ 上で，ソレノイドの磁束 $\Phi$ に対し
+\[
+  A=\frac{\Phi}{2\pi}\,d\varphi
+\]
+は $F=dA=0$ を満たす．$X$ の単連結な開集合 $U$ 上では $\varphi$ の一価な分枝が取れて $A=d\big(\tfrac{\Phi}{2\pi}\varphi\big)$ となる（局所的には純ゲージ）．
+すなわち 11.1.5 小節の言葉で，「$A=d\lambda_i$ となる $\lambda_i$ は各パッチ上に存在する」が，重なりで $\lambda_i-\lambda_j\in\{0,\Phi\}$ だけずれ，大域的な $\lambda$ に貼り合わない．
+大域的な情報は
+\[
+  \oint_{S^1}A = \Phi
+\]
+に現れ，荷電粒子の波動関数に位相 $e^{ie\Phi}$ を与える（$\hbar=1$）．
+
+層の言葉では，閉 1 形式の層 $\sheaf{Z}^1$ と完全系列
+\[
+  0\longrightarrow\underline{\R}_X\longrightarrow\sheaf{C}^\infty_X\xrightarrow{\ d\ }\sheaf{Z}^1\longrightarrow0
+\]
+（Poincaré の補題により茎ごとに全射）を考えると，$A\in\sheaf{Z}^1(X)$ が $d(\sheaf{C}^\infty(X))$ に入らない障害が $H^1(X,\underline{\R})\cong H^1_{\mathrm{dR}}(X)\cong\R$ の元 $[A]$ として測られる．
+これは例~\ref{ex:ch11-exp-image} の指数写像の場合とまったく同じ構造である．
+
+\subsection{ゲージ理論における局所記述}
+
+Dirac モノポールの Wu--Yang による記述は，層の貼り合わせの物理的な原型である．
+原点に磁荷 $g$ を置き，磁場を $\bm{B}=g\,\hat{\bm{r}}/r^2$ とする．$S^2$（原点を囲む球面）を貫く磁束は $4\pi g$ である．
+$\nabla\cdot\bm{B}=0$（$r>0$）なので局所的には $\bm{B}=\nabla\times\bm{A}$ と書けるが，
+もし $S^2$ 全体で滑らかな $A$ が取れたら Stokes の定理より $\int_{S^2}dA=0$ となって矛盾する．
+そこで $S^2$ を
+\[
+  U_N=S^2\setminus\{\text{南極}\},\qquad U_S=S^2\setminus\{\text{北極}\}
+\]
+で覆い，極座標 $(\theta,\varphi)$ で
+\[
+  A_N = g(1-\cos\theta)\,d\varphi,\qquad A_S=-g(1+\cos\theta)\,d\varphi
+\]
+と取る．$A_N$ は北極 $\theta=0$ で，$A_S$ は南極 $\theta=\pi$ で係数が消えるので，それぞれのパッチ上で滑らかである．
+いずれも $dA_N=dA_S=g\sin\theta\,d\theta\wedge d\varphi$ を満たす．重なり $U_N\cap U_S$ では
+\[
+  A_N-A_S = 2g\,d\varphi = d\lambda,\qquad \lambda=2g\varphi
+\]
+とゲージ変換で結ばれる．電荷 $e$ の粒子の波動関数はゲージ変換で $\psi_N=e^{ie\lambda}\psi_S$ と変換するので，遷移関数は
+\[
+  g_{NS}=e^{ie\lambda}=e^{2ieg\varphi}\colon U_N\cap U_S\longrightarrow U(1)
+\]
+である．これが赤道を一周して一価であるためには
+\[
+  2eg\in\Z\qquad(\text{Dirac の量子化条件 } eg=n/2,\ \hbar=c=1)
+\]
+が必要十分である．
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+  \fill[blue!8] (0,0) circle (1.8);
+  \begin{scope}
+    \clip (-1.9,-0.35) rectangle (1.9,0.35);
+    \fill[violet!20] (0,0) circle (1.8);
+  \end{scope}
+  \draw[thick] (0,0) circle (1.8);
+  \draw[thick,violet!70!black] (-1.8,0) arc (180:360:1.8 and 0.45);
+  \draw[dashed,violet!70!black] (1.8,0) arc (0:180:1.8 and 0.45);
+  \fill (0,1.8) circle (1.5pt) node[above] {北極};
+  \fill (0,-1.8) circle (1.5pt) node[below] {南極};
+  \node at (0,1.0) {$U_N$：$A_N$};
+  \node at (0,-1.0) {$U_S$：$A_S$};
+  \node[right,align=left,font=\small] at (2.1,0) {赤道付近 $U_N\cap U_S$：\\ $A_N-A_S=2g\,d\varphi$，\\ $\psi_N=e^{2ieg\varphi}\psi_S$};
+\end{tikzpicture}
+\caption{Dirac モノポールの Wu--Yang 記述．二つのパッチ上のゲージ場を遷移関数で貼り合わせる．}
+\label{fig:ch11-wuyang}
+\end{figure}
+
+この構成を層の言葉で読むと次のようになる．
+\begin{itemize}
+  \item 荷電場 $\psi$ は「$\psi_N\in C^\infty(U_N)$，$\psi_S\in C^\infty(U_S)$ で $\psi_N=g_{NS}\psi_S$ を満たす組」，すなわち遷移関数 $g_{NS}$ で貼り合わせた直線束 $L$ の切断である（11.5.3 小節）．
+  \item パッチが二つなのでコサイクル条件は自明．より細かい被覆を取れば \eqref{eq:ch11-cocycle} が非自明な条件となる．
+  \item 電荷と磁束の積 $e\cdot4\pi g = 2\pi n$（$n=2eg$）の量子数 $n$ は直線束の第一 Chern 数であり，$\PP^1=S^2$ 上の正則直線束 $\OO(n)$ の $n$ と同じ不変量である（$\OO(n)$ の遷移関数 $z^{n}$ を赤道 $|z|=1$ 上に制限すると $e^{in\varphi}$．$\varphi$ の向きの取り方で符号は変わる）．
+\end{itemize}
+ゲージ理論の詳しい幾何学（主束，接続，曲率）は第14章で扱う．
+
+\subsection{層の理論の物理的動機}
+
+最後に，層コホモロジーを Čech の方法で一番低い次数だけ予告しておく．
+アーベル群の層 $\sheaf{F}$ と開被覆 $\mathfrak{U}=\{U_i\}$ に対し，
+\begin{align*}
+  C^0 &= \prod_i\sheaf{F}(U_i),\quad C^1=\prod_{i,j}\sheaf{F}(U_i\cap U_j),\quad C^2=\prod_{i,j,k}\sheaf{F}(U_i\cap U_j\cap U_k),\\
+  (\delta s)_{ij}&=s_j-s_i,\qquad (\delta c)_{ijk}=c_{jk}-c_{ik}+c_{ij}
+\end{align*}
+と置く（$\delta\circ\delta=0$）．
+$\Ker(\delta\colon C^0\to C^1)=\sheaf{F}(X)$ は \eqref{eq:ch11-equalizer} にほかならない．
+次の次数
+\[
+  \check{H}^1(\mathfrak{U},\sheaf{F}) = \frac{\Ker(\delta\colon C^1\to C^2)}{\Img(\delta\colon C^0\to C^1)}
+\]
+は「コサイクル条件を満たす遷移データ $c_{ij}$ を，局所的な取り替え $s_i$ で自明化できるかどうか」を測る．
+\begin{itemize}
+  \item $\sheaf{F}=\OO_X^*$（乗法的に書く）なら，コサイクルは直線束の遷移関数 \eqref{eq:ch11-cocycle}，コバウンダリーはゲージ変換であり，$\check{H}^1(X,\OO_X^*)$ は直線束の同型類を与える．
+  \item $\sheaf{F}=\underline{\Z}$ や $\underline{\R}$ なら，$\check{H}^1$ は（良い被覆に関して）通常のコホモロジー $H^1(X;\Z)$，$H^1(X;\R)$ と一致する．Aharonov--Bohm の $[A]$ はここに住む．
+\end{itemize}
+さらに指数完全系列 \eqref{eq:ch11-exp-seq} から長完全系列の一部
+\[
+  H^1(X,\OO_X)\to H^1(X,\OO_X^*)\xrightarrow{\ c_1\ }H^2(X,\Z)
+\]
+が得られ，直線束にその第一 Chern 類（モノポール電荷）が対応する．
+$c_1$ をこの連結準同型で定める見方は第15章（15.3 節）で Chern--Weil の定義と比較され，層コホモロジーの体系的な理論への道筋は 17.6.3 小節で述べる．
+
+物理的な動機をまとめると次のとおりである．
+\begin{enumerate}
+  \item 局所的に定義される場は自然に層をなす（局所性）．
+  \item 物理的に意味のある大域的な量（磁荷，巻き付き数，位相的量子数，異常）はしばしば「局所的には自明なデータの貼り合わせの非自明さ」として現れ，層コホモロジーで測られる．
+  \item 代数幾何の対象（射影多様体，Calabi--Yau 多様体，ベクトル束のモジュライ）では，大域的な正則切断の次元（ゼロモードの数）が物理的な粒子数・世代数などを与え，その計算に層コホモロジーが不可欠である（第15章以降）．
+\end{enumerate}
+
+\begin{physbox}[ゼロモードの数え上げ]
+コンパクト化された弦理論で 4 次元に現れる質量ゼロの場の数は，内部空間上のある微分作用素のゼロモードの数，すなわち適当な層のコホモロジー群の次元で与えられることが多い．
+例~\ref{ex:ch11-O(n)} の $\dim\Gamma(\PP^1,\OO(n))=n+1$ は，その最も簡単な原型である（磁束 $n$ を貫かせた球面上の最低 Landau 準位の縮退度 $n+1$ と一致する）．
+\end{physbox}
+
+\exprob{prob:ch11-6-1}
+Wu--Yang の記述で，$S^2$ を三つの開集合 $U_1=S^2\setminus\{\text{南極}\}$，$U_2=S^2\setminus\{\text{北極}\}$，$U_3=\{\pi/3<\theta<2\pi/3\}$（赤道を含む帯）で覆い直したとき，遷移関数 $g_{ij}=e^{ie\lambda_{ij}}$ のコサイクル条件 $g_{12}g_{23}g_{31}=1$ が Dirac の量子化条件と同値になることを，$\lambda_{ij}$ の多価性に注意して説明せよ．
+（ヒント：$\lambda_{12}+\lambda_{23}+\lambda_{31}$ は一周分の $2g\cdot2\pi$ を含む．）
+
+\section*{問題の解答}
+\addcontentsline{toc}{section}{問題の解答}
+
+\exsol{prob:ch11-1-1}
+\textbf{比 $h_2/h_1$．}$z=re^{i\theta}$ と書く．$U_1$ 上では偏角を $\theta_1\in(-\pi,\pi)$，$U_2$ 上では $\theta_2\in(0,2\pi)$ に取り，
+\[
+  h_1(z)=\sqrt r\,e^{i\theta_1/2},\qquad h_2(z)=\sqrt r\,e^{i\theta_2/2}
+\]
+とする．$U_1\cap U_2=\C\setminus\R=H_+\sqcup H_-$ である．
+\begin{itemize}
+  \item $z\in H_+$ では $\theta_1=\theta_2\in(0,\pi)$ なので $h_2/h_1=1$．
+  \item $z\in H_-$ では $\theta_1\in(-\pi,0)$，$\theta_2=\theta_1+2\pi$ なので $h_2/h_1=e^{i\pi}=-1$．
+\end{itemize}
+これは $\log$ の場合の $\log_2-\log_1\in\{0,2\pi i\}$ を $\sqrt z=\exp(\tfrac12\log z)$ で写したもの（$e^{\pi i}=-1$）である．
+
+\textbf{大域的な平方根が存在しないこと．}$h$ を $\C^*$ 上の連続関数で $h(z)^2=z$ を満たすものとする．
+$U_1$ 上で $h$ も $h_1$ も零点をもたず $(h/h_1)^2=z/z=1$ なので，$h/h_1$ は $U_1$ 上の $\{\pm1\}$ に値をとる連続関数である．
+$U_1$ は点 $1$ に関して星形なので連結であり，$h/h_1$ は定数 $\epsilon_1\in\{\pm1\}$ である．同様に $U_2$（点 $-1$ に関して星形）上で $h=\epsilon_2h_2$．
+すると
+\begin{itemize}
+  \item $H_+$ 上：$\epsilon_1h_1=h=\epsilon_2h_2=\epsilon_2h_1$ より $\epsilon_1=\epsilon_2$，
+  \item $H_-$ 上：$\epsilon_1h_1=h=\epsilon_2h_2=-\epsilon_2h_1$ より $\epsilon_1=-\epsilon_2$
+\end{itemize}
+となり矛盾する．よってそのような $h$ は存在しない．
+層の言葉でいえば，各 $U_i$ 上の切断 $h_i$ は存在するが，重なりでのずれ $h_2/h_1$（$\{\pm1\}$ に値をとる局所定数関数）を $\epsilon_i$ の取り替えで解消できない，という (b) 型の障害である．
+
+\exsol{prob:ch11-2-1}
+\textbf{制限写像の定義．}$V\subset U$ を開集合とし，$C$ を $V$ の連結成分とする．$C$ は $U$ の連結部分集合なので，$C$ の1点 $x$ を含む $U$ の連結成分 $C'$ に含まれる（連結成分は $x$ を含む最大の連結部分集合）．
+$U$ の連結成分は互いに交わらないので，$C$ を含む $U$ の連結成分はただ1つである．これにより写像
+\[
+  c_{UV}:\pi_0(V)\to\pi_0(U),\qquad C\mapsto(C\text{ を含む }U\text{ の連結成分})
+\]
+が定まる．これを用いて
+\[
+  \rho_{UV}:H^0(U)\to H^0(V),\qquad f\mapsto f\circ c_{UV}
+\]
+と定める．すなわち $V$ の成分 $C$ に，それを含む $U$ の成分での値を与える．$(f+g)\circ c_{UV}=f\circ c_{UV}+g\circ c_{UV}$ なので $\rho_{UV}$ は群準同型である．
+
+\textbf{前層の公理．}
+(P0)：$\pi_0(\emptyset)=\emptyset$ なので $H^0(\emptyset)$ は空集合からの写像（ただ1つ）からなり，零群である．
+(P1)：$U$ の成分 $C$ を含む $U$ の成分は $C$ 自身なので $c_{UU}=\mathrm{id}$，よって $\rho_{UU}=\mathrm{id}$．
+(P2)：$W\subset V\subset U$ とし，$C$ を $W$ の成分とする．$C\subset c_{VW}(C)\subset c_{UV}(c_{VW}(C))$ であり，右端は $C$ を含む $U$ の成分なので，一意性より $c_{UV}\circ c_{VW}=c_{UW}$．よって
+\[
+  \rho_{VW}(\rho_{UV}(f))=f\circ c_{UV}\circ c_{VW}=f\circ c_{UW}=\rho_{UW}(f).
+\]
+以上より $U\mapsto H^0(U)$ は前層である．
+（$H^0(U)$ の元は「$U$ 上で各連結成分ごとに定数な $\Z$ 値関数」と同一視でき，制限はその関数の制限に一致する．$X$ が局所連結なら連結成分は開集合なので，これは局所定数関数の層 $\underline{\Z}_X$ と一致する（例\ref{ex:ch11-const-sheaf}）．）
+
+\exsol{prob:ch11-3-1}
+層ではない．(S1) は成り立つが (S2) が破れる．
+
+\textbf{(S1) は成り立つ．}$\sheaf{F}(U)$ の元は $U$ 上の関数であり，制限は関数の制限なので，$s|_{U_i}=t|_{U_i}$（全ての $i$）なら各点で $s=t$，すなわち $s=t$．
+
+\textbf{(S2) が破れる例．}$\R=\bigcup_{n\in\Z}U_n$，$U_n=(n-1,n+1)$ とし，$s_n=1|_{U_n}$（定数関数 $1$）とする．
+$\int_{U_n}|s_n|^2dx=2<\infty$ なので $s_n\in\sheaf{F}(U_n)$ であり，$s_n$ たちは明らかに整合する．
+貼り合わせるべき関数は $\R$ 上の定数関数 $1$ しかないが（(S1) の議論で一意），$\int_\R 1\,dx=\infty$ なので $1\notin\sheaf{F}(\R)$．よって (S2) が破れる．
+「$L^2$ 可積分」は局所的な性質ではない（11.3.3 小節）ことの具体例である．
+なおこの前層の層化は，「局所的に $L^2$」な $C^\infty$ 関数の層，すなわち（滑らかな関数はコンパクト集合上で有界なので）$\sheaf{C}^\infty_\R$ そのものである．
+
+\exsol{prob:ch11-3-2}
+$\sheaf{F}=i_{p*}A$ とする．開集合 $U$ とその開被覆 $U=\bigcup_iU_i$ をとる．
+
+\textbf{(S1)．}$p\notin U$ なら $\sheaf{F}(U)=0$ で主張は自明．$p\in U$ なら $p\in U_{i_0}$ となる $i_0$ があり，$\rho_{UU_{i_0}}=\mathrm{id}_A$ なので $s=s|_{U_{i_0}}=t|_{U_{i_0}}=t$．
+
+\textbf{(S2)．}整合する $s_i\in\sheaf{F}(U_i)$ が与えられたとする．$p\notin U$ なら全ての $\sheaf{F}(U_i)=0$ で $s=0$ が求めるもの．
+$p\in U$ なら $p\in U_{i_0}$ を1つ固定し，$s:=s_{i_0}\in A=\sheaf{F}(U)$ と置く．各 $i$ について，$p\notin U_i$ なら $\sheaf{F}(U_i)=0$ で $s|_{U_i}=0=s_i$．
+$p\in U_i$ なら $p\in U_i\cap U_{i_0}$ であり，制限はすべて恒等写像なので整合性 $s_i|_{U_i\cap U_{i_0}}=s_{i_0}|_{U_i\cap U_{i_0}}$ は $s_i=s_{i_0}$ を意味し，$s|_{U_i}=s_{i_0}=s_i$．
+よって $i_{p*}A$ は層である（Hausdorff 性はここでは使っていない）．
+
+\textbf{茎．}茎 $\sheaf{F}_q=\varinjlim_{U\ni q}\sheaf{F}(U)$ を考える．
+\begin{itemize}
+  \item $q\in\overline{\{p\}}$，すなわち $q$ の全ての開近傍が $p$ を含むとき：全ての $U\ni q$ で $\sheaf{F}(U)=A$，制限は恒等写像なので $\sheaf{F}_q=A$．
+  \item $q\notin\overline{\{p\}}$ のとき：$p\notin W$ なる開近傍 $W\ni q$ があり，任意の芽は $W$ に制限すると $0$ になるので $\sheaf{F}_q=0$．
+\end{itemize}
+$X$ が Hausdorff（$T_1$ でも十分）なら $\overline{\{p\}}=\{p\}$ なので
+\[
+  (i_{p*}A)_q=\begin{cases}A&(q=p)\\0&(q\neq p)\end{cases}
+\]
+であり，名前どおり $p$ にだけ「摩天楼」が立つ．
+
+\textbf{非 Hausdorff の場合．}上の一般的な計算より，$q\in\overline{\{p\}}$ かつ $q\neq p$ なら $\sheaf{F}_q=A\neq0$ である．
+例えば $X=\Spec\Z$ で $p=(0)$（生成点）とすると $\overline{\{p\}}=X$ なので，全ての点で茎が $A$ になる．実際，$(0)$ は全ての空でない開集合に含まれるので $i_{(0)*}A$ は「空でない開集合に $A$ を対応させる」層（$X$ が既約なので定数層 $\underline{A}_X$）と一致する．
+一般に $i_{p*}A$ の台は1点 $\{p\}$ ではなく，その閉包 $\overline{\{p\}}$ 全体に広がる．
+
+\exsol{prob:ch11-4-1}
+\textbf{茎ごとの全射性．}$d$ は $\C$ 線形で制限と可換なので層の射である．点 $p\in\C$ における芽 $g_p\in\OO_{\C,p}$ をとり，$g$ を $p$ 中心の円板 $B$ 上の正則関数 $g(z)=\sum_{n\ge0}a_n(z-p)^n$ で代表させる．
+\[
+  F(z)=\sum_{n\ge0}\frac{a_n}{n+1}(z-p)^{n+1}
+\]
+は同じ収束半径をもつ（$\limsup|a_n/(n+1)|^{1/(n+1)}=\limsup|a_n|^{1/n}$）ので $F\in\OO(B)$ であり，項別微分により $F'=g$．よって $d_p(F_p)=g_p$ であり，$d$ は茎ごとに全射，すなわち層の射として全射である．
+核は $\Ker d=\underline{\C}_X$（局所定数関数）なので，層の完全系列
+\[
+  0\longrightarrow\underline{\C}_X\longrightarrow\OO_X\xrightarrow{\ d\ }\OO_X\longrightarrow0
+\]
+が得られる（これは任意の開集合 $X\subset\C$ で成り立つ）．
+なお $X=\C$ では大域切断でも全射である：整関数のべき級数は収束半径 $\infty$ なので，上の $F$（$p=0$）は整関数になる．
+
+\textbf{$X=\C^*$ の場合．}$d_X:\OO(\C^*)\to\OO(\C^*)$ は全射でない．$1/z$ が像に入らない．
+実際，$F\in\OO(\C^*)$ で $F'=1/z$ となるものがあれば，単位円 $\gamma(\theta)=e^{i\theta}$ に沿って
+\[
+  2\pi i=\oint_\gamma\frac{dz}{z}=\oint_\gamma F'(z)\,dz=F(\gamma(2\pi))-F(\gamma(0))=0
+\]
+となり矛盾する（$F$ があれば $\C^*$ 上一価な $\log z$ が存在してしまう）．
+より詳しく，Laurent 展開 $g=\sum_{n\in\Z}a_nz^n\in\OO(\C^*)$ が像に入るための必要十分条件は $a_{-1}=0$ である（このとき $F=\sum_{n\neq-1}\frac{a_n}{n+1}z^{n+1}$）．
+したがって $\OO(\C^*)/d\,\OO(\C^*)\cong\C$（$g\mapsto a_{-1}=\frac{1}{2\pi i}\oint g\,dz$）であり，これは $H^1(\C^*,\underline{\C})\cong\C$ が茎ごとの全射と大域的な全射のずれを測っていることの例である（例\ref{ex:ch11-exp-image}と同じ構造）．
+
+\exsol{prob:ch11-5-1}
+\textbf{$\OO(n)\otimes\OO(m)\cong\OO(n+m)$．}直線束 $\sheaf{L},\sheaf{M}$ が同じ被覆上の遷移関数 $g_{ij},h_{ij}$ で与えられるとき，$\sheaf{L}\otimes\sheaf{M}$ は各 $U_i$ 上で $\OO_{U_i}\otimes\OO_{U_i}\cong\OO_{U_i}$（$1\otimes1\mapsto1$）と自明化され，
+重なりで局所切断 $s_i\otimes t_i$ は $s_i\otimes t_i=g_{ij}s_j\otimes h_{ij}t_j=(g_{ij}h_{ij})(s_j\otimes t_j)$ と変換するので，遷移関数は積 $g_{ij}h_{ij}$ である．
+$\OO(n)\otimes\OO(m)$ の遷移関数は $g_{01}=z^n\cdot z^m=z^{n+m}$（$g_{10}=z^{-n-m}$）であり，これは $\OO(n+m)$ の遷移関数と\emph{同一}である．
+したがって切断の層は同じ式
+\[
+  \{(s_0,s_1)\mid s_0\in\OO(U\cap U_0),\ s_1\in\OO(U\cap U_1),\ s_0=z^{n+m}s_1\}
+\]
+で与えられ，$\OO(n)\otimes\OO(m)\cong\OO(n+m)$（局所的には $s_i\otimes t_i\mapsto s_it_i$）．
+（遷移関数が一致しなくても，$h_ig_{ij}h_j^{-1}$ の形のゲージ変換で移り合えば同型である．）
+
+\textbf{$\Omega^1_{\PP^1}\cong\OO(-2)$．}$U_0$ 上の正則1形式は $\omega=s_0(z)\,dz$，$U_1$ 上は $\omega=s_1(w)\,dw$ と一意に書ける（$dz$，$dw$ はそれぞれ $\Omega^1|_{U_i}$ の基底）．
+重なりで $w=1/z$ なので
+\[
+  dw=-\frac{1}{z^2}\,dz,\qquad\text{よって}\qquad s_0\,dz=s_1\,dw=-\frac{s_1}{z^2}\,dz\iff s_0=-z^{-2}s_1.
+\]
+すなわち $\Omega^1_{\PP^1}$ は遷移関数 $g_{01}=-z^{-2}$ の直線束である．ゲージ変換 $h_0=1$，$h_1=-1$ を施すと
+\[
+  h_0g_{01}h_1^{-1}=-z^{-2}\cdot(-1)=z^{-2}
+\]
+となり，$\OO(-2)$ の遷移関数に一致する．具体的には
+\[
+  \Omega^1_{\PP^1}\xrightarrow{\ \sim\ }\OO(-2),\qquad (s_0\,dz,\ s_1\,dw)\mapsto(s_0,\ -s_1)
+\]
+が同型を与える（$s_0=-z^{-2}s_1=z^{-2}\cdot(-s_1)$ を確かめよ）．
+整合性の確認として，例\ref{ex:ch11-O(n)}より $\dim\Gamma(\PP^1,\OO(-2))=0$ であり，これは「$\PP^1$ 上には大域的な正則1形式が存在しない」（種数 $0$）ことと一致する．
+実際 $s_0=\sum a_kz^k$ とすると $s_1=-z^2s_0=-\sum a_kw^{-k-2}$ は $w=0$ で正則でなければならず，$a_k=0$ が全ての $k$ で従う．
+
+\exsol{prob:ch11-6-1}
+各開集合上のゲージ場を，$U_1$ 上 $A_1=A_N$，$U_2$ 上 $A_2=A_S$，帯 $U_3$ 上 $A_3=A_N|_{U_3}$（$U_3$ は両極を含まないので $A_N$ は滑らか）と選ぶ．
+遷移関数は本文と同じ規約で $A_i-A_j=d\lambda_{ij}$，$g_{ij}=e^{ie\lambda_{ij}}$，$\psi_i=g_{ij}\psi_j$ とする．重なりはいずれも赤道を含む環状領域で，$U_1\cap U_2\cap U_3=U_3$ である．
+\[
+  A_1-A_2=2g\,d\varphi,\qquad A_2-A_3=A_S-A_N=-2g\,d\varphi,\qquad A_3-A_1=0
+\]
+より，$\lambda_{12}=2g\varphi$，$\lambda_{23}=-2g\varphi$，$\lambda_{31}=0$（定数は省略）である．
+
+\textbf{多価性．}方位角 $\varphi$ は環状領域上で一価な関数ではないので，$\lambda_{12},\lambda_{23}$ を関数として扱うには分枝を選ばなければならない．
+各重なりで独立に切れ目を入れてよいので，例えば $\lambda_{12}$ には $\varphi\in(-\pi,\pi)$（切れ目 $\varphi=\pi$），$\lambda_{23}$ には $\varphi\in(0,2\pi)$（切れ目 $\varphi=0$）の分枝を用いるとする．
+3重の重なり $U_3$ 上で和を計算すると，$\varphi$ の2つの分枝の差 $\varphi_{(-\pi,\pi)}-\varphi_{(0,2\pi)}$ は $0<\varphi<\pi$ で $0$，$\pi<\varphi<2\pi$ で $-2\pi$ なので
+\[
+  \lambda_{12}+\lambda_{23}+\lambda_{31}=
+  \begin{cases}0&(0<\varphi<\pi)\\ -2g\cdot2\pi&(\pi<\varphi<2\pi)\end{cases}
+\]
+となる．すなわち，局所的には $d(\lambda_{12}+\lambda_{23}+\lambda_{31})=(A_1-A_2)+(A_2-A_3)+(A_3-A_1)=0$ で和は定数だが，赤道を一周する間に分枝の切り替えに由来する「一周分」$2g\cdot2\pi$ が現れる．
+
+\textbf{コサイクル条件．}したがって
+\[
+  g_{12}g_{23}g_{31}=e^{ie(\lambda_{12}+\lambda_{23}+\lambda_{31})}=
+  \begin{cases}1&(0<\varphi<\pi)\\ e^{-4\pi ieg}&(\pi<\varphi<2\pi)\end{cases}
+\]
+であり，コサイクル条件 $g_{12}g_{23}g_{31}=1$ が $U_3$ 全体で成り立つ $\iff$ $e^{4\pi ieg}=1$ $\iff$ $2eg\in\Z$，すなわち Dirac の量子化条件 $eg=n/2$ である．
+
+逆に $2eg\in\Z$ なら，$\lambda_{ij}$ の分枝を取り替えても $\lambda_{ij}$ は $4\pi g\Z$ だけしか変わらず $e^{ie\lambda_{ij}}$ は変わらないので，各 $g_{ij}$ は環状領域上の一価な滑らか関数となり，コサイクル条件は（分枝の選び方によらず）恒等的に成り立つ．
+以上の議論は，「2つの開集合の場合に $g_{NS}=e^{2ieg\varphi}$ が赤道を一周して一価である」という本文の条件を，3つの開集合の重なりのコサイクル条件として言い直したものになっている．

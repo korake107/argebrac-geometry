@@ -1,0 +1,324 @@
+% ==========================================================
+\chapter{位相空間}\label{app:E}
+% ==========================================================
+
+この付録では位相空間論の基本事項をまとめる．
+本編では，通常の（Euclid）位相と Zariski 位相（第3章）という性質の大きく異なる二つの位相を扱う．
+Zariski 位相は Hausdorff でなく，閉集合が非常に少ない「粗い」位相であるため，
+通常の位相での直観がそのままでは通用しない．以下では各概念について両者を対比しながら述べる．
+
+% ----------------------------------------------------------
+\section{位相空間の定義}
+% ----------------------------------------------------------
+
+\begin{mydef}{位相空間}{appE-top}
+集合 $X$ の部分集合族 $\mathcal O\subset2^X$ が次を満たすとき，$\mathcal O$ を $X$ の\textbf{位相}といい，
+$(X,\mathcal O)$ を\textbf{位相空間}，$\mathcal O$ の元を\textbf{開集合}という．
+\begin{enumerate}
+\item $\emptyset,X\in\mathcal O$．
+\item $U_\lambda\in\mathcal O\ (\lambda\in\Lambda)$ ならば $\bigcup_\lambda U_\lambda\in\mathcal O$（任意個の和）．
+\item $U,V\in\mathcal O$ ならば $U\cap V\in\mathcal O$（有限個の共通部分）．
+\end{enumerate}
+\end{mydef}
+
+\begin{myex}{位相の例}{appE-topex}
+\begin{enumerate}
+\item 距離空間 $(X,d)$ では，各点のまわりに $\varepsilon$ 球を含む集合を開集合とする．$\R^n$，$\C^n$ の\textbf{通常の位相}（Euclid 位相）はこれである．
+\item 離散位相 $\mathcal O=2^X$，密着位相 $\mathcal O=\{\emptyset,X\}$．
+\item 補有限位相：$\emptyset$ と，補集合が有限集合であるような部分集合を開集合とする．
+$\A^1$（$k$ が無限体）の Zariski 位相はこれと一致する．
+\end{enumerate}
+\end{myex}
+
+\begin{mydef}{位相の比較}{appE-compare}
+同じ集合上の位相 $\mathcal O_1\subset\mathcal O_2$ のとき，$\mathcal O_2$ は $\mathcal O_1$ より\textbf{細かい}（強い），$\mathcal O_1$ は\textbf{粗い}（弱い）という．
+\end{mydef}
+
+$\C^n$ 上で Zariski 位相は通常の位相より真に粗い（第3章）．
+
+\begin{mydef}{開基}{appE-basis}
+位相空間 $X$ の開集合族 $\mathcal B$ が，任意の開集合を $\mathcal B$ の元の和として表せるとき，$\mathcal B$ を\textbf{開基}という．
+\end{mydef}
+
+\begin{myex}{基本開集合}{appE-basicopen}
+$f\in k[x_1,\dots,x_n]$ に対し $D(f)=\A^n\setminus\Zero(f)=\{f\ne0\}$ を\textbf{基本開集合}という．
+任意の Zariski 閉集合は有限個の多項式の零点集合 $\Zero(f_1,\dots,f_r)$（Hilbert の基底定理）なので，
+その補集合は $D(f_1)\cup\dots\cup D(f_r)$ である．よって $\{D(f)\}$ は Zariski 位相の開基をなす．
+$D(f)\cap D(g)=D(fg)$ に注意．$\Spec R$ の基本開集合 $D(f)$（第12章）も同様である．
+\end{myex}
+
+\begin{mydef}{部分空間位相}{appE-subspace}
+位相空間 $X$ の部分集合 $A$ に $\{U\cap A\mid U\in\mathcal O\}$ を位相として入れたものを\textbf{部分空間位相}（相対位相）という．
+\end{mydef}
+
+代数的集合 $X\subset\A^n$ の Zariski 位相は，$\A^n$ の Zariski 位相の部分空間位相である．
+
+\begin{mydef}{積位相}{appE-product}
+$X\times Y$ に，$U\times V$（$U,V$ は開集合）の形の集合を開基とする位相を入れたものを\textbf{積位相}という．
+\end{mydef}
+
+\begin{note}
+$\A^2=\A^1\times\A^1$ の Zariski 位相は $\A^1$ の Zariski 位相の積位相ではない．
+実際，積位相の閉集合は有限個の水平線・垂直線・点の和にすぎないが，$\A^2$ の Zariski 閉集合には対角線 $\Zero(x-y)$ や
+放物線 $\Zero(y-x^2)$ が含まれる．代数幾何では「積」は位相の積ではなく，座標環のテンソル積 $k[X]\otimes_kk[Y]$
+（付録C）で定義する（第12章のファイバー積）．
+\end{note}
+
+% ----------------------------------------------------------
+\section{開集合と閉集合}
+% ----------------------------------------------------------
+
+\begin{mydef}{閉集合}{appE-closed}
+補集合が開集合である集合を\textbf{閉集合}という．
+\end{mydef}
+
+de Morgan の法則（付録A）により，閉集合の全体は次を満たし，逆にこれを満たす族を閉集合として位相が一意に定まる．
+\begin{enumerate}
+\item $\emptyset,X$ は閉集合．
+\item 任意個の閉集合の共通部分は閉集合．
+\item 有限個の閉集合の和は閉集合．
+\end{enumerate}
+
+\begin{myex}{Zariski 位相}{appE-zariski}
+$\A^n$ において代数的集合 $\Zero(S)$ の全体は，
+\[
+\Zero(0)=\A^n,\quad\Zero(1)=\emptyset,\quad
+\bigcap_\lambda\Zero(S_\lambda)=\Zero\Bigl(\bigcup_\lambda S_\lambda\Bigr),\quad
+\Zero(S)\cup\Zero(T)=\Zero(ST)
+\]
+を満たすので，閉集合の公理を満たす．これを閉集合とする位相が \textbf{Zariski 位相}である（第3章）．
+\end{myex}
+
+\begin{mydef}{閉包・内部・稠密}{appE-closure}
+$A\subset X$ を含む最小の閉集合（$A$ を含む閉集合すべての共通部分）を\textbf{閉包} $\bar A$，
+$A$ に含まれる最大の開集合を\textbf{内部} $A^\circ$ という．
+$\bar A=X$ のとき $A$ は $X$ で\textbf{稠密}であるという．
+点 $x$ を含む開集合を $x$ の\textbf{開近傍}という．$x\in\bar A\iff x$ の任意の開近傍が $A$ と交わる．
+\end{mydef}
+
+\begin{myex}{Zariski 閉包}{appE-zarclosure}
+\begin{enumerate}
+\item $\A^1$ の無限部分集合（例えば $\Z\subset\C$）の Zariski 閉包は $\A^1$ 全体である．
+\item 一般に $A\subset\A^n$ の Zariski 閉包は $\Zero(\Ideal(A))$ である（第4章）．
+\item 既約な $X$ の空でない開集合は $X$ で稠密である．特に $\A^n$ の空でない Zariski 開集合は（通常の位相でも）稠密であり，
+「一般の点で成り立つ」という言い回しは「空でない Zariski 開集合上で成り立つ」という意味で用いられる．
+\item スキーム $\Spec R$ では，素イデアル $\p$ に対応する点の閉包は $\Zero(\p)=\{\q\supset\p\}$ である．
+特に整域 $R$ の零イデアル $(0)$ は稠密な点（\textbf{生成点}）であり，$\Spec R$ の点は閉点とは限らない（第12章）．
+\end{enumerate}
+\end{myex}
+
+% ----------------------------------------------------------
+\section{連続写像}
+% ----------------------------------------------------------
+
+\begin{mydef}{連続写像・同相}{appE-cont}
+位相空間の間の写像 $f\colon X\to Y$ が，$Y$ の任意の開集合 $V$ について $f^{-1}(V)$ が $X$ の開集合であるとき\textbf{連続}という．
+（閉集合の逆像が閉，と言っても同値．）
+連続な全単射で逆写像も連続なものを\textbf{同相写像}といい，$X$ と $Y$ は\textbf{同相}であるという．
+\end{mydef}
+
+\begin{myprop}{多項式写像は Zariski 連続}{appE-polycont}
+多項式写像 $\varphi=(\varphi_1,\dots,\varphi_m)\colon\A^n\to\A^m$ は Zariski 位相について連続である．
+\end{myprop}
+\begin{proof}
+$\varphi^{-1}(\Zero(g_1,\dots,g_r))=\Zero(g_1\circ\varphi,\dots,g_r\circ\varphi)$ であり，$g_i\circ\varphi$ は多項式である．
+\end{proof}
+
+\begin{note}
+Zariski 位相の連続写像は非常に多い．例えば $\A^1\to\A^1$ の任意の全単射は（補有限位相なので）同相写像である．
+したがって代数多様体の「同型」は位相だけでは捉えられず，関数（座標環，構造層）の対応を要求する必要がある（第5章，第11章）．
+\end{note}
+
+\begin{mydef}{開写像・閉写像・埋め込み}{appE-open}
+開集合の像が開集合となる写像を\textbf{開写像}，閉集合の像が閉集合となる写像を\textbf{閉写像}という．
+連続単射 $f\colon X\to Y$ が $X$ から部分空間 $f(X)$ への同相写像であるとき\textbf{埋め込み}という．
+\end{mydef}
+
+\begin{myex}{射影は閉写像とは限らない}{appE-projection}
+射影 $\A^2\to\A^1$，$(x,y)\mapsto x$ による双曲線 $\Zero(xy-1)$ の像は $\A^1\setminus\{0\}$ で，閉集合でない．
+一方，射影多様体からの射は閉写像である（「射影多様体は完備」，第8章・第10章）．これは位相空間のコンパクト性の代数幾何版である．
+\end{myex}
+
+% ----------------------------------------------------------
+\section{コンパクト性}
+% ----------------------------------------------------------
+
+\begin{mydef}{コンパクト}{appE-compact}
+$X$ の任意の開被覆 $X=\bigcup_\lambda U_\lambda$ が有限部分被覆を持つとき，$X$ を\textbf{コンパクト}という．
+（Zariski 位相のような非 Hausdorff 空間の文脈では\textbf{準コンパクト}ということが多い．）
+\end{mydef}
+
+\begin{mythm}{基本性質}{appE-compactprop}
+\begin{enumerate}
+\item コンパクト空間の閉部分集合はコンパクトである．
+\item コンパクト空間の連続像はコンパクトである．
+\item （Heine--Borel）$\R^n$ の部分集合がコンパクト $\iff$ 有界閉集合．
+\item コンパクト空間上の実数値連続関数は最大値・最小値をとる．
+\item Hausdorff 空間のコンパクト部分集合は閉集合である．
+\item コンパクト空間の直積はコンパクトである（Tychonoff）．
+\end{enumerate}
+\end{mythm}
+\begin{proof}[(2) の証明]
+$f(X)\subset\bigcup V_\lambda$ なら $X=\bigcup f^{-1}(V_\lambda)$ の有限部分被覆が取れ，その $V_\lambda$ たちが $f(X)$ を覆う．
+\end{proof}
+
+\begin{myex}{}{appE-compactex}
+\begin{enumerate}
+\item $\C^n$ は通常の位相でコンパクトでない．$\C\PP^n$ は通常の位相でコンパクトである：
+単位球面 $S^{2n+1}\subset\C^{n+1}$ からの連続全射 $S^{2n+1}\to\C\PP^n$ があるから（(2)，第8章）．
+\item 代数的集合は Zariski 位相で常に準コンパクトである．実際，開集合の増大列は閉集合の減少列に対応し，
+Hilbert の基底定理により閉集合の減少列は停止する（Noether 位相空間，第2章・第3章）．
+したがって $\A^n$ も Zariski 位相ではコンパクトであり，代数幾何における「コンパクト」の正しい類似は
+準コンパクト性ではなく完備性（射影性）である（前節の例）．
+\end{enumerate}
+\end{myex}
+
+\begin{physbox}[コンパクト化]
+物理では，余剰次元を有限の大きさに保つためにコンパクトな内部空間を用い（第15章），
+また無限遠での振る舞いを制御するために空間をコンパクト化する（例：$\R^4\cup\{\infty\}=S^4$ 上のインスタントン）．
+射影空間 $\PP^n$ はアフィン空間 $\A^n$ に無限遠点を付け加えた代数的コンパクト化である（第8章）．
+\end{physbox}
+
+% ----------------------------------------------------------
+\section{Hausdorff性}
+% ----------------------------------------------------------
+
+\begin{mydef}{Hausdorff 空間}{appE-hausdorff}
+任意の相異なる2点 $x,y$ に対し，交わらない開近傍 $U\ni x$，$V\ni y$ が存在するとき，$X$ を\textbf{Hausdorff 空間}という．
+\end{mydef}
+
+距離空間は Hausdorff である．Hausdorff 空間では点列の極限は一意的である．
+$X$ が Hausdorff であることは，対角集合 $\Delta=\{(x,x)\}\subset X\times X$ が積位相で閉であることと同値である．
+
+\begin{myprop}{Zariski 位相は Hausdorff でない}{appE-nonhaus}
+$k$ が無限体のとき，$n\geq1$ に対し $\A^n$ の Zariski 位相は Hausdorff でない．
+\end{myprop}
+\begin{proof}
+$\A^n$ は既約なので（第3章），空でない2つの開集合は必ず交わる（交わらなければ $\A^n=U^c\cup V^c$ と真の閉集合の和に分解する）．
+$n=1$ なら直接にも分かる：空でない開集合は有限集合の補集合であり，2つの無限集合の補集合が有限なので交わる．
+\end{proof}
+
+\begin{note}
+代数幾何では Hausdorff 性の代わりに，対角集合 $\Delta_X\subset X\times X$ が（Zariski 位相の積ではなく代数幾何的な積の）閉集合であるという
+\textbf{分離性}を用いる．アフィン多様体と射影多様体は分離的である．
+原点を2重にした直線（2つの $\A^1$ を $\A^1\setminus\{0\}$ で貼り合わせたもの）は分離的でない多様体の典型例である（第12章）．
+\end{note}
+
+\begin{mydef}{$T_1$ 空間}{appE-t1}
+各1点集合 $\{x\}$ が閉集合であるとき $X$ を\textbf{$T_1$ 空間}という．
+\end{mydef}
+
+$\A^n$ の Zariski 位相は $T_1$ である（$\{a\}=\Zero(x_1-a_1,\dots,x_n-a_n)$）．
+一方，$\Spec R$ は一般に $T_1$ ですらない（閉点でない点を持つ）．
+
+% ----------------------------------------------------------
+\section{連結性}
+% ----------------------------------------------------------
+
+\begin{mydef}{連結・弧状連結}{appE-connected}
+$X$ が交わらない2つの空でない開集合の和に分けられないとき\textbf{連結}という．
+同値な条件：$X$ の開かつ閉な部分集合は $\emptyset$ と $X$ のみ．
+任意の2点が連続曲線で結べるとき\textbf{弧状連結}という．弧状連結ならば連結である．
+\end{mydef}
+
+連結空間の連続像は連結である．任意の点を含む最大の連結部分集合を\textbf{連結成分}という．
+
+\begin{mydef}{既約}{appE-irred}
+空でない位相空間 $X$ が，2つの真の閉部分集合の和として書けないとき\textbf{既約}という．
+同値な条件：空でない任意の開集合は稠密である；空でない任意の2つの開集合は交わる．
+\end{mydef}
+
+既約ならば連結であるが，逆は成り立たない．例えば $\Zero(xy)\subset\A^2$ は連結だが既約ではない（2本の座標軸の和）．
+Hausdorff 空間で既約なのは1点のみなので，既約性は Zariski 位相に特有の概念である（第3章）．
+
+\begin{myex}{複素多様体の連結性}{appE-connex}
+\begin{enumerate}
+\item $\C\setminus\{0\}$ は弧状連結だが，$\R\setminus\{0\}$ は連結でない．
+一般に，既約な複素代数多様体から真の部分代数的集合を除いても通常の位相で連結のままである
+（実余次元が2以上なので）．
+\item 既約な複素代数多様体は通常の位相で連結である．
+\item $\C^\times=\C\setminus\{0\}$ は単連結でない：原点を一周するループは縮められない．
+この事実は $\log z$ の多価性（付録D）や，$\pi_1(\C^\times)=\Z$ を通じた磁気単極子・渦の巻き付き数と関係する．
+\end{enumerate}
+\end{myex}
+
+% ----------------------------------------------------------
+\section{商位相}
+% ----------------------------------------------------------
+
+\begin{mydef}{商位相}{appE-quotient}
+$X$ を位相空間，$\sim$ を同値関係，$\pi\colon X\to X/{\sim}$ を標準射影とする．
+$U\subset X/{\sim}$ を，$\pi^{-1}(U)$ が $X$ で開集合のとき開集合と定めて得られる位相を\textbf{商位相}という．
+これは $\pi$ を連続にする最も細かい位相である．
+\end{mydef}
+
+\begin{myprop}{商位相の普遍性}{appE-quotuniv}
+$f\colon X\to Y$ が連続で $x\sim x'\Rightarrow f(x)=f(x')$ を満たせば，誘導される写像 $\bar f\colon X/{\sim}\to Y$（付録A）は連続である．
+\end{myprop}
+\begin{proof}
+$V\subset Y$ が開なら $\pi^{-1}(\bar f^{-1}(V))=f^{-1}(V)$ は開なので，$\bar f^{-1}(V)$ は商位相で開．
+\end{proof}
+
+\begin{myex}{商位相の例}{appE-quotex}
+\begin{enumerate}
+\item $[0,1]/(0\sim1)\cong S^1$，$\R/\Z\cong S^1$，$\R^2/\Z^2\cong T^2$．
+\item $\C\PP^n=(\C^{n+1}\setminus\{0\})/\C^\times$ に商位相を入れたものは，コンパクト Hausdorff 空間であり，
+チャート $U_i=\{x_i\ne0\}\cong\C^n$ によって複素多様体となる（第8章，第13章）．
+\item 群作用による商 $X/G$ は Hausdorff とは限らない．
+$\C^\times$ の $\C^n$ への作用 $\lambda\cdot z=\lambda z$ の軌道空間は，$\C^n\setminus\{0\}$ の軌道（$\C\PP^{n-1}$）と原点からなり，
+原点の任意の開近傍はすべての点を含む（原点がすべての軌道の閉包に含まれるため）．
+原点を除いて初めて良い商 $\C\PP^{n-1}$ が得られる．
+この「不安定な点を除いてから割る」という発想が幾何学的不変式論（GIT）であり，モジュライ空間の構成に用いられる（第16章）．
+\end{enumerate}
+\end{myex}
+
+\begin{myex}{貼り合わせ}{appE-gluing}
+位相空間 $X_i$ と開集合 $X_{ij}\subset X_i$，同相写像 $\varphi_{ji}\colon X_{ij}\to X_{ji}$ が
+$\varphi_{ii}=\mathrm{id}$，$\varphi_{kj}\circ\varphi_{ji}=\varphi_{ki}$（コサイクル条件，適切な定義域で）を満たすとき，
+直和 $\bigsqcup X_i$ を $x\sim\varphi_{ji}(x)$ で割った商空間を作ることができる．
+多様体（付録F），射影空間のアフィンチャートによる記述（第8章），スキームの構成（第12章）はすべてこの形である．
+ベクトル束の変換関数（付録F，第14章）も同じコサイクル条件を満たす．
+\end{myex}
+
+% ----------------------------------------------------------
+\section{基本的な位相空間の例}
+% ----------------------------------------------------------
+
+本編で現れる主な位相空間を，通常の位相と Zariski 位相の両面からまとめておく．
+
+\begin{myex}{Euclid 空間と球面}{appE-ex1}
+$\R^n$，$\C^n\cong\R^{2n}$ は通常の位相で連結・Hausdorff・非コンパクト．
+球面 $S^n=\{x\in\R^{n+1}\mid|x|=1\}$ はコンパクト・連結（$n\geq1$）．$S^2\cong\C\PP^1$（リーマン球面，付録D）．
+\end{myex}
+
+\begin{myex}{トーラス}{appE-ex2}
+$T^n=\R^n/\Z^n=(S^1)^n$ はコンパクト連結．複素トーラス $\C^g/\Lambda$（$\Lambda$ は階数 $2g$ の格子）は位相的には $T^{2g}$ である．
+$g=1$ の場合が楕円曲線であり，$\PP^2$ の3次曲線として射影多様体の構造を持つ（第13章，第17章）．
+\end{myex}
+
+\begin{myex}{射影空間}{appE-ex3}
+$\R\PP^n=S^n/(x\sim-x)$，$\C\PP^n=S^{2n+1}/U(1)$ はコンパクト連結 Hausdorff．
+$\C\PP^n=\C^n\sqcup\C^{n-1}\sqcup\cdots\sqcup\C^0$（胞体分割）であり，$\C\PP^1=S^2$．
+\end{myex}
+
+\begin{myex}{アフィン空間の Zariski 位相}{appE-ex4}
+$\A^n$（$k$ 無限体）は Zariski 位相で既約・準コンパクト・$T_1$・非 Hausdorff．
+$\A^1$ の閉集合は有限集合と全体のみ．$\A^2$ の閉集合は有限個の点と曲線の和と全体である．
+\end{myex}
+
+\begin{myex}{素イデアルスペクトル}{appE-ex5}
+$\Spec\Z=\{(0),(2),(3),(5),\dots\}$ では，閉点は $(p)$（$p$ 素数）であり，$(0)$ は閉包が全体となる生成点である．
+$\Spec\C[x]$ は $\A^1(\C)$ の点 $(x-a)$ に生成点 $(0)$ を加えたものである（第12章）．
+\end{myex}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1]
+  \draw[->] (-0.3,0)--(7.6,0);
+  \foreach \x/\l in {1/2,2/3,3/5,4/7,5/11,6/13} {\fill (\x,0) circle (2pt); \node[below] at (\x,-0.05) {$(\l)$};}
+  \node at (7.0,0.25) {$\cdots$};
+  \fill[red!70!black] (3.5,1.2) circle (2.5pt) node[above]{$(0)$ 生成点};
+  \foreach \x in {1,2,3,4,5,6} {\draw[red!50,dashed] (3.5,1.2)--(\x,0.08);}
+\end{tikzpicture}
+\caption{$\Spec\Z$ の模式図．生成点 $(0)$ はすべての閉点 $(p)$ に「特殊化」する．}
+\end{figure}
